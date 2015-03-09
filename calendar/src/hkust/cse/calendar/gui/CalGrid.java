@@ -86,14 +86,16 @@ public class CalGrid extends JFrame implements ActionListener {
 	private StyledDocument mem_doc = null;
 	private SimpleAttributeSet sab = null;
 	// private boolean isLogin = false;
-	private JMenu Appmenu = new JMenu("Appointment");;
+	private JMenu Appmenu = new JMenu("Appointment");
+	private JMenu timeMenu = new JMenu("Time Machine");
+
 
 	private final String[] holidays = {
 			"New Years Day\nSpring Festival\n",
 			"President's Day (US)\n",
 			"",
 			"Ching Ming Festival\nGood Friday\nThe day following Good Friday\nEaster Monday\n",
-			"Labour Day\nThe Buddhaâ€™s Birthday\nTuen Ng Festival\n",
+			"Labour Day\nThe Buddhaþý™s Birthday\nTuen Ng Festival\n",
 			"",
 			"Hong Kong Special Administrative Region Establishment Day\n",
 			"Civic Holiday(CAN)\n",
@@ -234,6 +236,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		initializeSystem(); // for you to add.
 		//mCurrUser = getCurrUser(); // totally meaningless code
 		Appmenu.setEnabled(true);
+		timeMenu.setEnabled(true);
 
 		UpdateCal();
 		pack();				// sized the window to a preferred size
@@ -325,6 +328,14 @@ public class CalGrid extends JFrame implements ActionListener {
 					tableView.setModel(t);
 					tableView.repaint();
 				}
+				else if (e.getActionCommand().equals("Set .. As Today")){
+					TimeMachine tm = new TimeMachine("Time Machine", CalGrid.this);
+					tm.setLocationRelativeTo(null);
+					tm.show();
+					TableModel t = prepareTableModel();
+					tableView.setModel(t);
+					tableView.repaint();
+				}
 
 			}
 		};
@@ -375,6 +386,16 @@ public class CalGrid extends JFrame implements ActionListener {
 		mi = new JMenuItem("Manual Scheduling");
 		mi.addActionListener(listener);
 		Appmenu.add(mi);
+		
+		// Add Time Machine button to the menu
+		menuBar.add(timeMenu);
+		Appmenu.setEnabled(false);
+		Appmenu.setMnemonic('t');
+		Appmenu.getAccessibleContext().setAccessibleDescription(
+				"Time Machine");
+		mi = new JMenuItem("Set .. As Today");
+		mi.addActionListener(listener);
+		timeMenu.add(mi);
 
 		return menuBar;
 	}
@@ -590,6 +611,15 @@ public class CalGrid extends JFrame implements ActionListener {
 	// check for any invite or update from join appointment
 	public void checkUpdateJoinAppt(){
 		// Fix Me!
+	}
+	
+	// Change today to a custom date and time, to be called from time machine widget
+	public void setToday(int year, int month, int date, int hour, int min){
+		today.set(year, month, date, hour, min, 0);
+		currentY = today.get(Calendar.YEAR);
+		currentD = today.get(today.DAY_OF_MONTH);
+		currentM = 12;
+		UpdateCal();
 	}
 
 }
