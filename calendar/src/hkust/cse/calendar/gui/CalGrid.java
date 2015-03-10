@@ -95,7 +95,7 @@ public class CalGrid extends JFrame implements ActionListener {
 			"President's Day (US)\n",
 			"",
 			"Ching Ming Festival\nGood Friday\nThe day following Good Friday\nEaster Monday\n",
-			"Labour Day\nThe Buddhaþý™s Birthday\nTuen Ng Festival\n",
+			"Labour Day\nThe Buddhaï¿½ï¿½s Birthday\nTuen Ng Festival\n",
 			"",
 			"Hong Kong Special Administrative Region Establishment Day\n",
 			"Civic Holiday(CAN)\n",
@@ -339,6 +339,22 @@ public class CalGrid extends JFrame implements ActionListener {
 
 			}
 		};
+		/*** actionlistener for "manage locations" ***/
+		
+		ActionListener listener2 = new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(e.getActionCommand().equals("Manage Locations")){
+					LocationsDialog b = new LocationsDialog(controller);
+					//AppScheduler b = new AppScheduler("New", CalGrid.this);
+					b.show();
+					b.setLocationRelativeTo(null);
+					TableModel t = prepareTableModel();
+					tableView.setModel(t);
+					tableView.repaint();
+				}
+			}
+		};
+		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.getAccessibleContext().setAccessibleName("Calendar Choices");
 		JMenuItem mi;
@@ -397,6 +413,11 @@ public class CalGrid extends JFrame implements ActionListener {
 		mi.addActionListener(listener);
 		timeMenu.add(mi);
 
+		/********  adding a new menu item  "manage location"  *******/
+		mi = new JMenuItem("Manage Locations");
+		mi.addActionListener(listener2);
+		Appmenu.add(mi);
+		
 		return menuBar;
 	}
 

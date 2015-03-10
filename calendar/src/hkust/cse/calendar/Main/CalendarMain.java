@@ -5,6 +5,7 @@ package hkust.cse.calendar.Main;
 import javax.swing.UIManager;
 
 import hkust.cse.calendar.gui.LoginDialog;
+import hkust.cse.calendar.notificationServices.notificationServices;
 
 
 public class CalendarMain {
@@ -19,6 +20,7 @@ public class CalendarMain {
 				
 			}
 			LoginDialog loginDialog = new LoginDialog();
+		//	new notificationServices("userName: Jack Hui", "Message: Time's up", 2015, 3, 10, 13, 30, 20);
 			while(logOut == false){
 				try {
 					Thread.sleep(300);

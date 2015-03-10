@@ -1,7 +1,9 @@
 package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
+import hkust.cse.calendar.gui.LocationsDialog;
 import hkust.cse.calendar.unit.Appt;
+import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
 
 import java.awt.BorderLayout;
@@ -20,14 +22,18 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,6 +48,7 @@ import javax.swing.border.TitledBorder;
 public class AppScheduler extends JDialog implements ActionListener,
 		ComponentListener {
 
+	
 	private JLabel yearL;
 	private JTextField yearF;
 	private JLabel monthL;
@@ -57,7 +64,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JLabel eTimeML;
 	private JTextField eTimeM;
 
-	private DefaultListModel model;
 	private JTextField titleField;
 
 	private JButton saveBut;
@@ -75,6 +81,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	private JSplitPane pDes;
 	JPanel detailPanel;
+	private JList list;
+	private Vector items;
+	private DefaultComboBoxModel listModel;
+	
 
 //	private JTextField attendField;
 //	private JTextField rejectField;
@@ -150,6 +160,29 @@ public class AppScheduler extends JDialog implements ActionListener,
 		titleField = new JTextField(15);
 		titleAndTextPanel.add(titleL);
 		titleAndTextPanel.add(titleField);
+		
+/********   loading elements from cal._controller to combobox   *********/
+		JLabel titleLoc = new JLabel("LOCATION");
+		titleAndTextPanel.add(titleLoc);
+		items = new Vector();
+		Location[] locations = cal.controller.getLocationList();
+		if(locations == null){
+			locations = new Location[0];
+			items.addElement("--EMPTY--");
+		}
+		else if(locations != null){
+			items.clear();
+			for(int i=0; i<locations.length; i++){
+				items.addElement(locations[i].getName().toString());
+			}
+		}
+		listModel = new DefaultComboBoxModel(items);
+		JComboBox locField = new JComboBox(listModel);
+		titleAndTextPanel.add(locField);
+		
+		
+		
+		
 
 		detailPanel = new JPanel();
 		detailPanel.setLayout(new BorderLayout());
