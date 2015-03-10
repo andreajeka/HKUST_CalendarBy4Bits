@@ -614,11 +614,22 @@ public class CalGrid extends JFrame implements ActionListener {
 	}
 	
 	// Change today to a custom date and time, to be called from time machine widget
-	public void setToday(int year, int month, int date, int hour, int min){
-		today.set(year, month, date, hour, min, 0);
+	public void setToday(int yyyy, int mm, int dd, int hour, int min){
+		// Set application time
+		today.set(yyyy, mm, dd);
 		currentY = today.get(Calendar.YEAR);
-		currentD = today.get(today.DAY_OF_MONTH);
-		currentM = 12;
+		currentM = today.get(Calendar.MONTH);
+		currentD = today.get(Calendar.DAY_OF_MONTH);
+		// Update the display
+		year.setText(new Integer(currentY).toString());
+		month.setSelectedIndex(currentM - 1);
+		getDateArray(data);
+		if (tableView != null) {
+			TableModel t = prepareTableModel();
+			tableView.setModel(t);
+			tableView.repaint();
+
+		}
 		UpdateCal();
 	}
 
