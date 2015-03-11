@@ -384,14 +384,33 @@ public class AppScheduler extends JDialog implements ActionListener,
 	}
 
 	private void saveButtonResponse() {
-		// Fix Me!
 		// Save the appointment to the hard disk
+		// TODO Save Button Response
+		/* Assign information to the newly created appointment. */
+		int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
+		int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
+		Timestamp stampStart = CreateTimeStamp(date,time[0]);
+		Timestamp stampEnd = CreateTimeStamp(date, time[1]);
+		TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
+		NewAppt.setTimeSpan(timeSpan);
+
+		String title = titleField.getText();
+		NewAppt.setTitle(title);
+	 
+		String info = detailArea.getText();
+		NewAppt.setInfo(info);
+		
+		/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
+		parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+		
+		setVisible(false);
+		dispose();
 	}
 
 	private Timestamp CreateTimeStamp(int[] date, int time) {
 		Timestamp stamp = new Timestamp(0);
 		stamp.setYear(date[0]);
-		stamp.setMonth(date[1] - 1);
+		stamp.setMonth(date[1] - 1); // it is (x-1) because Timespan's month is from 0 to 11
 		stamp.setDate(date[2]);
 		stamp.setHours(time / 60);
 		stamp.setMinutes(time % 60);

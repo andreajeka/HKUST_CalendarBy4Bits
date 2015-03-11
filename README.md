@@ -15,7 +15,7 @@ The basic required features in the Phase I of the calendar system development is
   * The successfully scheduled event should cause GUI to change accordingly. An entry should show in the daily view and the day when the event is scheduled should change color on the month view.
     
 3. Location information: The location must be uniquely identified by its name. The user must select from a set of predefined locations. The locations can be added through a separate interface (Note that this interface does not exist in the current skeleton).
-**Partially implemented based on the slides https://course.cse.ust.hk/comp3111/project/start.pdf**
+>**Partially implemented based on the slides https://course.cse.ust.hk/comp3111/project/start.pdf**
 4. Event validity: The user can neither schedule multiple events that overlap in time or in space nor an event happens in the past. The user can only modify or delete any events that have not yet happened.
 Notification: The calendar system should provide notification services to the user at a user-defined interval prior to the time when the event happens.
 5. Time machine: Do not program directly using your computer clock because, for testing purposes, we will ask you to fast forward and rewind the clock that is used by the calendar system. During the evaluation of the project, the evaluator will use the interface you provide, either on the GUI or from the console, to use this time traveling feature and test the functionalities of the implementation. You must make sure your entire calendar system is based on a changeable clock.
