@@ -84,6 +84,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JList list;
 	private Vector items;
 	private DefaultComboBoxModel listModel;
+	private JLabel titleLoc;
+	private JComboBox locField;
 	
 
 //	private JTextField attendField;
@@ -162,7 +164,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 		titleAndTextPanel.add(titleField);
 		
 /********   loading elements from cal._controller to combobox   *********/
-		JLabel titleLoc = new JLabel("LOCATION");
+		
+		titleLoc = new JLabel("LOCATION");
 		titleAndTextPanel.add(titleLoc);
 		items = new Vector();
 		Location[] locations = cal.controller.getLocationList();
@@ -177,11 +180,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 			}
 		}
 		listModel = new DefaultComboBoxModel(items);
-		JComboBox locField = new JComboBox(listModel);
+		locField = new JComboBox(listModel);
 		titleAndTextPanel.add(locField);
-		
-		
-		
 		
 
 		detailPanel = new JPanel();
