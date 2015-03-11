@@ -32,4 +32,17 @@ public class User implements Serializable {
 	public void Password(String pass) {
 		mPassword = pass;
 	}
+
+	// TODO equals 
+	@Override
+	public boolean equals(Object u) {
+		if (this == u) return true;
+		if (u == null) return false;
+		if (getClass() != u.getClass()) return false;
+		User temp = (User) u;
+		if (mID == temp.ID() && mPassword == temp.Password()) {
+			return true;
+		}
+		return false;
+	}
 }
