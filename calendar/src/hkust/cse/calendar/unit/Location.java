@@ -1,5 +1,6 @@
 package hkust.cse.calendar.unit;
 
+/* creating a Location class */
 public class Location {
 
 	private String location;
