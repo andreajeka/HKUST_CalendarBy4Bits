@@ -7,7 +7,7 @@ import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
-
+/* creating a class norificationServices */
 
 public class notificationServices {
 	Timer timer;
