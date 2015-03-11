@@ -10,18 +10,22 @@ import javax.swing.JOptionPane;
 /* creating a class norificationServices */
 
 public class notificationServices {
-	Timer timer;
+	private Timer timer;
+	private Calendar calendar;
+	private Date time;
+	private String message;
+	
 	
 	public notificationServices(String userName, String message, int year, int month, int date, int hour, int minute, int second){
 		
-		Calendar calendar = Calendar.getInstance();
+		calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, year);
 		calendar.set(Calendar.MONTH, month-1);
 		calendar.set(Calendar.DATE, date);
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minute);
 		calendar.set(Calendar.SECOND, second);
-		Date time = calendar.getTime();
+		time = calendar.getTime();
 		
 		
 		timer = new Timer();
@@ -32,8 +36,9 @@ public class notificationServices {
 	}
 	
 	class alartTask extends TimerTask{
-		String message;
-		String userName;
+		private String message;
+		private String userName;
+		
 		public alartTask(String userName, String message){
 			this.userName = userName;
 			this.message = message;
