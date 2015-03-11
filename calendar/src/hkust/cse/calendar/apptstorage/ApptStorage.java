@@ -43,4 +43,6 @@ public abstract class ApptStorage {
 	
 	public abstract int getLocationCapacity();
 
+	public abstract int LengthInMemory();
+
 }

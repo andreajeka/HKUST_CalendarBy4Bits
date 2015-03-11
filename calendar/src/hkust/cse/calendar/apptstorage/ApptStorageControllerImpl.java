@@ -81,4 +81,8 @@ public class ApptStorageControllerImpl {
 		return mApptStorage.getLocationCapacity();
 	}
 	
+	public int LengthInMemory() {
+		return mApptStorage.LengthInMemory();
+	}
+
 }

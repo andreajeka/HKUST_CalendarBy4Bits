@@ -30,6 +30,7 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -399,6 +400,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 	 
 		String info = detailArea.getText();
 		NewAppt.setInfo(info);
+
+		int count = parent.controller.LengthInMemory();
+		NewAppt.setID(count+1);
 		
 		/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
 		parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);

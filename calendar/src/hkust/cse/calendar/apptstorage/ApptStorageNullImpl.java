@@ -4,6 +4,7 @@ import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.unit.User;
+import java.util.HashMap;
 
 public class ApptStorageNullImpl extends ApptStorage {
 
@@ -12,12 +13,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public ApptStorageNullImpl( User user )
 	{
 		defaultUser = user;
+		mAppts = new HashMap();
 	}
 	
 	@Override
 	public void SaveAppt(Appt appt) {
-		// TODO Auto-generated method stub
-
+		mAssignedApptID = appt.getID();
+		mAppts.put(appt,appt.getID());
 	}
 
 	@Override
@@ -80,4 +82,9 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return this._locations.length;
 	}
 
+	@Override
+	// Return the length of mAppts
+	public int LengthInMemory() {
+		return mAppts.size();
+	}
 }
