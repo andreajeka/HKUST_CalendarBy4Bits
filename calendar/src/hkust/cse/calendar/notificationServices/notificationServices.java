@@ -30,9 +30,6 @@ public class notificationServices {
 		
 		timer = new Timer();
 		timer.schedule(new alartTask(userName, message), time);
-		System.out.println(year + " " + month + " " + date);
-		System.out.println(time.toString());
-		
 	}
 	
 	class alartTask extends TimerTask{
