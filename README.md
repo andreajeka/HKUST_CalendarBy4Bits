@@ -20,3 +20,15 @@ The basic required features in the Phase I of the calendar system development is
 Notification: The calendar system should provide notification services to the user at a user-defined interval prior to the time when the event happens.
 5. Time machine: Do not program directly using your computer clock because, for testing purposes, we will ask you to fast forward and rewind the clock that is used by the calendar system. During the evaluation of the project, the evaluator will use the interface you provide, either on the GUI or from the console, to use this time traveling feature and test the functionalities of the implementation. You must make sure your entire calendar system is based on a changeable clock.
 
+
+###STORING EVENTS EXPLAINED
+1. How ApptStorage works to store events in memory?
+ * First of all, storing in memory means that every time we log out or exit the calendar, we lose the stored events. (Despite    the term 'memory', in this project of Phase 1, it's referring to the heap/dynamic memory, I guess). That is why in Phase 2    we will be dealing a lot with storing events in a XML file.
+
+ * Second, ApptStorage is an <b>ABSTRACT</b> class, meaning that it has to be inherited. ApptStorageNullImpl inherits the abstract     class and become the object to store our events. ApptStorageControllerImpl is a stand-alone class (the name is misleading,    because it looks like it inherits ApptStorage) which manages the ApptStorageNullImpl. It can get or modify data inside the    ApptStorageNullImpl. The constructor of ApptStorageControllerImpl takes an instance of ApptStorageNullImpl as its   parameter.
+
+2. Now how do these classes get created in essence with the Calendar GUI?
+  * When we get logged in into the calendar grid GUI (CalGrid: the one with the tables, month, time, etc), during the creation of CalGrid, a <b><i>new</i></b> controller of type ApptStorageControllerImpl with parameter <b><i>new</i></b> ApptStorageNullImpl get passed into CalGrid from LoginDialog. Hence, we could say that the ApptStorageNullImpl creation starts in CalGrid. From here onwards, the CalGrid itself or the children components of CalGrid can refer to this 'memory'. That is why everytime we log out and exit from calendar grid (or we can say if the gui of CalGrid is disposed), we lose the memory.
+<p align="center">
+  <img src=https://cloud.githubusercontent.com/assets/8019899/6593645/42de73a2-c815-11e4-87dc-30891432fe47.png width="600px" height="500px" alt="StoragePhase1"/>
+</p>
