@@ -328,6 +328,7 @@ public class AppList extends JPanel implements ActionListener {
 	}
 
 	// colouring the appointment list
+	@SuppressWarnings("deprecation")
 	public void addAppt(Appt appt) {
 		Color color;
 		currColor = new Color(0,240-(appt.TimeSpan().StartTime().getHours()-8)*25,255-(appt.TimeSpan().StartTime().getMinutes()*3));

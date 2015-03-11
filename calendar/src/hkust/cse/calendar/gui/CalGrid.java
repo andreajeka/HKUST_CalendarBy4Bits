@@ -521,7 +521,24 @@ public class CalGrid extends JFrame implements ActionListener {
 //		applist.clear();
 //	}
 
+
 	private Appt[] GetMonthAppts() {
+		// This will fix issue with year
+		String curYear = Integer.toString(currentY);
+	    int month = currentM - 1;
+	    String curMonth = Integer.toString(month);
+	    Integer day = new Integer(currentD);
+	    String curDay = Integer.toString(day);
+	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+"1 00:00:00");
+
+	    GregorianCalendar g = new GregorianCalendar(currentY, currentM - 1, 1);
+
+	    int date = g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+
+	    String dateMax = Integer.toString(date);
+		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+dateMax+" 23:59:59");
+		
+		/*
 		Timestamp start = new Timestamp(0);
 		start.setYear(currentY);
 		start.setMonth(currentM - 1);
@@ -533,6 +550,9 @@ public class CalGrid extends JFrame implements ActionListener {
 		GregorianCalendar g = new GregorianCalendar(currentY, currentM - 1, 1);
 		end.setDate(g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
 		end.setHours(23);
+		*/
+
+
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
 	}
@@ -599,6 +619,7 @@ public class CalGrid extends JFrame implements ActionListener {
 	}
 
 	public Appt[] GetTodayAppt() {
+		/*
 		Integer temp;
 		temp = new Integer(currentD);
 		Timestamp start = new Timestamp(0);
@@ -616,7 +637,17 @@ public class CalGrid extends JFrame implements ActionListener {
 		end.setHours(23);
 		end.setMinutes(59);
 		end.setSeconds(59);
-		
+		*/
+
+		String curYear = Integer.toString(currentY);
+	    int month = currentM - 1;
+	    String curMonth = Integer.toString(month);
+	    Integer day = new Integer(currentD);
+	    String curDay = Integer.toString(day);
+	    
+	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 00:00:00");
+	    Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 23:59:59");
+
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
 	}
