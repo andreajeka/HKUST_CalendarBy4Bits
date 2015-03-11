@@ -36,6 +36,7 @@ public abstract class ApptStorage {
 	/*
 	 * Add other methods if necessary
 	 */
+	
 	public abstract Location[] getLocationList();
 	
 	public abstract void setLocationList(Location[] locations);
