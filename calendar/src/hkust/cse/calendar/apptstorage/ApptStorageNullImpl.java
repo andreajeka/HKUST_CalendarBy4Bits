@@ -62,6 +62,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	}
 	
+	/* creating a Location array */
 	Location[] _locations;
 	
 	@Override
