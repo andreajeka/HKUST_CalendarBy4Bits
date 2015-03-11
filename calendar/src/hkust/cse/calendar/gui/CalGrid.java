@@ -413,7 +413,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		mi.addActionListener(listener);
 		timeMenu.add(mi);
 
-		/********  adding a new menu item  "manage location"  *******/
+/********  adding a new menu item  *******/
 		mi = new JMenuItem("Manage Locations");
 		mi.addActionListener(listener2);
 		Appmenu.add(mi);
