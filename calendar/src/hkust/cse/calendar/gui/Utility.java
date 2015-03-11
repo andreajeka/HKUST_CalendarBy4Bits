@@ -28,6 +28,7 @@ public class Utility {
 		return result;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static Appt createDefaultAppt(int currentY, int currentM,
 			int currentD, User me) {
 		Appt newAppt = new Appt();
@@ -82,5 +83,65 @@ public class Utility {
 		newAppt.setTitle("Untitled");
 		newAppt.setInfo("Input description of this appointment");
 		return newAppt;
+	}
+	
+	@SuppressWarnings("deprecation")
+	/**
+	 * Create a TimeStamp comparison to check whether t1 > t2 or t1 < t2 or t1 = t2
+	 * @param t1
+	 * @param t2
+	 * @return
+	 * 0 when t1 = t2
+	 * 1 when t1 > t2
+	 * -1 when t1 < t2
+	 */
+	public final static int AfterBeforeEqual(Timestamp t1, Timestamp t2) {
+		if(t1.getYear() > t2.getYear()) {
+			return 1;
+		}
+		else if (t1.getYear() < t2.getYear()) {
+			return -1;
+		}
+		else {
+			if(t1.getMonth() > t2.getMonth()+1) {
+				return 1;
+			}
+			else if (t1.getMonth() < t2.getMonth()+1) {
+				return -1;
+			}
+			else {
+				if (t1.getDay() > t2.getDay()) {
+					return 1;
+				}
+				else if (t1.getDay() < t2.getDay()) {
+					return -1;
+				}
+				else {
+					if (t1.getHours() > t2.getHours()) {
+						return 1;
+					}
+					else if (t1.getHours() < t2.getHours()){
+						return -1;
+					}
+					else {
+						if (t1.getMinutes() > t2.getMinutes()) {
+							return 1;
+						}
+						else if (t1.getMinutes() < t2.getMinutes()) {
+							return -1;
+						}
+						else { //if minutes are equal
+							if (t1.getSeconds() > t2.getSeconds()) {
+								return 1;
+							}
+							else if (t1.getSeconds() < t2.getSeconds()) {
+								return -1;
+							}
+							else return 0;
+						}
+					}
+				}
+			}
+		}
 	}
 }
