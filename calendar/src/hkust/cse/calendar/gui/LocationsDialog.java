@@ -26,12 +26,16 @@ public class LocationsDialog extends JFrame {
 	private DefaultListModel listModel;
 	private JList list;
 	private JTextField locNameText;
-	JScrollPane scroll;
+	private JScrollPane scroll;
+	private JPanel buttonPane = new JPanel();		
+	private JButton addBt = new JButton("Add");
+	private JButton removeBt = new JButton("Remove");
+	private int temp1, selectedIndex, capacity;
+	
 	public LocationsDialog(ApptStorageControllerImpl controller){
 		_controller = controller;
 
 		/**set the border layout***/
-
 
 		this.setLayout(new BorderLayout());
 		this.setLocationByPlatform(true);
@@ -39,27 +43,16 @@ public class LocationsDialog extends JFrame {
 
 		listModel = new DefaultListModel();
 
-
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setVisibleRowCount(5);
-		//this.add(list, BorderLayout.CENTER);
-
-
-
-
 
 		scroll = new JScrollPane(list);
 		this.add(scroll, BorderLayout.CENTER);
 
 		locNameText = new JTextField(11);
-
-		JPanel buttonPane = new JPanel();
 		buttonPane.add(locNameText);
-
-		JButton addBt = new JButton("Add");
-		JButton removeBt = new JButton("Remove");
 		buttonPane.add(addBt, BorderLayout.CENTER);
 		buttonPane.add(removeBt, BorderLayout.EAST);
 		this.add(buttonPane, BorderLayout.PAGE_END);
@@ -95,12 +88,12 @@ public class LocationsDialog extends JFrame {
 		/******   remove item from JList and Location[]   ******/
 		removeBt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				int selectedIndex = list.getSelectedIndex();
+				selectedIndex = list.getSelectedIndex();
 				if(selectedIndex != -1)
 					listModel.remove(selectedIndex);
 				else if(selectedIndex == -1)
 					JOptionPane.showMessageDialog(null, "Please Select a Loacation", "REMOVE ERROR", JOptionPane.ERROR_MESSAGE);
-				int capacity = 0;
+				capacity = 0;
 				if(_controller.getLocationList() != null){
 					capacity = _controller.getLocationCapacity();
 					Location[] locations = _controller.getLocationList();
@@ -122,7 +115,7 @@ public class LocationsDialog extends JFrame {
 	}
 
 	/******   loading the locations from _controller to JList   ******/
-	public void loadLocation(){
+	private void loadLocation(){
 		if(_controller.getLocationList() != null){
 			Location[] locations = _controller.getLocationList();
 			if(locations.length != 0){
@@ -135,16 +128,15 @@ public class LocationsDialog extends JFrame {
 	}
 
 	/******   save the locations from JList to _controller   ******/
-	public void updateLocation(){
-		int temp = listModel.getSize();
-		Location[] locations = new Location[temp];
-		if(temp != 0){
-			for(int i=0; i<temp; i++){
+	private void updateLocation(){
+		temp1 = listModel.getSize();
+		Location[] locations = new Location[temp1];
+		if(temp1 != 0){
+			for(int i=0; i<temp1; i++){
 				locations[i] = new Location(listModel.getElementAt(i).toString());
 			}
 		}
 		_controller.setLocationList(locations);
-		//JOptionPane.showMessageDialog(null, locations[0].getName().toString());
 	}
 
 }
