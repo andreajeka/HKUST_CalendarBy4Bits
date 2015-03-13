@@ -5,8 +5,12 @@ import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.unit.User;
+
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 public class ApptStorageNullImpl extends ApptStorage {
 
@@ -20,9 +24,20 @@ public class ApptStorageNullImpl extends ApptStorage {
 	
 	@Override
 	public void SaveAppt(Appt appt) {
-		// We put the pair appointment and its id into the HashMap
-		mAssignedApptID = appt.getID();
-		mAppts.put(appt,appt.getID());
+		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.keySet());
+		boolean overlap = false;
+		
+		for (Appt anAppt : apptList) {
+			if (anAppt.TimeSpan().Overlap(appt.TimeSpan()))
+				overlap = true;
+				break;
+		}
+		
+		if (overlap == false) {
+			// We put the pair appointment and its id into the HashMap
+			mAssignedApptID = appt.getID();
+			mAppts.put(appt,appt.getID());	
+		}
 	}
 
 	@Override
@@ -51,8 +66,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			    		Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == 0) {
 			    	apptsByTime.add(anAppt);
 			    }
-			}
-			
+			}		
 		}
 		
 		if (apptsByTime.isEmpty()) {
@@ -85,12 +99,15 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public void UpdateAppt(Appt appt) {
 		// TODO Auto-generated method stub
-
+		int apptID = appt.getID();
+		RemoveAppt(appt);
+		mAppts.put(appt, apptID);
 	}
 
 	@Override
 	public void RemoveAppt(Appt appt) {
 		// TODO Auto-generated method stub
+		mAppts.remove(appt, appt.getID());
 
 	}
 
