@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -649,6 +650,7 @@ public class CalGrid extends JFrame implements ActionListener {
 	    Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 23:59:59");
 
 		TimeSpan period = new TimeSpan(start, end);
+	
 		return controller.RetrieveAppts(mCurrUser, period);
 	}
 

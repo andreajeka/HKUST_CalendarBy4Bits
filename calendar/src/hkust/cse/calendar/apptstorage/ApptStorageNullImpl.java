@@ -19,24 +19,28 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public ApptStorageNullImpl( User user )
 	{
 		defaultUser = user;
-		mAppts = new HashMap<Appt, Integer>();
+		mAppts = new HashMap<Integer, Appt>();
 	}
 	
 	@Override
 	public void SaveAppt(Appt appt) {
-		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.keySet());
+		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
 		boolean overlap = false;
-		
-		for (Appt anAppt : apptList) {
-			if (anAppt.TimeSpan().Overlap(appt.TimeSpan()))
-				overlap = true;
-				break;
+		System.out.println(appt.getID());
+		if (!apptList.isEmpty()) {
+			for (Appt anAppt : apptList) {
+				if (anAppt.TimeSpan().Overlap(appt.TimeSpan()))
+					overlap = true;
+					break;
+			}
 		}
 		
 		if (overlap == false) {
 			// We put the pair appointment and its id into the HashMap
-			mAssignedApptID = appt.getID();
-			mAppts.put(appt,appt.getID());	
+			int key = LengthInMemory() + 1;
+			mAppts.put(key, appt);
+
+			
 		}
 	}
 
@@ -46,7 +50,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// Create an array list, add items in, convert back to regular array and return
 		
 		// Retrieve the whole Appointments (in a set of keys) into the container ArrayList
-		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.keySet());
+		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
 		// Create a container ArrayList to contain the appointments which fall inside the requirement
 		ArrayList<Appt> apptsByTime = new ArrayList<Appt>();
 		for (Appt anAppt: apptList) {
@@ -98,10 +102,10 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void UpdateAppt(Appt appt) {
-		// TODO Auto-generated method stub
 		int apptID = appt.getID();
-		RemoveAppt(appt);
-		mAppts.put(appt, apptID);
+		// According to Java Doc, If the map previously contained a mapping for this key, 
+		// the old value is replaced by the specified value.
+		mAppts.put(apptID, appt);
 	}
 
 	@Override

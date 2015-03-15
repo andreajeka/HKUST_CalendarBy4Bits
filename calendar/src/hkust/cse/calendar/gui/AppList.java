@@ -414,7 +414,12 @@ public class AppList extends JPanel implements ActionListener {
 	}
 
 	private void delete() {
-
+		/* TODO DELETE APPLIST
+		Appt apptTitle = getSelectedAppTitle();
+		if (apptTitle == null)
+			return;
+		*/
+		
 	}
 
 	private void modify() {
@@ -497,6 +502,8 @@ public class AppList extends JPanel implements ActionListener {
 		if ((e.getModifiers() & InputEvent.BUTTON3_MASK) != 0)
 			pop.show(e.getComponent(), e.getX(), e.getY());
 	}
+	
+	// If user click-drag (dragging tile with mouse pressed)
 	private void calculateDrag(MouseEvent e){
 		
 		if(releaseRow==pressRow){		

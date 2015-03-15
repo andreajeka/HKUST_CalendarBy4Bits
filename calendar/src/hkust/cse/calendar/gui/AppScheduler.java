@@ -400,12 +400,16 @@ public class AppScheduler extends JDialog implements ActionListener,
 	 
 		String info = detailArea.getText();
 		NewAppt.setInfo(info);
-
-		int count = parent.controller.LengthInMemory();
-		NewAppt.setID(count+1);
 		
-		/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
-		parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+		// Check if there is no appointment selected in the appointment list
+		if (selectedApptId == -1) {
+			/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
+			parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+		} else {
+			NewAppt.setID(selectedApptId);
+			parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.MODIFY);
+			selectedApptId = -1;
+		}
 		
 		setVisible(false);
 		dispose();
@@ -422,7 +426,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 	}
 
 	public void updateSetApp(Appt appt) {
-		// Fix Me!
+		// TODO Update Appt
+		
+		
 	}
 
 	public void componentHidden(ComponentEvent e) {
