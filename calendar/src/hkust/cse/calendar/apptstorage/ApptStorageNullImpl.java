@@ -26,7 +26,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
 		boolean overlap = false;
-		System.out.println(appt.getID());
 		if (!apptList.isEmpty()) {
 			for (Appt anAppt : apptList) {
 				if (anAppt.TimeSpan().Overlap(appt.TimeSpan()))
@@ -38,6 +37,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		if (overlap == false) {
 			// We put the pair appointment and its id into the HashMap
 			int key = LengthInMemory() + 1;
+			appt.setID(key);
 			mAppts.put(key, appt);
 
 			
@@ -96,7 +96,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public Appt RetrieveAppts(int joinApptID) {
-		// TODO Auto-generated method stub
+		// TODO RetrieveAppts with joinApptID
 		return null;
 	}
 
@@ -110,20 +110,17 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void RemoveAppt(Appt appt) {
-		// TODO Auto-generated method stub
-		mAppts.remove(appt, appt.getID());
-
+		mAppts.remove(appt.getID(), appt);
 	}
 
 	@Override
 	public User getDefaultUser() {
-		// TODO Auto-generated method stub
 		return defaultUser;
 	}
 
 	@Override
 	public void LoadApptFromXml() {
-		// TODO Auto-generated method stub
+		// TODO Load ApptFrom XML
 
 	}
 	

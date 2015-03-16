@@ -95,6 +95,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private int selectedApptId = -1;
 	
 
+	@SuppressWarnings("deprecation")
 	private void commonConstructor(String title, CalGrid cal) {
 		parent = cal;
 		this.setAlwaysOnTop(true);
@@ -415,6 +416,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		dispose();
 	}
 
+	@SuppressWarnings("deprecation")
 	private Timestamp CreateTimeStamp(int[] date, int time) {
 		Timestamp stamp = new Timestamp(0);
 		stamp.setYear(date[0]);
@@ -425,10 +427,31 @@ public class AppScheduler extends JDialog implements ActionListener,
 		return stamp;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void updateSetApp(Appt appt) {
-		// TODO Update Appt
+		/*
+		// TODO Update Appt Scheduler fields with the appropriate content 
+		TimeSpan time = appt.TimeSpan();
+		String timeY = Integer.toString(time.StartTime().getYear());
+		int monthSync = time.StartTime().getMonth() + 1;
+		String timeM = Integer.toString(monthSync);
+		String timeD = Integer.toString(time.StartTime().getDay());
+		String timeHourS = Integer.toString(time.StartTime().getHours());
+		String timeHourE = Integer.toString(time.EndTime().getHours());
+		String timeMinS = Integer.toString(time.StartTime().getMinutes());
+		String timeMinE = Integer.toString(time.EndTime().getMinutes());
 		
-		
+	    yearF.setText(timeY); 
+	    monthF.setText(timeM);
+	    dayF.setText(timeD);
+	    sTimeH.setText(timeHourS);
+	    sTimeM.setText(timeMinS);
+	    eTimeH.setText(timeHourE);
+	    eTimeM.setText(timeMinE);
+	    
+	    titleField.setText(appt.getTitle());
+	    detailArea.setText(appt.getInfo());
+	    */
 	}
 
 	public void componentHidden(ComponentEvent e) {

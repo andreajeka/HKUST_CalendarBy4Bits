@@ -130,8 +130,8 @@ public class CalGrid extends JFrame implements ActionListener {
 
 		today = new GregorianCalendar();
 		currentY = today.get(Calendar.YEAR);
-		currentD = today.get(today.DAY_OF_MONTH);
-		int temp = today.get(today.MONTH) + 1;
+		currentD = today.get(Calendar.DAY_OF_MONTH);
+		int temp = today.get(Calendar.MONTH) + 1;
 		currentM = 12;
 
 		getDateArray(data);
@@ -192,8 +192,8 @@ public class CalGrid extends JFrame implements ActionListener {
 				if (tem.equals("") == false) {
 					try {
 						if (today.get(Calendar.YEAR) == currentY
-								&& today.get(today.MONTH) + 1 == currentM
-								&& today.get(today.DAY_OF_MONTH) == Integer
+								&& today.get(Calendar.MONTH) + 1 == currentM
+								&& today.get(Calendar.DAY_OF_MONTH) == Integer
 										.parseInt(tem)) {
 							return new CalCellRenderer(today);
 						}
@@ -280,6 +280,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		return dataModel;
 	}
 
+	@SuppressWarnings("deprecation")
 	public void getDateArray(Object[][] data) {
 		GregorianCalendar c = new GregorianCalendar(currentY, currentM - 1, 1);
 		int day;
@@ -317,6 +318,7 @@ public class CalGrid extends JFrame implements ActionListener {
 	JMenuBar createMenuBar() {
 
 		ActionListener listener = new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equals("Manual Scheduling")) {
 					AppScheduler a = new AppScheduler("New", CalGrid.this);
@@ -343,6 +345,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		/*** actionlistener for "manage locations" ***/
 		
 		ActionListener listener2 = new ActionListener(){
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e){
 				if(e.getActionCommand().equals("Manage Locations")){
 					LocationsDialog b = new LocationsDialog(controller);
@@ -599,6 +602,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		updateAppList();
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean IsTodayAppt(Appt appt) {
 		if (appt.TimeSpan().StartTime().getYear() + 1900 != currentY)
 			return false;
@@ -609,6 +613,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean IsMonthAppts(Appt appt) {
 
 		if (appt.TimeSpan().StartTime().getYear() + 1900 != currentY)

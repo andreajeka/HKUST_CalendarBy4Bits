@@ -93,7 +93,6 @@ public class LoginDialog extends JFrame implements ActionListener
 	
 
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource() == button)
 		{
 			// When the button is clicked, check the user name and password, and try to log the user in

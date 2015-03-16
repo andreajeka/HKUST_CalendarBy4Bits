@@ -57,6 +57,7 @@ public class Utility {
 		return newAppt;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static Appt createDefaultAppt(int currentY, int currentM,
 			int currentD, User me, int startTime) {
 		Appt newAppt = new Appt();

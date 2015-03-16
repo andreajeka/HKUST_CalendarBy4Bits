@@ -13,6 +13,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
+
 import javax.swing.BorderFactory;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -184,7 +185,7 @@ public class AppList extends JPanel implements ActionListener {
 			}
 		};
 
-		tableView.setAutoResizeMode(tableView.AUTO_RESIZE_ALL_COLUMNS);
+		tableView.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		tableView.setRowHeight(20);
 		tableView.setRowSelectionAllowed(false);
 		TableColumn c = null;
@@ -414,14 +415,14 @@ public class AppList extends JPanel implements ActionListener {
 	}
 
 	private void delete() {
-		/* TODO DELETE APPLIST
 		Appt apptTitle = getSelectedAppTitle();
 		if (apptTitle == null)
 			return;
-		*/
-		
+		parent.controller.ManageAppt(apptTitle, ApptStorageControllerImpl.REMOVE);
+		parent.updateAppList();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void modify() {
 		Appt apptTitle = getSelectedAppTitle();
 		if (apptTitle == null)
@@ -431,7 +432,6 @@ public class AppList extends JPanel implements ActionListener {
 		setAppDial.updateSetApp(apptTitle);
 		setAppDial.show();
 		setAppDial.setResizable(false);
-
 	}
 
 	public Appt getSelectedAppTitle() {
@@ -464,6 +464,7 @@ public class AppList extends JPanel implements ActionListener {
 
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void NewAppt() {
 		
 		if (parent.mCurrUser == null)
