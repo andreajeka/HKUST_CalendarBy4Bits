@@ -153,9 +153,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 		eTimeM = new JTextField(4);
 		peTime.add(eTimeM);
 
+		// TODO Add radio buttons
 		JPanel pFreq = new JPanel();
 		Border freqBorder = new TitledBorder(null, "FREQUENCY");
-		pDate.setBorder(freqBorder);
+		pFreq.setBorder(freqBorder);
 		
 		onceRB = new JRadioButton("Once");
 		pFreq.add(onceRB);
