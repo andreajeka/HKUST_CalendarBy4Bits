@@ -28,6 +28,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -38,6 +39,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -65,6 +67,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JTextField eTimeH;
 	private JLabel eTimeML;
 	private JTextField eTimeM;
+	private JRadioButton onceRB;
+	private JRadioButton dailyRB;
+	private JRadioButton weeklyRB;
+	private JRadioButton monthlyRB;
 
 	private JTextField titleField;
 
@@ -147,11 +153,30 @@ public class AppScheduler extends JDialog implements ActionListener,
 		eTimeM = new JTextField(4);
 		peTime.add(eTimeM);
 
+		JPanel pFreq = new JPanel();
+		Border freqBorder = new TitledBorder(null, "FREQUENCY");
+		pDate.setBorder(freqBorder);
+		
+		onceRB = new JRadioButton("Once");
+		pFreq.add(onceRB);
+		dailyRB = new JRadioButton("Daily");
+		pFreq.add(dailyRB);
+		weeklyRB = new JRadioButton("Weekly");
+		pFreq.add(weeklyRB);
+		monthlyRB = new JRadioButton("Monthly");
+		pFreq.add(monthlyRB);
+		ButtonGroup group = new ButtonGroup();
+		group.add(onceRB);
+		group.add(dailyRB);
+		group.add(weeklyRB);
+		group.add(monthlyRB);
+		
 		JPanel pTime = new JPanel();
 		pTime.setLayout(new BorderLayout());
 		pTime.add("West", psTime);
 		pTime.add("East", peTime);
-
+		pTime.add("South", pFreq);
+		
 		JPanel top = new JPanel();
 		top.setLayout(new BorderLayout());
 		top.setBorder(new BevelBorder(BevelBorder.RAISED));
