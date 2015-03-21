@@ -5,6 +5,7 @@ import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.unit.User;
 
 import java.sql.Timestamp;
+import java.util.GregorianCalendar;
 
 import javax.swing.JOptionPane;
 
@@ -28,11 +29,21 @@ public class Utility {
 		return result;
 	}
 
-	@SuppressWarnings("deprecation")
+
 	public static Appt createDefaultAppt(int currentY, int currentM,
 			int currentD, User me) {
 		Appt newAppt = new Appt();
 		newAppt.setID(0);
+		
+		String curYear = Integer.toString(currentY);
+	    int month = currentM - 1;
+	    String curMonth = Integer.toString(month);
+	    Integer day = new Integer(currentD);
+	    String curDay = Integer.toString(day);
+	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 09:00:00");
+		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 09:30:00");
+		
+		/*
 		Timestamp start = new Timestamp(0);
 		start.setYear(currentY);
 		start.setMonth(currentM - 1);
@@ -46,6 +57,7 @@ public class Utility {
 		end.setDate(currentD);
 		end.setHours(9);
 		end.setMinutes(30);
+		*/
 
 		newAppt.setTimeSpan(new TimeSpan(start, end));
 		User[] temp = new User[1];

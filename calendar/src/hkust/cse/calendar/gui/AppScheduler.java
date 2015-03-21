@@ -18,6 +18,7 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -429,13 +430,23 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	@SuppressWarnings("deprecation")
 	public void updateSetApp(Appt appt) {
-		/*
+		
 		// TODO Update Appt Scheduler fields with the appropriate content 
 		TimeSpan time = appt.TimeSpan();
-		String timeY = Integer.toString(time.StartTime().getYear());
-		int monthSync = time.StartTime().getMonth() + 1;
+		
+		// Use Calendar to fix year issue 
+		// Because using timestamp.getYear() returns 115 instead of 2015
+		Calendar start = new GregorianCalendar();
+		start.setTimeInMillis(time.StartTime().getTime());
+		
+		String timeY = Integer.toString(start.get(Calendar.YEAR)); 
+		// We have to add 2 to the month since after observation, 
+		// month conversion from timespan to calendar is automatically adjusted 
+		// by calendar class by substracting 1. Since we already substracted 
+		// 1 in the code of Utility.createDefaultAppt(), we have to add 2
+		int monthSync = start.get(Calendar.MONTH) + 2; 
 		String timeM = Integer.toString(monthSync);
-		String timeD = Integer.toString(time.StartTime().getDay());
+		String timeD = Integer.toString(start.get(Calendar.DATE));
 		String timeHourS = Integer.toString(time.StartTime().getHours());
 		String timeHourE = Integer.toString(time.EndTime().getHours());
 		String timeMinS = Integer.toString(time.StartTime().getMinutes());
@@ -451,7 +462,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	    
 	    titleField.setText(appt.getTitle());
 	    detailArea.setText(appt.getInfo());
-	    */
+	    
 	}
 
 	public void componentHidden(ComponentEvent e) {
