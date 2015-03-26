@@ -466,11 +466,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		start.setTimeInMillis(time.StartTime().getTime());
 		
 		String timeY = Integer.toString(start.get(Calendar.YEAR)); 
-		// We have to add 2 to the month since after observation, 
-		// month conversion from timespan to calendar is automatically adjusted 
-		// by calendar class by substracting 1. Since we already substracted 
-		// 1 in the code of Utility.createDefaultAppt(), we have to add 2
-		int monthSync = start.get(Calendar.MONTH) + 2; 
+		int monthSync = start.get(Calendar.MONTH) + 1; 
 		String timeM = Integer.toString(monthSync);
 		String timeD = Integer.toString(start.get(Calendar.DATE));
 		String timeHourS = Integer.toString(time.StartTime().getHours());

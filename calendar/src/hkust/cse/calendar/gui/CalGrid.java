@@ -529,20 +529,16 @@ public class CalGrid extends JFrame implements ActionListener {
 	private Appt[] GetMonthAppts() {
 		// This will fix issue with year
 		String curYear = Integer.toString(currentY);
-	    int month = currentM - 1;
+	    int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
 	    String curMonth = Integer.toString(month);
-	    Integer day = new Integer(currentD);
-	    String curDay = Integer.toString(day);
 	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+"1 00:00:00");
 
-	    GregorianCalendar g = new GregorianCalendar(currentY, currentM - 1, 1);
-
-	    int date = g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-
-	    String dateMax = Integer.toString(date);
+	    GregorianCalendar g = new GregorianCalendar(currentY, month, 1);
+	    int dateIntMax = g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+	    String dateMax = Integer.toString(dateIntMax);
 		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+dateMax+" 23:59:59");
-		
-		/*
+
+		/* 
 		Timestamp start = new Timestamp(0);
 		start.setYear(currentY);
 		start.setMonth(currentM - 1);
@@ -555,7 +551,6 @@ public class CalGrid extends JFrame implements ActionListener {
 		end.setDate(g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
 		end.setHours(23);
 		*/
-
 
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
@@ -646,17 +641,17 @@ public class CalGrid extends JFrame implements ActionListener {
 		*/
 
 		String curYear = Integer.toString(currentY);
-	    int month = currentM - 1;
+	    int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
 	    String curMonth = Integer.toString(month);
-	    Integer day = new Integer(currentD);
-	    String curDay = Integer.toString(day);
-	    
-	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 00:00:00");
-	    Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 23:59:59");
+	    Integer date = new Integer(currentD);
+	    String curDate= Integer.toString(date);
+
+	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 00:00:00");
+	    Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 23:59:59");
 
 		TimeSpan period = new TimeSpan(start, end);
-	
 		return controller.RetrieveAppts(mCurrUser, period);
+		
 	}
 
 	public AppList getAppList() {

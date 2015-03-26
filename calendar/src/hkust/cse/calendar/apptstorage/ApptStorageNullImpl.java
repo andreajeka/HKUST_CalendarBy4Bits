@@ -25,23 +25,17 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
-		boolean overlap = false;
 		if (!apptList.isEmpty()) {
 			for (Appt anAppt : apptList) {
-				if (anAppt.TimeSpan().Overlap(appt.TimeSpan()))
-					overlap = true;
-					break;
+				if (anAppt.TimeSpan().Overlap(appt.TimeSpan())) {
+					return;
+				}
 			}
 		}
-		
-		if (overlap == false) {
-			// We put the pair appointment and its id into the HashMap
-			int key = LengthInMemory() + 1;
-			appt.setID(key);
-			mAppts.put(key, appt);
-
-			
-		}
+		// We put the pair appointment and its id into the HashMap
+		int key = LengthInMemory() + 1;
+		appt.setID(key);
+		mAppts.put(key, appt);
 	}
 
 	@Override
@@ -54,7 +48,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// Create a container ArrayList to contain the appointments which fall inside the requirement
 		ArrayList<Appt> apptsByTime = new ArrayList<Appt>();
 		for (Appt anAppt: apptList) {
-			
 			// The below code returns false, which is weird.
 			// System.out.println(anAppt.TimeSpan().EndTime().before(d.EndTime()));
 			// The below code returns true, which is weird.
@@ -69,10 +62,15 @@ public class ApptStorageNullImpl extends ApptStorage {
 			    if (Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == - 1 | 
 			    		Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == 0) {
 			    	apptsByTime.add(anAppt);
+			    	/* Debug to check if Utility.AfterBeforeEqual works correctly
+			    	System.out.println("Appt " + anAppt.getID() +": title is " + anAppt.getTitle() + 
+			    			", ST: " + anAppt.TimeSpan().StartTime().getHours() + " " +  anAppt.TimeSpan().StartTime().getMinutes() + 
+			    			", ET: " + anAppt.TimeSpan().EndTime().getHours() + " " +  anAppt.TimeSpan().EndTime().getMinutes());
+			    	*/
 			    }
-			}		
+			}
 		}
-		
+		System.out.println();
 		if (apptsByTime.isEmpty()) {
 			return null;
 		}

@@ -36,12 +36,12 @@ public class Utility {
 		newAppt.setID(0);
 		
 		String curYear = Integer.toString(currentY);
-	    int month = currentM - 1;
+	    int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
 	    String curMonth = Integer.toString(month);
-	    Integer day = new Integer(currentD);
-	    String curDay = Integer.toString(day);
-	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 09:00:00");
-		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDay+" 09:30:00");
+	    Integer date = new Integer(currentD);
+	    String curDate = Integer.toString(date);
+	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 09:00:00");
+		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 09:30:00");
 		
 		/*
 		Timestamp start = new Timestamp(0);
@@ -110,23 +110,29 @@ public class Utility {
 	 */
 	public final static int AfterBeforeEqual(Timestamp t1, Timestamp t2) {
 		if(t1.getYear() > t2.getYear()) {
+			System.out.println("Year bigger");
 			return 1;
 		}
 		else if (t1.getYear() < t2.getYear()) {
+			System.out.println("Year smaller");
 			return -1;
 		}
 		else {
-			if(t1.getMonth() > t2.getMonth()+1) {
+			if(t1.getMonth() > t2.getMonth()) {
+				System.out.println("Month bigger");
 				return 1;
 			}
-			else if (t1.getMonth() < t2.getMonth()+1) {
+			else if (t1.getMonth() < t2.getMonth()) {
+				System.out.println("Month smaller");
 				return -1;
 			}
 			else {
-				if (t1.getDay() > t2.getDay()) {
+				if (t1.getDate() > t2.getDate()) {
+					System.out.println("Date bigger");
 					return 1;
 				}
-				else if (t1.getDay() < t2.getDay()) {
+				else if (t1.getDate() < t2.getDate()) {
+					System.out.println("Date smaller");
 					return -1;
 				}
 				else {
