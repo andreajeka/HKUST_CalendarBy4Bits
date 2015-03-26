@@ -13,9 +13,11 @@ class CalCellRenderer extends DefaultTableCellRenderer
 
 	private int c;
 
-	public CalCellRenderer(Object value) {
-		if (value != null) {
+	public CalCellRenderer(CalGrid.dayInfo info) {
+		if (info == CalGrid.dayInfo.Today) {
 			setForeground(Color.red);
+		} else if (info == CalGrid.dayInfo.HasEvent){
+			setForeground(Color.green);
 		} else
 			setForeground(Color.black);
 		setBackground(Color.white);

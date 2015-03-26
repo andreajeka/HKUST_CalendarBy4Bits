@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
@@ -46,6 +47,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.TableView;
 
 
 public class CalGrid extends JFrame implements ActionListener {
@@ -191,18 +193,40 @@ public class CalGrid extends JFrame implements ActionListener {
 
 				if (tem.equals("") == false) {
 					try {
+						// Change today to red
 						if (today.get(Calendar.YEAR) == currentY
 								&& today.get(Calendar.MONTH) + 1 == currentM
 								&& today.get(Calendar.DAY_OF_MONTH) == Integer
 										.parseInt(tem)) {
-							return new CalCellRenderer(today);
+							return new CalCellRenderer(dayInfo.Today);
+						}
+						// Change days with event to green
+						else {
+							// Retrieve from storage
+							Timestamp start = new Timestamp(0);
+							start.setYear(currentY - 1900);
+							start.setMonth(currentM - 1);
+							start.setDate(Integer.parseInt(tem));
+							start.setHours(0);
+							start.setMinutes(0);
+
+							Timestamp end = new Timestamp(0);
+							end.setYear(currentY - 1900);
+							end.setMonth(currentM - 1);
+							end.setDate(Integer.parseInt(tem) + 1);
+							end.setHours(0);
+							end.setMinutes(0);
+							
+							Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
+							if (appData != null)
+								return new CalCellRenderer(dayInfo.HasEvent);
 						}
 					} catch (Throwable e) {
 						System.exit(1);
 					}
 
 				}
-				return new CalCellRenderer(null);
+				return new CalCellRenderer(dayInfo.Empty);
 			}
 		};
 
@@ -496,6 +520,11 @@ public class CalGrid extends JFrame implements ActionListener {
 		applist.setTodayAppt(GetTodayAppt());
 	}
 
+	// Enum to set day color
+	public enum dayInfo{
+		Today, HasEvent, Empty
+	}
+	
 	public void UpdateCal() {
 		if (mCurrUser != null) {
 			mCurrTitle = "Desktop Calendar - " + mCurrUser.ID() + " - ";
@@ -507,7 +536,8 @@ public class CalGrid extends JFrame implements ActionListener {
 //			for (int i = 0; i < 6; i++)
 //				for (int j = 0; j < 7; j++)
 //					apptMarker[i][j] = new Vector(10, 1);
-
+			
+			
 			TableModel t = prepareTableModel();
 			this.tableView.setModel(t);
 			this.tableView.repaint();
@@ -675,20 +705,18 @@ public class CalGrid extends JFrame implements ActionListener {
 	// Change today to a custom date and time, to be called from time machine widget
 	public void setToday(int yyyy, int mm, int dd, int hour, int min){
 		// Set application time
-		today.set(yyyy, mm, dd);
+		today.set(yyyy, mm - 1, dd);
+		//today.set(yyyy, mm, dd, hour, min);
 		currentY = today.get(Calendar.YEAR);
-		currentM = today.get(Calendar.MONTH);
+		currentM = today.get(Calendar.MONTH) + 1;
 		currentD = today.get(Calendar.DAY_OF_MONTH);
 		// Update the display
 		year.setText(new Integer(currentY).toString());
 		month.setSelectedIndex(currentM - 1);
 		getDateArray(data);
-		if (tableView != null) {
-			TableModel t = prepareTableModel();
-			tableView.setModel(t);
-			tableView.repaint();
-
-		}
+		TableModel t = prepareTableModel();
+		tableView.setModel(t);
+		tableView.repaint();
 		UpdateCal();
 	}
 

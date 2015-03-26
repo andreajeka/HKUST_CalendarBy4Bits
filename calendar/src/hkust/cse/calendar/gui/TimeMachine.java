@@ -1,7 +1,5 @@
 package hkust.cse.calendar.gui;
 
-import hkust.cse.calendar.unit.Appt;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,15 +12,10 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.TableModel;
-import javax.swing.text.BadLocationException;
 
 public class TimeMachine extends JDialog implements ActionListener {
 
@@ -56,7 +49,7 @@ public class TimeMachine extends JDialog implements ActionListener {
 	
 	private void commonConstructor(String title, CalGrid cal) {
 		parent = cal;
-		this.setAlwaysOnTop(true);
+		this.setAlwaysOnTop(false);
 		setTitle(title);
 		setModal(false);
 
@@ -142,6 +135,8 @@ public class TimeMachine extends JDialog implements ActionListener {
 			dispose();
 		} else if (e.getSource() == saveBut) {
 			saveButtonResponse();
+			setVisible(false);
+			dispose();
 		} else if (e.getSource() == monthB) {
 			if (monthB.getSelectedItem() != null) {
 				monthInt = monthB.getSelectedIndex() + 1;
