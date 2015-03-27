@@ -18,11 +18,7 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -56,10 +52,6 @@ import javax.swing.border.TitledBorder;
 public class AppScheduler extends JDialog implements ActionListener,
 		ComponentListener {
 
-	private static final int MODE_ONCE = 0;
-	private static final int MODE_DAILY = 1;
-	private static final int MODE_WEEKLY = 2;
-	private static final int MODE_MONTHLY = 3;
 	
 	private JLabel yearL;
 	private JTextField yearF;
@@ -168,7 +160,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 		
 		onceRB = new JRadioButton("Once");
 		pFreq.add(onceRB);
-		onceRB.setSelected(true);
 		dailyRB = new JRadioButton("Daily");
 		pFreq.add(dailyRB);
 		weeklyRB = new JRadioButton("Weekly");
@@ -441,167 +432,15 @@ public class AppScheduler extends JDialog implements ActionListener,
 		// Check if there is no appointment selected in the appointment list
 		if (selectedApptId == -1) {
 			/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
-			if (onceRB.isSelected()) {
-				addAppt(date, time, MODE_ONCE, -1, ApptStorageControllerImpl.NEW);
-			} else if (dailyRB.isSelected()) {
-				addAppt(date, time, MODE_DAILY, -1, ApptStorageControllerImpl.NEW);
-			} else if (weeklyRB.isSelected()) {
-				addAppt(date, time, MODE_WEEKLY, -1, ApptStorageControllerImpl.NEW);
-			} else if (monthlyRB.isSelected()) {
-				addAppt(date, time, MODE_MONTHLY, -1, ApptStorageControllerImpl.NEW);
-			}
+			parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
 		} else {
-			if (onceRB.isSelected()) {
-				addAppt(date, time, MODE_ONCE, selectedApptId, ApptStorageControllerImpl.MODIFY);
-			} else if (dailyRB.isSelected()) {
-				addAppt(date, time, MODE_DAILY, selectedApptId, ApptStorageControllerImpl.MODIFY);
-			} else if (weeklyRB.isSelected()) {
-				addAppt(date, time, MODE_WEEKLY, selectedApptId, ApptStorageControllerImpl.MODIFY);
-			} else if (monthlyRB.isSelected()) {
-				addAppt(date, time, MODE_MONTHLY, selectedApptId, ApptStorageControllerImpl.MODIFY);
-			}
-			
+			NewAppt.setID(selectedApptId);
+			parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.MODIFY);
 			selectedApptId = -1;
 		}
 		
 		setVisible(false);
 		dispose();
-	}
-	
-	private void addAppt(int[] date, int[] time, int selectedApptId, int mode, int action) {
-		String title = titleField.getText();
-		String info = detailArea.getText();
-		
-		if (mode == MODE_ONCE) {
-			Timestamp stampStart = CreateTimeStamp(date,time[0]);
-			Timestamp stampEnd = CreateTimeStamp(date, time[1]);
-			TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
-			
-			if (selectedApptId != -1) {
-				NewAppt.setID(selectedApptId);
-			}
-			NewAppt.setTimeSpan(timeSpan);
-			NewAppt.setTitle(title);
-			NewAppt.setInfo(info);
-			
-			parent.controller.ManageAppt(NewAppt, action);
-		} else if (mode == MODE_DAILY) {
-			// Daily event lasts a month
-			Integer initMonth = date[1];
-			
-			for (int i = 0; i < CalGrid.monthDays[date[1] - 1] + 1; i++) {
-				Timestamp stampStart = CreateTimeStamp(date,time[0]);
-				Timestamp stampEnd = CreateTimeStamp(date, time[1]);
-				TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
-				
-				Appt appt = new Appt();
-				if (selectedApptId != -1) {
-					NewAppt.setID(selectedApptId);
-				}
-				appt.setTimeSpan(timeSpan);
-				appt.setTitle(title);
-				appt.setInfo(info);
-				
-				parent.controller.ManageAppt(appt, action);
-				
-				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-				try {
-					Date tempDate;
-					if (date[1] < 10) {
-						tempDate = dateFormat.parse(String.valueOf(date[0] + "0" + String.valueOf(date[1]) + String.valueOf(date[2])));
-					} else {
-						tempDate = dateFormat.parse(String.valueOf(date[0] + String.valueOf(date[1]) + String.valueOf(date[2])));
-					}
-					
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTime(tempDate);
-					calendar.add(Calendar.DATE, 1);
-					tempDate = calendar.getTime();
-					
-					// Checking to prevent overflow to the month after next month
-					// e.g. 1-31 to 2-28, but not 3-2
-					if (calendar.get(Calendar.MONTH) + 1 > initMonth + 1) {
-						return;
-					}
-					date[0] = calendar.get(Calendar.YEAR);
-					date[1] = calendar.get(Calendar.MONTH) + 1;
-					date[2] = calendar.get(Calendar.DAY_OF_MONTH);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} else if (mode == MODE_WEEKLY) {
-			// Weekly event lasts for 4 weeks i.e. one month
-			for (int i = 0; i < 4; i++) {
-				Timestamp stampStart = CreateTimeStamp(date,time[0]);
-				Timestamp stampEnd = CreateTimeStamp(date, time[1]);
-				TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
-				
-				Appt appt = new Appt();
-				appt.setTimeSpan(timeSpan);
-				appt.setTitle(title);
-				appt.setInfo(info);
-				
-				parent.controller.ManageAppt(appt, action);
-				
-				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-				try {
-					Date tempDate;
-					if (date[1] < 10) {
-						tempDate = dateFormat.parse(String.valueOf(date[0] + "0" + String.valueOf(date[1]) + String.valueOf(date[2])));
-					} else {
-						tempDate = dateFormat.parse(String.valueOf(date[0] + String.valueOf(date[1]) + String.valueOf(date[2])));
-					}
-					
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTime(tempDate);
-					calendar.add(Calendar.WEEK_OF_MONTH, 1);
-					tempDate = calendar.getTime();
-					date[0] = calendar.get(Calendar.YEAR);
-					date[1] = calendar.get(Calendar.MONTH) + 1;
-					date[2] = calendar.get(Calendar.DAY_OF_MONTH);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} else if (mode == MODE_MONTHLY) {
-			// Monthly event lasts a year
-			Integer initDay = date[2];
-			
-			for (int i = 0; i < 13; i++) {
-				if (date[2] != 0) {
-					// Appointment with non-existing date skipped
-					Timestamp stampStart = CreateTimeStamp(date,time[0]);
-					Timestamp stampEnd = CreateTimeStamp(date, time[1]);
-					TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
-					
-					Appt appt = new Appt();
-					appt.setTimeSpan(timeSpan);
-					appt.setTitle(title);
-					appt.setInfo(info);
-					
-					parent.controller.ManageAppt(appt, action);
-				} else {
-					// Reset the day to the initial value for further computation
-					date[2] = initDay;
-				}
-				
-				date[1]++;
-				
-				if (date[1] == 13) {
-					date[0]++;
-					date[1] = 1;
-				}
-				
-				// Used for checking date validity
-				// e.g. Not every month has day 31, day of month is marked as 0 when it does not exist
-				if (date[2] > CalGrid.monthDays[date[1] - 1]) {
-					date[2] = 0;
-				}
-			}
-		}
 	}
 
 	@SuppressWarnings("deprecation")
