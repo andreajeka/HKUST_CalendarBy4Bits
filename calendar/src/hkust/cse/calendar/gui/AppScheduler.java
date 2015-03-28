@@ -468,7 +468,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		dispose();
 	}
 	
-	private void addAppt(int[] date, int[] time, int selectedApptId, int mode, int action) {
+	private void addAppt(int[] date, int[] time, int mode, int selectedApptId, int action) {
 		String title = titleField.getText();
 		String info = detailArea.getText();
 		
