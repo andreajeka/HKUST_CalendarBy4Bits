@@ -110,6 +110,11 @@ public class TimeMachine extends JDialog implements ActionListener {
 
 		contentPane.add("North", top);
 		
+		// Set default values
+		yearF.setText(Integer.toString(parent.currentY));
+		TimeH.setText("12");
+		TimeM.setText("0");
+		
 		// Save and cancel
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
