@@ -4,6 +4,7 @@ import hkust.cse.calendar.gui.CalGrid;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,11 +17,13 @@ public class notificationServices {
 	private Calendar calendar;
 	private Date time, time2;
 	private String message;
+	private GregorianCalendar today;
 	
 	
 	
 	public notificationServices(CalGrid cal, String userName, String message){
 		
+		today = cal.getToday();
 		calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, cal.currentY);
 		calendar.set(Calendar.MONTH, cal.currentM-1);
@@ -29,7 +32,7 @@ public class notificationServices {
 		calendar.set(Calendar.MINUTE, 12);
 		calendar.set(Calendar.SECOND, 12);
 		time = calendar.getTime();
-		time2 = cal.today.getTime();
+		
 		System.out.println(cal.currentY + " " + cal.currentM + " " + cal.currentD);
 		
 		timer = new Timer();
@@ -49,7 +52,7 @@ public class notificationServices {
 			this.cals = cal;
 		}
 		public void run(){
-			JOptionPane.showMessageDialog(null, cals.today.getTime(), this.userName, JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, today.getTime(), this.userName, JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }
