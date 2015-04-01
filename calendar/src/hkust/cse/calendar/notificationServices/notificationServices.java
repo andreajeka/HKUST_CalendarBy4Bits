@@ -1,5 +1,7 @@
 package hkust.cse.calendar.notificationServices;
 
+import hkust.cse.calendar.gui.CalGrid;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
@@ -12,36 +14,42 @@ import javax.swing.JOptionPane;
 public class notificationServices {
 	private Timer timer;
 	private Calendar calendar;
-	private Date time;
+	private Date time, time2;
 	private String message;
 	
 	
-	public notificationServices(String userName, String message, int year, int month, int date, int hour, int minute, int second){
+	
+	public notificationServices(CalGrid cal, String userName, String message){
 		
 		calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, month-1);
-		calendar.set(Calendar.DATE, date);
-		calendar.set(Calendar.HOUR_OF_DAY, hour);
-		calendar.set(Calendar.MINUTE, minute);
-		calendar.set(Calendar.SECOND, second);
+		calendar.set(Calendar.YEAR, cal.currentY);
+		calendar.set(Calendar.MONTH, cal.currentM-1);
+		calendar.set(Calendar.DATE, cal.currentD);
+		calendar.set(Calendar.HOUR_OF_DAY, 12);
+		calendar.set(Calendar.MINUTE, 12);
+		calendar.set(Calendar.SECOND, 12);
 		time = calendar.getTime();
-		
+		time2 = cal.today.getTime();
+		System.out.println(cal.currentY + " " + cal.currentM + " " + cal.currentD);
 		
 		timer = new Timer();
-		timer.schedule(new alartTask(userName, message), time);
+		timer.schedule(new alartTask(userName, message, cal), time);
+		
+		
 	}
 	
 	class alartTask extends TimerTask{
 		private String message;
 		private String userName;
+		CalGrid cals;
 		
-		public alartTask(String userName, String message){
+		public alartTask(String userName, String message, CalGrid cal){
 			this.userName = userName;
 			this.message = message;
+			this.cals = cal;
 		}
 		public void run(){
-			JOptionPane.showMessageDialog(null, this.message, this.userName, JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, cals.today.getTime(), this.userName, JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }
