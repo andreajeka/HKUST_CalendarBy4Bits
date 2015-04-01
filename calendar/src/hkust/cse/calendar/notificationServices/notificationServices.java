@@ -25,13 +25,14 @@ public class notificationServices {
 		
 		today = cal.getToday();
 		calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, cal.currentY);
-		calendar.set(Calendar.MONTH, cal.currentM-1);
-		calendar.set(Calendar.DATE, cal.currentD);
+		calendar.set(Calendar.YEAR, 2015);
+		calendar.set(Calendar.MONTH, 3-1);
+		calendar.set(Calendar.DATE, 31);
 		calendar.set(Calendar.HOUR_OF_DAY, 12);
 		calendar.set(Calendar.MINUTE, 12);
 		calendar.set(Calendar.SECOND, 12);
 		time = calendar.getTime();
+		long ms = today.getTimeInMillis();
 		
 		System.out.println(cal.currentY + " " + cal.currentM + " " + cal.currentD);
 		
@@ -52,7 +53,8 @@ public class notificationServices {
 			this.cals = cal;
 		}
 		public void run(){
-			JOptionPane.showMessageDialog(null, today.getTime(), this.userName, JOptionPane.WARNING_MESSAGE);
+			long diff = today.getTimeInMillis() - calendar.getTimeInMillis();
+			JOptionPane.showMessageDialog(null, today.getTime()+ " " + diff/86400000, this.userName, JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }
