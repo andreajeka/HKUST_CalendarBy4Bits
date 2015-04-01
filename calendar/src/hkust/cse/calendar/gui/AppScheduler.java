@@ -102,6 +102,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private DefaultComboBoxModel listModel;
 	private JLabel titleLoc;
 	private JComboBox locField;
+	private JLabel titleFreq;
+	private JComboBox FreqField;
+	private JLabel titleFreqDate;
+	private JComboBox FreqDateField;
 	
 
 //	private JTextField attendField;
@@ -180,6 +184,31 @@ public class AppScheduler extends JDialog implements ActionListener,
 		group.add(dailyRB);
 		group.add(weeklyRB);
 		group.add(monthlyRB);
+
+
+
+		//Add two combo box
+		titleFreq = new JLabel("Frequency");
+		pFreq.add(titleFreq);
+		
+		String[] FreqStrings = {"Once","Daily","Weekly","Monthly"};
+		
+		
+		listModel = new DefaultComboBoxModel(FreqStrings);
+		FreqField = new JComboBox(listModel);
+		pFreq.add(FreqField);
+		
+		FreqField.setSelectedItem(FreqStrings[0]);
+		
+		titleFreqDate = new JLabel("End Date of Frequency");
+		pFreq.add(titleFreqDate);
+		
+		listModel = new DefaultComboBoxModel();
+		FreqDateField = new JComboBox(listModel);
+		pFreq.add(FreqDateField);
+
+
+
 		
 		JPanel pTime = new JPanel();
 		pTime.setLayout(new BorderLayout());
