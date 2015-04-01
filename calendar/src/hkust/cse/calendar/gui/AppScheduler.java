@@ -11,7 +11,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -32,8 +31,6 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -41,10 +38,8 @@ import javax.swing.JFrame;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -78,10 +73,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JTextField eTimeH;
 	private JLabel eTimeML;
 	private JTextField eTimeM;
-	private JRadioButton onceRB;
-	private JRadioButton dailyRB;
-	private JRadioButton weeklyRB;
-	private JRadioButton monthlyRB;
 	
 	private JToggleButton reminderToggle;
 
@@ -99,24 +90,27 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private boolean isJoint = false;
 
 	private JTextArea detailArea;
-
+	private Vector<String> items;
+	
 	private JSplitPane pDes;
 	JPanel detailPanel;
-	private JList list;
-	private Vector items;
-	private DefaultComboBoxModel listModel;
+	private DefaultComboBoxModel<String> listModelString;
+	private DefaultComboBoxModel<Integer> listModelInt;
 	private JLabel titleLoc;
-	private JComboBox locField;
+	private JComboBox<String> locField;
 	private JLabel titleFreq;
-	private JComboBox FreqField;
-	private JLabel titleFreqDate;
-	private JComboBox FreqDateField;
+	private JComboBox<String> FreqField;
+	private JLabel titleFreqAmount;
+	private JComboBox<Integer> FreqAmountField;
+	private JLabel labelEnd;
+	JPanel pRemind;
 	
 
 //	private JTextField attendField;
 //	private JTextField rejectField;
 //	private JTextField waitingField;
 	private int selectedApptId = -1;
+	private int freqAmount = 0;
 	private boolean isReminderToggled = false;
 	
 
@@ -178,54 +172,81 @@ public class AppScheduler extends JDialog implements ActionListener,
 		JPanel pFreq = new JPanel();
 		Border freqBorder = new TitledBorder(null, "FREQUENCY");
 		pFreq.setBorder(freqBorder);
-		
-		onceRB = new JRadioButton("Once");
-		pFreq.add(onceRB);
-		onceRB.setSelected(true);
-		dailyRB = new JRadioButton("Daily");
-		pFreq.add(dailyRB);
-		weeklyRB = new JRadioButton("Weekly");
-		pFreq.add(weeklyRB);
-		monthlyRB = new JRadioButton("Monthly");
-		pFreq.add(monthlyRB);
-		ButtonGroup group = new ButtonGroup();
-		group.add(onceRB);
-		group.add(dailyRB);
-		group.add(weeklyRB);
-		group.add(monthlyRB);
 
 		//Add two combo box
 		titleFreq = new JLabel("Frequency");
-		pFreq.add(titleFreq);
 		
 		String[] FreqStrings = {"Once","Daily","Weekly","Monthly"};
-		
-		
-		listModel = new DefaultComboBoxModel(FreqStrings);
-		FreqField = new JComboBox(listModel);
-		pFreq.add(FreqField);
-		
+		listModelString = new DefaultComboBoxModel<String>(FreqStrings);
+		FreqField = new JComboBox<String>(listModelString);
 		FreqField.setSelectedItem(FreqStrings[0]);
 		
-		titleFreqDate = new JLabel("End Date of Frequency");
-		pFreq.add(titleFreqDate);
+		FreqField.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				if (FreqField.getSelectedItem().equals(FreqStrings[0])) {
+					titleFreqAmount.setEnabled(false);
+					FreqAmountField.setEnabled(false);
+					labelEnd.setText("");
+				} else {
+					titleFreqAmount.setEnabled(true);
+					FreqAmountField.setEnabled(true);
+					if (FreqField.getSelectedItem().equals(FreqStrings[1])) {
+						titleFreqAmount.setText("For");
+						labelEnd.setText("day(s)");
+						pRemind.setBorder(new EmptyBorder(15,5,5,15));
+					} else if (FreqField.getSelectedItem().equals(FreqStrings[2])) {
+						titleFreqAmount.setText("Every");
+						labelEnd.setText("week(s)");
+						pRemind.setBorder(new EmptyBorder(15,10,5,5));
+					} else if (FreqField.getSelectedItem().equals(FreqStrings[3])) {
+						titleFreqAmount.setText("Every");
+						labelEnd.setText("month(s)");
+						pRemind.setBorder(new EmptyBorder(15,20,5,3));
+					}
+				}
+			}
+		});
 		
-		listModel = new DefaultComboBoxModel();
-		FreqDateField = new JComboBox(listModel);
-		pFreq.add(FreqDateField);
+		// Set a list of numbers for frequency amount. Max is 30
+		Integer[] FreqAmount = new Integer[30];
+		int count = 1;
+		for (int i = 0; i < 30; i++) {
+			FreqAmount[i] = count;
+			count++;
+		}
+		titleFreqAmount = new JLabel("Every");
+		titleFreqAmount.setEnabled(false);
+		listModelInt = new DefaultComboBoxModel<Integer>(FreqAmount);
+		FreqAmountField = new JComboBox<Integer>(listModelInt);
+		FreqAmountField.setSelectedItem(FreqStrings[0]);
+		FreqAmountField.setEnabled(false);
+		
+		labelEnd = new JLabel();
+		
+		pFreq.add(titleFreq);
+		pFreq.add(FreqField);
+		pFreq.add(titleFreqAmount);
+		pFreq.add(FreqAmountField);
+		pFreq.add(labelEnd);
 
-		JPanel pRemind = new JPanel();
-		pRemind.setBorder(new EmptyBorder(10,5,5,10));
+		// Create a reminder toggle button
+		pRemind = new JPanel();
+		pRemind.setBorder(new EmptyBorder(15,5,5,25));
 		
 		reminderToggle = new JToggleButton("REMINDER OFF");
 		reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
+		reminderToggle.setForeground(Color.BLUE);
 		reminderToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (reminderToggle.isSelected()) {
 					reminderToggle.setText("REMINDER ON");
+					reminderToggle.setBorder(new BevelBorder(BevelBorder.LOWERED));
+					reminderToggle.setForeground(Color.RED);
 					isReminderToggled = true;
 				} else {
 					reminderToggle.setText("REMINDER OFF");
+					reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
+					reminderToggle.setForeground(Color.BLUE);
 					isReminderToggled = false;
 				}
 			}
@@ -236,7 +257,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 		FnR.add(pFreq, BorderLayout.WEST);
 		FnR.add(pRemind, BorderLayout.EAST);
 
-		
 		JPanel pTime = new JPanel();
 		pTime.setLayout(new BorderLayout());
 		pTime.add("West", psTime);
@@ -261,7 +281,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		
 		titleLoc = new JLabel("LOCATION");
 		titleAndTextPanel.add(titleLoc);
-		items = new Vector();
+		items = new Vector<String>();
 		Location[] locations = cal.controller.getLocationList();
 		if(locations == null){
 			locations = new Location[0];
@@ -273,8 +293,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 				items.addElement(locations[i].getName().toString());
 			}
 		}
-		listModel = new DefaultComboBoxModel(items);
-		locField = new JComboBox(listModel);
+		listModelString = new DefaultComboBoxModel<String>(items);
+		locField = new JComboBox<String>(listModelString);
 		titleAndTextPanel.add(locField);
 		
 
@@ -483,6 +503,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		/* Assign information to the newly created appointment. */
 		int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
 		int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
+		/*
 		Timestamp stampStart = CreateTimeStamp(date,time[0]);
 		Timestamp stampEnd = CreateTimeStamp(date, time[1]);
 		TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
@@ -496,28 +517,30 @@ public class AppScheduler extends JDialog implements ActionListener,
 		
 		String location = (String) locField.getSelectedItem();
 		NewAppt.setLocation(location);
+		 */
+		freqAmount = FreqAmountField.getSelectedIndex() + 1;
 		
 		// Check if there is no appointment selected in the appointment list
 		if (selectedApptId == -1) {
 			/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
-			if (onceRB.isSelected()) {
-				addAppt(date, time, MODE_ONCE, -1, ApptStorageControllerImpl.NEW);
-			} else if (dailyRB.isSelected()) {
-				addAppt(date, time, MODE_DAILY, -1, ApptStorageControllerImpl.NEW);
-			} else if (weeklyRB.isSelected()) {
-				addAppt(date, time, MODE_WEEKLY, -1, ApptStorageControllerImpl.NEW);
-			} else if (monthlyRB.isSelected()) {
-				addAppt(date, time, MODE_MONTHLY, -1, ApptStorageControllerImpl.NEW);
+			if (FreqField.getSelectedItem().equals("Once")) {
+				addAppt(date, time, MODE_ONCE, ApptStorageControllerImpl.NEW);
+			} else if (FreqField.getSelectedItem().equals("Daily")) {
+				addAppt(date, time, MODE_DAILY, ApptStorageControllerImpl.NEW);
+			} else if (FreqField.getSelectedItem().equals("Weekly")) {
+				addAppt(date, time, MODE_WEEKLY, ApptStorageControllerImpl.NEW);
+			} else if (FreqField.getSelectedItem().equals("Monthly")) {
+				addAppt(date, time, MODE_MONTHLY, ApptStorageControllerImpl.NEW);
 			}
 		} else {
-			if (onceRB.isSelected()) {
-				addAppt(date, time, MODE_ONCE, selectedApptId, ApptStorageControllerImpl.MODIFY);
-			} else if (dailyRB.isSelected()) {
-				addAppt(date, time, MODE_DAILY, selectedApptId, ApptStorageControllerImpl.MODIFY);
-			} else if (weeklyRB.isSelected()) {
-				addAppt(date, time, MODE_WEEKLY, selectedApptId, ApptStorageControllerImpl.MODIFY);
-			} else if (monthlyRB.isSelected()) {
-				addAppt(date, time, MODE_MONTHLY, selectedApptId, ApptStorageControllerImpl.MODIFY);
+			if (FreqField.getSelectedItem().equals("Once")) {
+				addAppt(date, time, MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+			} else if (FreqField.getSelectedItem().equals("Daily")) {
+				addAppt(date, time, MODE_DAILY, ApptStorageControllerImpl.MODIFY);
+			} else if (FreqField.getSelectedItem().equals("Weekly")) {
+				addAppt(date, time, MODE_WEEKLY, ApptStorageControllerImpl.MODIFY);
+			} else if (FreqField.getSelectedItem().equals("Monthly")) {
+				addAppt(date, time, MODE_MONTHLY, ApptStorageControllerImpl.MODIFY);
 			}
 			
 			selectedApptId = -1;
@@ -527,9 +550,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 		dispose();
 	}
 	
-	private void addAppt(int[] date, int[] time, int mode, int selectedApptId, int action) {
+	private void addAppt(int[] date, int[] time, int mode, int action) {
 		String title = titleField.getText();
 		String info = detailArea.getText();
+		String location = (String) locField.getSelectedItem();
 		
 		if (mode == MODE_ONCE) {
 			Timestamp stampStart = CreateTimeStamp(date,time[0]);
@@ -542,13 +566,15 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setTimeSpan(timeSpan);
 			NewAppt.setTitle(title);
 			NewAppt.setInfo(info);
+			NewAppt.setLocation(location);
+			NewAppt.setFrequency("Once");
+			NewAppt.setFrequencyAmount(freqAmount);
 			
 			parent.controller.ManageAppt(NewAppt, action);
-		} else if (mode == MODE_DAILY) {
-			// Daily event lasts a month
-			Integer initMonth = date[1];
 			
-			for (int i = 0; i < CalGrid.monthDays[date[1] - 1] + 1; i++) {
+		} else if (mode == MODE_DAILY) {
+			Integer initMonth = date[1];
+			for (int i = 0; i < freqAmount; i++) {
 				Timestamp stampStart = CreateTimeStamp(date,time[0]);
 				Timestamp stampEnd = CreateTimeStamp(date, time[1]);
 				TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
@@ -560,6 +586,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setTimeSpan(timeSpan);
 				appt.setTitle(title);
 				appt.setInfo(info);
+				appt.setLocation(location);
+				appt.setFrequency("Daily");
+				appt.setFrequencyAmount(freqAmount);
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -591,8 +620,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 				}
 			}
 		} else if (mode == MODE_WEEKLY) {
-			// Weekly event lasts for 4 weeks i.e. one month
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < freqAmount; i++) {
 				Timestamp stampStart = CreateTimeStamp(date,time[0]);
 				Timestamp stampEnd = CreateTimeStamp(date, time[1]);
 				TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
@@ -601,6 +629,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setTimeSpan(timeSpan);
 				appt.setTitle(title);
 				appt.setInfo(info);
+				appt.setLocation(location);
+				appt.setFrequency("Weekly");
+				appt.setFrequencyAmount(freqAmount);
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -626,10 +657,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 				}
 			}
 		} else if (mode == MODE_MONTHLY) {
-			// Monthly event lasts a year
 			Integer initDay = date[2];
 			
-			for (int i = 0; i < 13; i++) {
+			for (int i = 0; i < freqAmount; i++) {
 				if (date[2] != 0) {
 					// Appointment with non-existing date skipped
 					Timestamp stampStart = CreateTimeStamp(date,time[0]);
@@ -640,6 +670,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 					appt.setTimeSpan(timeSpan);
 					appt.setTitle(title);
 					appt.setInfo(info);
+					appt.setLocation(location);
+					appt.setFrequency("Monthly");
+					appt.setFrequencyAmount(freqAmount);
 					
 					parent.controller.ManageAppt(appt, action);
 				} else {
@@ -702,8 +735,11 @@ public class AppScheduler extends JDialog implements ActionListener,
 	    eTimeH.setText(timeHourE);
 	    eTimeM.setText(timeMinE);
 	    
+	    reminderToggle.setSelected(isReminderToggled);
+	    
 	    titleField.setText(appt.getTitle());
 	    detailArea.setText(appt.getInfo());
+	    
 	    
 	}
 
