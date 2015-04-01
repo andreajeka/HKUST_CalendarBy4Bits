@@ -109,51 +109,58 @@ public class Utility {
 	 * -1 when t1 < t2
 	 */
 	public final static int AfterBeforeEqual(Timestamp t1, Timestamp t2) {
-		if(t1.getYear() > t2.getYear()) {
-			System.out.println("Year bigger");
+		int t1Year = t1.getYear();
+		int t2Year = t2.getYear();
+		int t1Month = t1.getMonth();
+		int t2Month = t2.getMonth();
+		int t1Date = t1.getDate();
+		int t2Date = t2.getDate();
+		int t1Hours = t1.getHours();
+		int t2Hours = t2.getHours();
+		int t1Minutes = t1.getMinutes();
+		int t2Minutes = t2.getMinutes();
+		int t1Seconds = t1.getSeconds();
+		int t2Seconds = t2.getSeconds();
+		
+		if(t1Year > t2Year) {
 			return 1;
 		}
-		else if (t1.getYear() < t2.getYear()) {
-			System.out.println("Year smaller");
+		else if (t1Year < t2Year) {
 			return -1;
 		}
 		else {
-			if(t1.getMonth() > t2.getMonth()) {
-				System.out.println("Month bigger");
+			if(t1Month > t2Month) {
 				return 1;
 			}
-			else if (t1.getMonth() < t2.getMonth()) {
-				System.out.println("Month smaller");
+			else if (t1Month < t2Month) {
 				return -1;
 			}
 			else {
-				if (t1.getDate() > t2.getDate()) {
-					System.out.println("Date bigger");
+				if (t1Date > t2Date) {
 					return 1;
 				}
-				else if (t1.getDate() < t2.getDate()) {
-					System.out.println("Date smaller");
+				else if (t1Date < t2Date) {
 					return -1;
 				}
 				else {
-					if (t1.getHours() > t2.getHours()) {
+					if (t1Hours > t2Hours) {
 						return 1;
 					}
-					else if (t1.getHours() < t2.getHours()){
+					else if (t1Hours < t2Hours){
 						return -1;
 					}
 					else {
-						if (t1.getMinutes() > t2.getMinutes()) {
+						if (t1Minutes > t2Minutes) {
 							return 1;
 						}
-						else if (t1.getMinutes() < t2.getMinutes()) {
+						else if (t1Minutes < t2Minutes) {
 							return -1;
 						}
 						else { //if minutes are equal
-							if (t1.getSeconds() > t2.getSeconds()) {
+							if (t1Seconds > t2Seconds) {
 								return 1;
 							}
-							else if (t1.getSeconds() < t2.getSeconds()) {
+							else if (t1Seconds < t2Seconds) {
 								return -1;
 							}
 							else return 0;

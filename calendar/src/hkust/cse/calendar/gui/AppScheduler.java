@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -48,8 +49,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 
@@ -79,6 +82,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JRadioButton dailyRB;
 	private JRadioButton weeklyRB;
 	private JRadioButton monthlyRB;
+	
+	private JToggleButton reminderToggle;
 
 	private JTextField titleField;
 
@@ -108,6 +113,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 //	private JTextField rejectField;
 //	private JTextField waitingField;
 	private int selectedApptId = -1;
+	private boolean isReminderToggled = false;
 	
 
 	@SuppressWarnings("deprecation")
@@ -161,6 +167,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 		eTimeM = new JTextField(4);
 		peTime.add(eTimeM);
 
+		JPanel FnR = new JPanel();
+		FnR.setLayout(new BorderLayout());
+				
 		// TODO Add radio buttons
 		JPanel pFreq = new JPanel();
 		Border freqBorder = new TitledBorder(null, "FREQUENCY");
@@ -180,12 +189,34 @@ public class AppScheduler extends JDialog implements ActionListener,
 		group.add(dailyRB);
 		group.add(weeklyRB);
 		group.add(monthlyRB);
+
+		JPanel pRemind = new JPanel();
+		pRemind.setBorder(new EmptyBorder(10,5,5,10));
+		
+		reminderToggle = new JToggleButton("REMINDER OFF");
+		reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
+		reminderToggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (reminderToggle.isSelected()) {
+					reminderToggle.setText("REMINDER ON");
+					isReminderToggled = true;
+				} else {
+					reminderToggle.setText("REMINDER OFF");
+					isReminderToggled = false;
+				}
+			}
+		});
+		
+		pRemind.add(reminderToggle);
+		
+		FnR.add(pFreq, BorderLayout.WEST);
+		FnR.add(pRemind, BorderLayout.EAST);
 		
 		JPanel pTime = new JPanel();
 		pTime.setLayout(new BorderLayout());
 		pTime.add("West", psTime);
 		pTime.add("East", peTime);
-		pTime.add("South", pFreq);
+		pTime.add("South", FnR);
 		
 		JPanel top = new JPanel();
 		top.setLayout(new BorderLayout());
@@ -294,7 +325,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-
 		// distinguish which button is clicked and continue with require function
 		if (e.getSource() == CancelBut) {
 
@@ -316,6 +346,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		parent.getAppList().setTodayAppt(parent.GetTodayAppt());
 		parent.repaint();
 	}
+	
 
 	private JPanel createPartOperaPane() {
 		JPanel POperaPane = new JPanel();
@@ -437,6 +468,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 	 
 		String info = detailArea.getText();
 		NewAppt.setInfo(info);
+		
+		String location = (String) locField.getSelectedItem();
+		NewAppt.setLocation(location);
 		
 		// Check if there is no appointment selected in the appointment list
 		if (selectedApptId == -1) {

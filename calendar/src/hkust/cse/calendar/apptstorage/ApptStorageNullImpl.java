@@ -70,7 +70,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 			    }
 			}
 		}
-		System.out.println();
 		if (apptsByTime.isEmpty()) {
 			return null;
 		}
