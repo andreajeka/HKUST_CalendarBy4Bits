@@ -23,6 +23,12 @@ public class Appt implements Serializable {
 	
 	private LinkedList<String> waiting;			// The waiting list
 	
+	private String location;					// The location
+	
+	private String frequency;					// The type of frequency
+	
+	private int frequencyAmount;				// The amount of frequency
+	
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
 		mTimeSpan = null;
@@ -33,6 +39,7 @@ public class Appt implements Serializable {
 		reject = new LinkedList<String>();
 		waiting = new LinkedList<String>();
 		joinApptID = -1;
+		location = "";
 	}
 
 	// Getter of the mTimeSpan
@@ -55,6 +62,19 @@ public class Appt implements Serializable {
 		return mApptID;
 	}
 	
+	// Getter of the location
+	public String getLocation() {
+		return location;
+	}
+	
+	public String getFrequency() {
+		return frequency;
+	}
+
+	public int getFrequencyAmount() {
+		return frequencyAmount;
+	}
+
 	// Getter of the join appointment id
 	public int getJoinID(){
 		return joinApptID;
@@ -168,6 +188,21 @@ public class Appt implements Serializable {
 	// Setter if the appointment id
 	public void setID(int id) {
 		mApptID = id;
+	}
+	
+	// Setter of the location
+	public void setLocation(String location) {
+		this.location= location;
+	}
+	
+	// Setter of frequency
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
+	
+	// Setter of frequency amount
+	public void setFrequencyAmount(int frequencyAmount) {
+		this.frequencyAmount = frequencyAmount;
 	}
 	
 	// check whether this is a joint appointment

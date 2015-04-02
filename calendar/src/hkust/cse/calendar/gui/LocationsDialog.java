@@ -23,8 +23,8 @@ public class LocationsDialog extends JFrame {
 
 	private ApptStorageControllerImpl _controller;
 
-	private DefaultListModel listModel;
-	private JList list;
+	private DefaultListModel<String> listModel;
+	private JList<String> list;
 	private JTextField locNameText;
 	private JScrollPane scroll;
 	private JPanel buttonPane = new JPanel();		
@@ -41,9 +41,9 @@ public class LocationsDialog extends JFrame {
 		this.setLocationByPlatform(true);
 		this.setSize(300, 200);
 
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<String>();
 
-		list = new JList(listModel);
+		list = new JList<String>(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
 		list.setVisibleRowCount(5);

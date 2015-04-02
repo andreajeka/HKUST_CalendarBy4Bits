@@ -352,15 +352,19 @@ public class CalGrid extends JFrame implements ActionListener {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equals("Manual Scheduling")) {
-					AppScheduler a = new AppScheduler("New", CalGrid.this);
-					a.updateSetApp(hkust.cse.calendar.gui.Utility
-							.createDefaultAppt(currentY, currentM, currentD,
-									mCurrUser));
-					a.setLocationRelativeTo(null);
-					a.show();
-					TableModel t = prepareTableModel();
-					tableView.setModel(t);
-					tableView.repaint();
+					if (controller.getLocationList() != null) {
+						AppScheduler a = new AppScheduler("New", CalGrid.this);
+						a.updateSetApp(hkust.cse.calendar.gui.Utility
+								.createDefaultAppt(currentY, currentM, currentD,
+										mCurrUser));
+						a.setLocationRelativeTo(null);
+						a.show();
+						TableModel t = prepareTableModel();
+						tableView.setModel(t);
+						tableView.repaint();
+					} else {
+						JOptionPane.showMessageDialog(null, "Input at least one location in 'Manage Locations'", "NO LOCATION!", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 				else if (e.getActionCommand().equals("Set .. As Today")){
 					TimeMachine tm = new TimeMachine("Time Machine", CalGrid.this);
