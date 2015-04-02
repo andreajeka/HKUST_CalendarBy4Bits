@@ -584,7 +584,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			
 			NewAppt.setTimer(NewAppt.getReminder());
 			
-			System.out.println("NewAppt " + NewAppt.getReminder() + " " + NewAppt.getIsReminder());
+			//System.out.println("NewAppt " + NewAppt.getReminder() + " " + NewAppt.getIsReminder());
 			
 			parent.controller.ManageAppt(NewAppt, action);
 			

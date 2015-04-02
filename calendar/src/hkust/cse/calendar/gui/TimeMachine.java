@@ -265,9 +265,9 @@ public class TimeMachine extends JDialog implements ActionListener {
 				mAppt[i].setTempReminder(diffG.getTime());
 				
 				
-				System.out.println(diffG.getTime());
-				System.out.println(diffD.getTime());
-				System.out.println(diff);
+			//	System.out.println(diffG.getTime());
+			//	System.out.println(diffD.getTime());
+			//	System.out.println(diff);
 				
 			}
 
@@ -279,6 +279,11 @@ public class TimeMachine extends JDialog implements ActionListener {
 			startBut.setEnabled(true);
 			fastBut.setEnabled(false);
 			rewindBut.setEnabled(false);
+			
+			//reset all timer to original
+			for(int i=0; i<mAppt.length; i++){
+				mAppt[i].resetEveryTimer();
+			}
 
 		} else if (e.getSource() == fastBut){
 
@@ -323,7 +328,7 @@ public class TimeMachine extends JDialog implements ActionListener {
 			diffCal = new GregorianCalendar();
 	
 			
-			System.out.println("time machine start date: " + diffDate);
+			//System.out.println("time machine start date: " + diffDate);
 			if(mAppt != null){
 				tempCal = new GregorianCalendar();
 				for(int i=0; i<mAppt.length; i++){
@@ -333,6 +338,7 @@ public class TimeMachine extends JDialog implements ActionListener {
 					if(mAppt[i].checkTimerLife()){
 						mAppt[i].setTempReminder(tempDate);
 						mAppt[i].resetTimer(tempDate);
+						//System.out.println(mAppt[i].checkTimerLife());
 					}
 				}
 			}

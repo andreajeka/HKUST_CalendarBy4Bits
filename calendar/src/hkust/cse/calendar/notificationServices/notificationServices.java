@@ -26,7 +26,7 @@ public class notificationServices {
 		this.mInfo = _mInfo;
 		this.timerLife = timerLife;
 		timer = new Timer();
-		System.out.println("create a timer");
+	//	System.out.println("create a timer");
 		timer.schedule(new alartTask(mTitle, mInfo), date);
 	}
 	

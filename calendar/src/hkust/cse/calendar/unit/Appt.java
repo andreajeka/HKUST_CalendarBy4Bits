@@ -69,6 +69,14 @@ public class Appt implements Serializable {
 			return;
 	}
 
+	public void resetEveryTimer(){
+		if(alive){
+			timer.resetTimer(originalReminder);
+		}
+		else
+			return;
+	}
+	
 	public void resetTimer(Date reminder){
 		alive = checkTimerLife();
 		if(alive){
@@ -83,7 +91,7 @@ public class Appt implements Serializable {
 
 		cal = new GregorianCalendar();
 		cal.setTime(originalReminder);
-		System.out.println("GregorianCalendar  " + cal.getTime());
+		//System.out.println("GregorianCalendar  " + cal.getTime());
 		Date d = new Date();
 		d = cal.getTime();
 		tempReminder = originalReminder;
