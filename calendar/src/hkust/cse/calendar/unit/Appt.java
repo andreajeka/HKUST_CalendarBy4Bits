@@ -1,7 +1,12 @@
 package hkust.cse.calendar.unit;
 
+import hkust.cse.calendar.notificationServices.notificationServices;
+
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.Timer;
 
 public class Appt implements Serializable {
 
@@ -29,6 +34,12 @@ public class Appt implements Serializable {
 	
 	private int frequencyAmount;				// The amount of frequency
 	
+	private Date originalReminder;
+	private Date date;
+	boolean isReminder;
+	
+	private notificationServices timer;
+	
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
 		mTimeSpan = null;
@@ -40,6 +51,39 @@ public class Appt implements Serializable {
 		waiting = new LinkedList<String>();
 		joinApptID = -1;
 		location = "";
+		setReminder(0,0,0,0,0);
+		isReminder = false;
+	}
+	
+	public void setTimer(){
+		if(isReminder){
+			timer = new notificationServices(originalReminder, mTitle, mInfo);
+		}
+		else
+			return;
+	}
+	
+	public void setReminder(int year, int month, int day, int hour, int minute){
+		originalReminder = new Date(year-1900, month-1, day, hour, minute);
+		System.out.println("setReminder" + originalReminder);
+		
+		/* testing */
+		Date test = new Date(year-1900, month-1, day, hour, minute-15);
+		Date diff = new Date(originalReminder.getTime() - test.getTime());
+		System.out.println("diff " + diff);
+		
+	}
+	
+	public void setIsReminder(boolean r){
+		isReminder = r;
+	}
+	
+	public boolean getIsReminder(){
+		return isReminder;
+	}
+	
+	public Date getReminder(){
+		return originalReminder;
 	}
 
 	// Getter of the mTimeSpan

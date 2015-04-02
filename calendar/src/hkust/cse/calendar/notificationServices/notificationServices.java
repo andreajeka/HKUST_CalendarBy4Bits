@@ -14,47 +14,29 @@ import javax.swing.JOptionPane;
 
 public class notificationServices {
 	private Timer timer;
-	private Calendar calendar;
-	private Date time, time2;
-	private String message;
-	private GregorianCalendar today;
+	private Date date;
+	private String mTitle, mInfo;
+
 	
-	
-	
-	public notificationServices(String userName, String message){
-		
-		//today = cal.getToday();
-		calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, 2015);
-		calendar.set(Calendar.MONTH, 3-1);
-		calendar.set(Calendar.DATE, 31);
-		calendar.set(Calendar.HOUR_OF_DAY, 12);
-		calendar.set(Calendar.MINUTE, 12);
-		calendar.set(Calendar.SECOND, 12);
-		time = calendar.getTime();
-		long ms = today.getTimeInMillis();
-		
+	public notificationServices(Date _date, String _mTitle, String _mInfo){		
 		//System.out.println(cal.currentY + " " + cal.currentM + " " + cal.currentD);
-		
+		this.date = _date;
+		this.mTitle = _mTitle;
+		this.mInfo = _mInfo;
 		timer = new Timer();
-		timer.schedule(new alartTask(userName, message), time);
-		
-		
+		System.out.println("create a timer");
+		timer.schedule(new alartTask(mTitle, mInfo), date);
 	}
 	
 	class alartTask extends TimerTask{
-		private String message;
-		private String userName;
-		CalGrid cals;
+		private String mTitle, mInfo;
 		
-		public alartTask(String userName, String message){
-			this.userName = userName;
-			this.message = message;
-			//this.cals = cal;
+		public alartTask(String _mTitle, String _mInfo){
+			this.mTitle = _mTitle;
+			this.mInfo = _mInfo;
 		}
 		public void run(){
-			long diff = today.getTimeInMillis() - calendar.getTimeInMillis();
-			JOptionPane.showMessageDialog(null, today.getTime()+ " " + diff/86400000, this.userName, JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, this.mInfo, this.mTitle, JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }

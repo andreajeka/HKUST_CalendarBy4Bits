@@ -554,9 +554,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		
 		/* adding timer in the appscheduler  */
 		
-		getDate = new Date(Integer.parseInt(yearF.getText()), Integer.parseInt(monthF.getText()),
-				Integer.parseInt(dayF.getText()),Integer.parseInt(sTimeH.getText()),Integer.parseInt(sTimeM.getText()), 0);
-		new timer(getDate);
+		
 		
 		setVisible(false);
 		dispose();
@@ -581,6 +579,13 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setLocation(location);
 			NewAppt.setFrequency("Once");
 			NewAppt.setFrequencyAmount(freqAmount);
+			NewAppt.setIsReminder(isReminderToggled);
+			NewAppt.setReminder(Integer.parseInt(yearF.getText()), Integer.parseInt(monthF.getText()),
+					Integer.parseInt(dayF.getText()), Integer.parseInt(sTimeH.getText()), Integer.parseInt(sTimeM.getText()));
+			
+			NewAppt.setTimer();
+			
+			System.out.println("NewAppt " + NewAppt.getReminder() + " " + NewAppt.getIsReminder());
 			
 			parent.controller.ManageAppt(NewAppt, action);
 			

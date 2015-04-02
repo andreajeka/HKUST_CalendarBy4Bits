@@ -386,8 +386,8 @@ public class CalGrid extends JFrame implements ActionListener {
 					tableView.setModel(t);
 					tableView.repaint();
 					//new notificationServices("userName: Jack Hui", "Message: Time's up", 2015, 3, 10, 13, 30, 20);
-					
-					//new notificationServices(CalGrid.this, "jack", "time's up");
+					//Date da = new Date(2015-1900, 3, 2, 11, 30);
+					//new notificationServices(da, "jack", "time's up");
 
 				}
 			}

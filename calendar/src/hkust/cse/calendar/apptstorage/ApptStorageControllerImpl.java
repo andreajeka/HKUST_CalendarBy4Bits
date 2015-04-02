@@ -1,5 +1,7 @@
 package hkust.cse.calendar.apptstorage;
 
+import java.util.ArrayList;
+
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
@@ -32,6 +34,14 @@ public class ApptStorageControllerImpl {
 	/* Retrieve the Appt's in the storage for a specific user within the specific time span */
 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {
 		return mApptStorage.RetrieveAppts(entity, time);
+	}
+	
+	/* retrieve all the appts */
+	public Appt[] RetrieveAllAppts(){
+		ArrayList<Appt> apptList = new ArrayList<Appt>(mApptStorage.mAppts.values());
+		Appt[] apptArray = new Appt[apptList.size()];
+		apptArray = apptList.toArray(apptArray);
+		return apptArray;
 	}
 
 	// overload method to retrieve appointment with the given joint appointment id
