@@ -261,13 +261,13 @@ public class TimeMachine extends JDialog implements ActionListener {
 				if(diff>0)
 				diffG.add(Calendar.MINUTE, -(int)diff/(60*1000));
 				else if(diff<0)
-					diffG.add(Calendar.MINUTE, -(int)diff/(60*1000));
+					diffG.add(Calendar.MINUTE, (int)diff/(60*1000));
 				mAppt[i].setTempReminder(diffG.getTime());
 				
 				
 			//	System.out.println(diffG.getTime());
 			//	System.out.println(diffD.getTime());
-			//	System.out.println(diff);
+				System.out.println(diff);
 				
 			}
 
