@@ -80,19 +80,12 @@ public class Appt implements Serializable {
 
 	public void setReminder(int year, int month, int day, int hour, int minute){
 		originalReminder = new Date(year-1900, month-1, day, hour, minute-10);
-		System.out.println("setReminder" + originalReminder);
 
 		cal = new GregorianCalendar();
 		cal.setTime(originalReminder);
 		System.out.println("GregorianCalendar  " + cal.getTime());
 		Date d = new Date();
 		d = cal.getTime();
-		System.out.println("Date " + d);
-		/* testing */
-		Date test = new Date(year-1900, month-1, day, hour, minute-15);
-		Date diff = new Date(originalReminder.getTime() - test.getTime());
-		System.out.println("diff " + diff);
-
 		tempReminder = originalReminder;
 	}
 

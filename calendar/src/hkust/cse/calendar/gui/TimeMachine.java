@@ -216,8 +216,6 @@ public class TimeMachine extends JDialog implements ActionListener {
 
 		// retrieve appts from cal
 		mAppt = cal.controller.RetrieveAllAppts();
-
-
 	}
 
 	@Override
@@ -248,6 +246,30 @@ public class TimeMachine extends JDialog implements ActionListener {
 			saveButtonResponse();
 			parent.setToday(currToday);
 			updateDisplayTime();
+			
+			diffDate = new Date(Utility.getNumber(yearF.getText())-1900, monthInt, dateInt, 
+					Utility.getNumber(startTimeH.getText()), Utility.getNumber(startTimeM.getText()));
+			
+			long diff;
+			GregorianCalendar diffG, diffD;
+			for(int i=0; i<mAppt.length; i++){
+				diffG = new GregorianCalendar();
+				diffD = new GregorianCalendar();
+				diffG.setTime(mAppt[i].getReminder());
+				diffD.setTime(diffDate);
+				diff = diffD.getTimeInMillis() - System.currentTimeMillis();
+				if(diff>0)
+				diffG.add(Calendar.MINUTE, -(int)diff/(60*1000));
+				else if(diff<0)
+					diffG.add(Calendar.MINUTE, -(int)diff/(60*1000));
+				mAppt[i].setTempReminder(diffG.getTime());
+				
+				
+				System.out.println(diffG.getTime());
+				System.out.println(diffD.getTime());
+				System.out.println(diff);
+				
+			}
 
 		} else if (e.getSource() == stopBut){
 
@@ -299,16 +321,7 @@ public class TimeMachine extends JDialog implements ActionListener {
 			// update all the timers
 			
 			diffCal = new GregorianCalendar();
-			int year = Utility.getNumber(yearF.getText());
-			int month = monthInt;
-			int date = dateInt;
-			int hour = Utility.getNumber(startTimeH.getText());
-			int min = Utility.getNumber(startTimeM.getText());
-			
-			diffDate = new Date(Utility.getNumber(yearF.getText()), monthInt, dateInt, 
-			Utility.getNumber(startTimeH.getText()), Utility.getNumber(startTimeM.getText()));
-			
-			
+	
 			
 			System.out.println("time machine start date: " + diffDate);
 			if(mAppt != null){
@@ -317,17 +330,12 @@ public class TimeMachine extends JDialog implements ActionListener {
 					tempCal.setTime(mAppt[i].getTempReminder());
 					tempCal.add(Calendar.MINUTE, -incrementStep);
 					tempDate = tempCal.getTime();
-					System.out.println(mAppt[i].checkTimerLife());
 					if(mAppt[i].checkTimerLife()){
-
 						mAppt[i].setTempReminder(tempDate);
 						mAppt[i].resetTimer(tempDate);
-						System.out.println(tempDate);
 					}
-				}System.out.println(mAppt.length);
-
+				}
 			}
-			System.out.println(11);
 		}
 	}
 
