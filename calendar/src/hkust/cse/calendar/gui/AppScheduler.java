@@ -6,7 +6,6 @@ import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.notificationServices.notificationServices;
-import hkust.cse.calendar.notificationServices.timer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

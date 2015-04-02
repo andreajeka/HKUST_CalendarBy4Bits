@@ -58,17 +58,18 @@ public class TimeMachine extends JDialog implements ActionListener {
 	private JButton fastBut;
 	private JButton rewindBut;
 	private JButton stopBut;
-	
+
 	// Calendar object
-	private GregorianCalendar currToday;
+	private GregorianCalendar currToday, todayStamp;
 	private SimpleDateFormat dateFormat;
-	
+
 	//appt array
 	private Appt[] mAppt;
 	private Date tempDate;
 	private GregorianCalendar tempCal;
-	//tempCal = new GregorianCalendar();
-	
+	private GregorianCalendar diffCal;
+	private Date diffDate;
+
 	// Constant array for combobox month & day
 	private final int[] days = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
 			11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -76,20 +77,20 @@ public class TimeMachine extends JDialog implements ActionListener {
 	private final String[] months = { "January", "Feburary", "March", "April",
 			"May", "June", "July", "August", "September", "October",
 			"November", "December" };
-	
+
 	// Flags and helpers
 	private boolean incrementFlag;
 	private int incrementStep;
 	private Timer timer;
-	
-	
+
+
 	// Default constructor
 	TimeMachine(String title, CalGrid cal) {
 		commonConstructor(title, cal);
 	}
-	
+
 	private void commonConstructor(String title, CalGrid cal) {
-		
+
 		// Initialization
 		parent = cal;
 		this.setAlwaysOnTop(false);
@@ -100,18 +101,18 @@ public class TimeMachine extends JDialog implements ActionListener {
 		currToday = new GregorianCalendar();
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm");
 		incrementFlag = true;
-		
+
 		// Date panel
 		JPanel datePanel = new JPanel();
 		Border dateBorder = new TitledBorder(null, "START DATE");
 		datePanel.setBorder(dateBorder);
-		
+
 		// Year
 		yearL = new JLabel("YEAR: ");
 		datePanel.add(yearL);
 		yearF = new JTextField(6);
 		datePanel.add(yearF);
-		
+
 		// Month
 		monthL = new JLabel("Month: ");
 		datePanel.add(monthL);
@@ -121,7 +122,7 @@ public class TimeMachine extends JDialog implements ActionListener {
 		for (int cnt = 0; cnt < 12; cnt++)
 			monthB.addItem(months[cnt]);
 		datePanel.add(monthB);
-		
+
 		// Day
 		dateL = new JLabel("DAY: ");
 		datePanel.add(dateL);
@@ -131,28 +132,28 @@ public class TimeMachine extends JDialog implements ActionListener {
 		for (int cnt = 0; cnt < 31; cnt++)
 			dateB.addItem(days[cnt]);
 		datePanel.add(dateB);
-		
+
 		// Time panel
 		JPanel timePanel = new JPanel();
 		Border stimeBorder = new TitledBorder(null, "START TIME");
 		timePanel.setBorder(stimeBorder);
-		
+
 		// Start Hour
 		startTimeHL = new JLabel("Hour");
 		timePanel.add(startTimeHL);
 		startTimeH = new JTextField(4);
 		timePanel.add(startTimeH);
-		
+
 		// Start Minute
 		startTimeML = new JLabel("Minute");
 		timePanel.add(startTimeML);
 		startTimeM = new JTextField(4);
 		timePanel.add(startTimeM);
-		
+
 		JPanel psTime = new JPanel();
 		psTime.setLayout(new BorderLayout());
 		psTime.add(timePanel, BorderLayout.WEST);
-		
+
 		// Time step panel
 		JPanel timeStepPanel = new JPanel();
 		Border timestepBorder = new TitledBorder(null, "TIME STEP");
@@ -161,9 +162,9 @@ public class TimeMachine extends JDialog implements ActionListener {
 		timeStepPanel.add(timeStepL);
 		timeStep = new JTextField(4);
 		timeStepPanel.add(timeStep);
-	
+
 		psTime.add(timeStepPanel);
-		
+
 		// Current time
 		currTime = new JLabel(dateFormat.format(currToday.getTime()));
 		JPanel currTimePanel = new JPanel();
@@ -176,16 +177,16 @@ public class TimeMachine extends JDialog implements ActionListener {
 		top.add(psTime, BorderLayout.CENTER);
 		top.add(currTimePanel, BorderLayout.SOUTH);
 		contentPane.add("North", top);
-		
+
 		// Set default values
 		yearF.setText(Integer.toString(parent.currentY));
 		startTimeH.setText("12");
 		startTimeM.setText("0");
-		
+
 		// Save and cancel
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		
+
 		startBut = new JButton("Start");
 		startBut.addActionListener(this);
 		panel2.add(startBut);
@@ -193,17 +194,17 @@ public class TimeMachine extends JDialog implements ActionListener {
 		cancelBut = new JButton("Cancel");
 		cancelBut.addActionListener(this);
 		panel2.add(cancelBut);
-		
+
 		fastBut = new JButton("Fast Forward");
 		fastBut.addActionListener(this);
 		fastBut.setEnabled(false);
 		panel2.add(fastBut);
-		
+
 		rewindBut = new JButton("Rewind");
 		rewindBut.addActionListener(this);
 		rewindBut.setEnabled(false);
 		panel2.add(rewindBut);
-		
+
 		stopBut = new JButton("Stop");
 		stopBut.addActionListener(this);
 		stopBut.setEnabled(false);
@@ -212,13 +213,13 @@ public class TimeMachine extends JDialog implements ActionListener {
 		contentPane.add("South", panel2);
 
 		pack();
-		
+
 		// retrieve appts from cal
 		mAppt = cal.controller.RetrieveAllAppts();
-		
-		
+
+
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// distinguish which button is clicked and continue with require function
@@ -229,97 +230,119 @@ public class TimeMachine extends JDialog implements ActionListener {
 			if (dateB.getSelectedItem() != null)
 				dateInt = dateB.getSelectedIndex() + 1;
 		} else if (e.getSource() == cancelBut) {
-			
+
 			// Close the dialog
 			incrementFlag = false;
 			setVisible(false);
 			dispose();
-			
+
 		} else if (e.getSource() == startBut) {
-			
+
 			// Set buttons
 			stopBut.setEnabled(true);
 			fastBut.setEnabled(true);
 			rewindBut.setEnabled(true);
 			startBut.setEnabled(false);
-			
+
 			// Save and update
 			saveButtonResponse();
 			parent.setToday(currToday);
 			updateDisplayTime();
-			
+
 		} else if (e.getSource() == stopBut){
-			
+
 			incrementFlag = false;
-			
+
 			// Set buttons
 			startBut.setEnabled(true);
 			fastBut.setEnabled(false);
 			rewindBut.setEnabled(false);
-			
+
 		} else if (e.getSource() == fastBut){
-			
+
 			// Set buttons
 			fastBut.setEnabled(false);
 			rewindBut.setEnabled(true);
-			
+
 			// Set timer to increase time
 			incrementStep = Utility.getNumber(timeStep.getText());
 			timer = new Timer();
 			timer.schedule(new incrementTimeTask(), 1000);
-			
+
 			// Update
 			updateDisplayTime();
-			
+
 		} else if (e.getSource() == rewindBut){
-			
+
 			// Set buttons
 			fastBut.setEnabled(true);
 			rewindBut.setEnabled(false);
-			
+
 			incrementStep = - Utility.getNumber(timeStep.getText());
 		}
 	}
-	
+
 	private class incrementTimeTask extends TimerTask{
 		@Override
 		public void run(){
-			
+
 			currToday.add(Calendar.MINUTE, incrementStep);
 			updateDisplayTime();
 			parent.setToday(currToday);
-			
+
 			// Repeatedly increment until stop
 			if (incrementFlag){
 				Timer timer = new Timer();
 				timer.schedule(new incrementTimeTask(), 1000);
 			}
+
+			// update all the timers
+			
+			diffCal = new GregorianCalendar();
+			int year = Utility.getNumber(yearF.getText());
+			int month = monthInt;
+			int date = dateInt;
+			int hour = Utility.getNumber(startTimeH.getText());
+			int min = Utility.getNumber(startTimeM.getText());
+			
+			diffDate = new Date(Utility.getNumber(yearF.getText()), monthInt, dateInt, 
+			Utility.getNumber(startTimeH.getText()), Utility.getNumber(startTimeM.getText()));
 			
 			
-			tempCal = new GregorianCalendar();
-			/*for(int i=0; i<mAppt.length; i++){
-				tempCal.setTime(mAppt[i].getReminder());
-				tempCal.add(Calendar.MINUTE, incrementStep);
-				tempDate = tempCal.getTime();
-				mAppt[i].resetTimer(tempDate);
-			}*/
-			System.out.println(mAppt.length);
 			
+			System.out.println("time machine start date: " + diffDate);
+			if(mAppt != null){
+				tempCal = new GregorianCalendar();
+				for(int i=0; i<mAppt.length; i++){
+					tempCal.setTime(mAppt[i].getTempReminder());
+					tempCal.add(Calendar.MINUTE, -incrementStep);
+					tempDate = tempCal.getTime();
+					System.out.println(mAppt[i].checkTimerLife());
+					if(mAppt[i].checkTimerLife()){
+
+						mAppt[i].setTempReminder(tempDate);
+						mAppt[i].resetTimer(tempDate);
+						System.out.println(tempDate);
+					}
+				}System.out.println(mAppt.length);
+
+			}
+			System.out.println(11);
 		}
 	}
-	
+
 	private void updateDisplayTime(){
 		// Update draw
 		currTime.setText(dateFormat.format(currToday.getTime()));
 	}
-	
+
 	private void saveButtonResponse(){
 		int year = Utility.getNumber(yearF.getText());
 		int month = monthInt;
 		int date = dateInt;
 		int hour = Utility.getNumber(startTimeH.getText());
 		int min = Utility.getNumber(startTimeM.getText());
-		
+
 		currToday.set(year, month, date, hour, min);
 	}
 }
