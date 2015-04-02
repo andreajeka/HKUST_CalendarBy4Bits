@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -268,6 +270,10 @@ public class CalGrid extends JFrame implements ActionListener {
 		UpdateCal();
 		pack();				// sized the window to a preferred size
 		setVisible(true);	//set the window to be visible
+		
+		// Increment time normally
+		Timer timer = new Timer();
+		timer.schedule(new incrementTimeTask(), 6000);
 	}
 
 	public TableModel prepareTableModel() {
@@ -708,9 +714,10 @@ public class CalGrid extends JFrame implements ActionListener {
 	}
 	
 	// Change today to a custom date and time, to be called from time machine widget
-	public void setToday(int yyyy, int mm, int dd, int hour, int min){
+	public void setToday(GregorianCalendar gc){
 		// Set application time
-		today.set(yyyy, mm - 1, dd, hour, min);
+		//today.set(yyyy, mm, dd, hour, min);
+		today = gc;
 		currentY = today.get(Calendar.YEAR);
 		currentM = today.get(Calendar.MONTH) + 1;
 		currentD = today.get(Calendar.DAY_OF_MONTH);
@@ -726,6 +733,16 @@ public class CalGrid extends JFrame implements ActionListener {
 	
 	public GregorianCalendar getToday(){
 		return today;
+	}
+	
+	private class incrementTimeTask extends TimerTask{
+		@Override
+		public void run(){
+			today.add(Calendar.MINUTE, 1);
+
+			Timer timer = new Timer();
+			timer.schedule(new incrementTimeTask(), 6000);
+		}
 	}
 
 }

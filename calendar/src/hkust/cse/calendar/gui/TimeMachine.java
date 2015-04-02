@@ -17,25 +17,48 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class TimeMachine extends JDialog implements ActionListener {
 
+	// Dialog items
 	private CalGrid parent;
 	private JLabel yearL;
 	private JTextField yearF;
 	private JLabel monthL;
 	private JComboBox monthB;
 	private int monthInt;
-	private JLabel dayL;
-	private JComboBox dayB;
-	private int dayInt;
-	private JLabel TimeHL;
-	private JTextField TimeH;
-	private JLabel TimeML;
-	private JTextField TimeM;
+	private JLabel dateL;
+	private JComboBox dateB;
+	private int dateInt;
+	private JLabel startTimeHL;
+	private JTextField startTimeH;
+	private JLabel startTimeML;
+	private JTextField startTimeM;
+	private JLabel endTimeHL;
+	private JTextField endTimeH;
+	private JLabel endTimeML;
+	private JTextField endTimeM;
+	private JLabel timeStepL;
+	private JTextField timeStep;
+	private JLabel currTime;
 
-	private JButton saveBut;
-	private JButton CancelBut;
+	// Dialog buttons
+	private JButton startBut;
+	private JButton cancelBut;
+	private JButton fastBut;
+	private JButton rewindBut;
+	private JButton stopBut;
 	
+	// Calendar object
+	private GregorianCalendar currToday;
+	private SimpleDateFormat dateFormat;
+	
+	// Constant array for combobox month & day
 	private final int[] days = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
 			11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
 			21, 22, 23, 24, 25, 26, 27, 28, 29 ,30, 31};
@@ -43,89 +66,137 @@ public class TimeMachine extends JDialog implements ActionListener {
 			"May", "June", "July", "August", "September", "October",
 			"November", "December" };
 	
+	// Flags and helpers
+	private boolean incrementFlag;
+	private int incrementStep;
+	private Timer timer;
+	
+	
+	// Default constructor
 	TimeMachine(String title, CalGrid cal) {
 		commonConstructor(title, cal);
 	}
 	
 	private void commonConstructor(String title, CalGrid cal) {
+		
+		// Initialization
 		parent = cal;
 		this.setAlwaysOnTop(false);
 		setTitle(title);
 		setModal(false);
-
 		Container contentPane;
 		contentPane = getContentPane();
+		currToday = new GregorianCalendar();
+		dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm");
+		incrementFlag = true;
 		
-		JPanel pDate = new JPanel();
-		Border dateBorder = new TitledBorder(null, "DATE");
-		pDate.setBorder(dateBorder);
+		// Date panel
+		JPanel datePanel = new JPanel();
+		Border dateBorder = new TitledBorder(null, "START DATE");
+		datePanel.setBorder(dateBorder);
 		
-		// Date and time text field
 		// Year
 		yearL = new JLabel("YEAR: ");
-		pDate.add(yearL);
+		datePanel.add(yearL);
 		yearF = new JTextField(6);
-		pDate.add(yearF);
+		datePanel.add(yearF);
+		
 		// Month
 		monthL = new JLabel("Month: ");
-		pDate.add(monthL);
+		datePanel.add(monthL);
 		monthB = new JComboBox();
 		monthB.addActionListener(this);
 		monthB.setPreferredSize(new Dimension(100, 30));
 		for (int cnt = 0; cnt < 12; cnt++)
 			monthB.addItem(months[cnt]);
-		pDate.add(monthB);
-		// Day
-		dayL = new JLabel("DAY: ");
-		pDate.add(dayL);
-		dayB = new JComboBox();
-		dayB.addActionListener(this);
-		dayB.setPreferredSize(new Dimension(100, 30));
-		for (int cnt = 0; cnt < 31; cnt++)
-			dayB.addItem(days[cnt]);
-		pDate.add(dayB);
+		datePanel.add(monthB);
 		
-		// Set the panel
-		JPanel psTime = new JPanel();
+		// Day
+		dateL = new JLabel("DAY: ");
+		datePanel.add(dateL);
+		dateB = new JComboBox();
+		dateB.addActionListener(this);
+		dateB.setPreferredSize(new Dimension(50, 30));
+		for (int cnt = 0; cnt < 31; cnt++)
+			dateB.addItem(days[cnt]);
+		datePanel.add(dateB);
+		
+		// Time panel
+		JPanel timePanel = new JPanel();
 		Border stimeBorder = new TitledBorder(null, "START TIME");
-		psTime.setBorder(stimeBorder);
-		TimeHL = new JLabel("Hour");
-		psTime.add(TimeHL);
-		TimeH = new JTextField(4);
-		psTime.add(TimeH);
-		TimeML = new JLabel("Minute");
-		psTime.add(TimeML);
-		TimeM = new JTextField(4);
-		psTime.add(TimeM);
-
-		JPanel pTime = new JPanel();
-		pTime.setLayout(new BorderLayout());
-		pTime.add("West", psTime);
+		timePanel.setBorder(stimeBorder);
+		
+		// Start Hour
+		startTimeHL = new JLabel("Hour");
+		timePanel.add(startTimeHL);
+		startTimeH = new JTextField(4);
+		timePanel.add(startTimeH);
+		
+		// Start Minute
+		startTimeML = new JLabel("Minute");
+		timePanel.add(startTimeML);
+		startTimeM = new JTextField(4);
+		timePanel.add(startTimeM);
+		
+		JPanel psTime = new JPanel();
+		psTime.setLayout(new BorderLayout());
+		psTime.add(timePanel, BorderLayout.WEST);
+		
+		// Time step panel
+		JPanel timeStepPanel = new JPanel();
+		Border timestepBorder = new TitledBorder(null, "TIME STEP");
+		timeStepPanel.setBorder(timestepBorder);
+		timeStepL = new JLabel("Minute/second: ");
+		timeStepPanel.add(timeStepL);
+		timeStep = new JTextField(4);
+		timeStepPanel.add(timeStep);
+	
+		psTime.add(timeStepPanel);
+		
+		// Current time
+		currTime = new JLabel(dateFormat.format(currToday.getTime()));
+		JPanel currTimePanel = new JPanel();
+		currTimePanel.add(currTime, BorderLayout.CENTER);
 
 		JPanel top = new JPanel();
 		top.setLayout(new BorderLayout());
 		top.setBorder(new BevelBorder(BevelBorder.RAISED));
-		top.add(pDate, BorderLayout.NORTH);
-		top.add(pTime, BorderLayout.CENTER);
-
+		top.add(datePanel, BorderLayout.NORTH);
+		top.add(psTime, BorderLayout.CENTER);
+		top.add(currTimePanel, BorderLayout.SOUTH);
 		contentPane.add("North", top);
 		
 		// Set default values
 		yearF.setText(Integer.toString(parent.currentY));
-		TimeH.setText("12");
-		TimeM.setText("0");
+		startTimeH.setText("12");
+		startTimeM.setText("0");
 		
 		// Save and cancel
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		
-		saveBut = new JButton("Save");
-		saveBut.addActionListener(this);
-		panel2.add(saveBut);
+		startBut = new JButton("Start");
+		startBut.addActionListener(this);
+		panel2.add(startBut);
 
-		CancelBut = new JButton("Cancel");
-		CancelBut.addActionListener(this);
-		panel2.add(CancelBut);
+		cancelBut = new JButton("Cancel");
+		cancelBut.addActionListener(this);
+		panel2.add(cancelBut);
+		
+		fastBut = new JButton("Fast Forward");
+		fastBut.addActionListener(this);
+		fastBut.setEnabled(false);
+		panel2.add(fastBut);
+		
+		rewindBut = new JButton("Rewind");
+		rewindBut.addActionListener(this);
+		rewindBut.setEnabled(false);
+		panel2.add(rewindBut);
+		
+		stopBut = new JButton("Stop");
+		stopBut.addActionListener(this);
+		stopBut.setEnabled(false);
+		panel2.add(stopBut);
 
 		contentPane.add("South", panel2);
 
@@ -135,31 +206,93 @@ public class TimeMachine extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// distinguish which button is clicked and continue with require function
-		if (e.getSource() == CancelBut) {
+		if (e.getSource() == monthB) {
+			if (monthB.getSelectedItem() != null)
+				monthInt = monthB.getSelectedIndex();
+		} else if (e.getSource() == dateB) {
+			if (dateB.getSelectedItem() != null)
+				dateInt = dateB.getSelectedIndex() + 1;
+		} else if (e.getSource() == cancelBut) {
+			
+			// Close the dialog
+			incrementFlag = false;
 			setVisible(false);
 			dispose();
-		} else if (e.getSource() == saveBut) {
+			
+		} else if (e.getSource() == startBut) {
+			
+			// Set buttons
+			stopBut.setEnabled(true);
+			fastBut.setEnabled(true);
+			rewindBut.setEnabled(true);
+			startBut.setEnabled(false);
+			
+			// Save and update
 			saveButtonResponse();
-			setVisible(false);
-			dispose();
-		} else if (e.getSource() == monthB) {
-			if (monthB.getSelectedItem() != null) {
-				monthInt = monthB.getSelectedIndex() + 1;
-			}
-		} else if (e.getSource() == dayB) {
-			if (dayB.getSelectedItem() != null) {
-				dayInt = dayB.getSelectedIndex() + 1;
+			parent.setToday(currToday);
+			updateDisplayTime();
+			
+		} else if (e.getSource() == stopBut){
+			
+			incrementFlag = false;
+			
+			// Set buttons
+			startBut.setEnabled(true);
+			fastBut.setEnabled(false);
+			rewindBut.setEnabled(false);
+			
+		} else if (e.getSource() == fastBut){
+			
+			// Set buttons
+			fastBut.setEnabled(false);
+			rewindBut.setEnabled(true);
+			
+			// Set timer to increase time
+			incrementStep = Utility.getNumber(timeStep.getText());
+			timer = new Timer();
+			timer.schedule(new incrementTimeTask(), 1000);
+			
+			// Update
+			updateDisplayTime();
+			
+		} else if (e.getSource() == rewindBut){
+			
+			// Set buttons
+			fastBut.setEnabled(true);
+			rewindBut.setEnabled(false);
+			
+			incrementStep = - Utility.getNumber(timeStep.getText());
+		}
+	}
+	
+	private class incrementTimeTask extends TimerTask{
+		@Override
+		public void run(){
+			
+			currToday.add(Calendar.MINUTE, incrementStep);
+			updateDisplayTime();
+			parent.setToday(currToday);
+			
+			// Repeatedly increment until stop
+			if (incrementFlag){
+				Timer timer = new Timer();
+				timer.schedule(new incrementTimeTask(), 1000);
 			}
 		}
+	}
+	
+	private void updateDisplayTime(){
+		// Update draw
+		currTime.setText(dateFormat.format(currToday.getTime()));
 	}
 	
 	private void saveButtonResponse(){
 		int year = Utility.getNumber(yearF.getText());
 		int month = monthInt;
-		int date = dayInt;
-		int hour = Utility.getNumber(TimeH.getText());
-		int min = Utility.getNumber(TimeM.getText());
+		int date = dateInt;
+		int hour = Utility.getNumber(startTimeH.getText());
+		int min = Utility.getNumber(startTimeM.getText());
 		
-		parent.setToday(year, month, date, hour, min);
+		currToday.set(year, month, date, hour, min);
 	}
 }
