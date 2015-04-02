@@ -1,5 +1,9 @@
 package hkust.cse.calendar.gui;
 
+
+
+import hkust.cse.calendar.unit.Appt;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -19,6 +23,7 @@ import javax.swing.border.TitledBorder;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,6 +62,12 @@ public class TimeMachine extends JDialog implements ActionListener {
 	// Calendar object
 	private GregorianCalendar currToday;
 	private SimpleDateFormat dateFormat;
+	
+	//appt array
+	private Appt[] mAppt;
+	private Date tempDate;
+	private GregorianCalendar tempCal;
+	//tempCal = new GregorianCalendar();
 	
 	// Constant array for combobox month & day
 	private final int[] days = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
@@ -201,6 +212,11 @@ public class TimeMachine extends JDialog implements ActionListener {
 		contentPane.add("South", panel2);
 
 		pack();
+		
+		// retrieve appts from cal
+		mAppt = cal.controller.RetrieveAllAppts();
+		
+		
 	}
 	
 	@Override
@@ -278,6 +294,17 @@ public class TimeMachine extends JDialog implements ActionListener {
 				Timer timer = new Timer();
 				timer.schedule(new incrementTimeTask(), 1000);
 			}
+			
+			
+			tempCal = new GregorianCalendar();
+			/*for(int i=0; i<mAppt.length; i++){
+				tempCal.setTime(mAppt[i].getReminder());
+				tempCal.add(Calendar.MINUTE, incrementStep);
+				tempDate = tempCal.getTime();
+				mAppt[i].resetTimer(tempDate);
+			}*/
+			System.out.println(mAppt.length);
+			
 		}
 	}
 	

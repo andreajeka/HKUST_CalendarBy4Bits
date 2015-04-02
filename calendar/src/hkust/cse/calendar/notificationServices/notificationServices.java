@@ -28,6 +28,11 @@ public class notificationServices {
 		timer.schedule(new alartTask(mTitle, mInfo), date);
 	}
 	
+	public void resetTimer(Date date){
+		timer.cancel();
+		timer.schedule(new alartTask(mTitle, mInfo), date);
+	}
+	
 	class alartTask extends TimerTask{
 		private String mTitle, mInfo;
 		
@@ -36,7 +41,8 @@ public class notificationServices {
 			this.mInfo = _mInfo;
 		}
 		public void run(){
-			JOptionPane.showMessageDialog(null, this.mInfo, this.mTitle, JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "The following appointment: [" + this.mInfo + "] will be happened in ten minutes",
+					"Appointment: " + this.mTitle , JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }

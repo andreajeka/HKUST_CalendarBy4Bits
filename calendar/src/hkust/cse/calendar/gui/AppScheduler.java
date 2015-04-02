@@ -583,7 +583,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setReminder(Integer.parseInt(yearF.getText()), Integer.parseInt(monthF.getText()),
 					Integer.parseInt(dayF.getText()), Integer.parseInt(sTimeH.getText()), Integer.parseInt(sTimeM.getText()));
 			
-			NewAppt.setTimer();
+			NewAppt.setTimer(NewAppt.getReminder());
 			
 			System.out.println("NewAppt " + NewAppt.getReminder() + " " + NewAppt.getIsReminder());
 			

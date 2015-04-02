@@ -131,7 +131,8 @@ public class CalGrid extends JFrame implements ActionListener {
 
 		applist = new AppList();
 		applist.setParent(this);
-
+		
+		
 		setJMenuBar(createMenuBar());
 
 		today = new GregorianCalendar();
