@@ -5,6 +5,8 @@ import hkust.cse.calendar.gui.LocationsDialog;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
+import hkust.cse.calendar.notificationServices.notificationServices;
+import hkust.cse.calendar.notificationServices.timer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,6 +29,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Timer;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -104,6 +107,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JComboBox<Integer> FreqAmountField;
 	private JLabel labelEnd;
 	JPanel pRemind;
+	
+	private Timer timer;
+	private Date getDate;
 	
 
 //	private JTextField attendField;
@@ -545,6 +551,12 @@ public class AppScheduler extends JDialog implements ActionListener,
 			
 			selectedApptId = -1;
 		}
+		
+		/* adding timer in the appscheduler  */
+		
+		getDate = new Date(Integer.parseInt(yearF.getText()), Integer.parseInt(monthF.getText()),
+				Integer.parseInt(dayF.getText()),Integer.parseInt(sTimeH.getText()),Integer.parseInt(sTimeM.getText()), 0);
+		new timer(getDate);
 		
 		setVisible(false);
 		dispose();

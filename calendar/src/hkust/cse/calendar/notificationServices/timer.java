@@ -1,29 +1,31 @@
 package hkust.cse.calendar.notificationServices;
 
-import hkust.cse.calendar.gui.CalGrid;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
-/* creating a class norificationServices */
 
-public class notificationServices {
+
+public class timer {
+
 	private Timer timer;
+	private String userName = "good";
+	private String message = "bad";
+	private Date date;
 	private Calendar calendar;
-	private Date time, time2;
-	private String message;
-	private GregorianCalendar today;
-	
-	
-	
-	public notificationServices(String userName, String message){
-		
-		//today = cal.getToday();
+
+	public timer(Date _date){
+		this.date = _date;
+		timer = new Timer();
+
+		timer.schedule(new alartTask(userName, message), date);
+		System.out.println(date);
+	}
+
+	public timer(){
 		calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, 2015);
 		calendar.set(Calendar.MONTH, 3-1);
@@ -31,30 +33,25 @@ public class notificationServices {
 		calendar.set(Calendar.HOUR_OF_DAY, 12);
 		calendar.set(Calendar.MINUTE, 12);
 		calendar.set(Calendar.SECOND, 12);
-		time = calendar.getTime();
-		long ms = today.getTimeInMillis();
-		
-		//System.out.println(cal.currentY + " " + cal.currentM + " " + cal.currentD);
+		Date time = calendar.getTime();
 		
 		timer = new Timer();
 		timer.schedule(new alartTask(userName, message), time);
-		
-		
+
+
 	}
-	
+
 	class alartTask extends TimerTask{
 		private String message;
 		private String userName;
-		CalGrid cals;
-		
+
 		public alartTask(String userName, String message){
 			this.userName = userName;
 			this.message = message;
-			//this.cals = cal;
 		}
+
 		public void run(){
-			long diff = today.getTimeInMillis() - calendar.getTimeInMillis();
-			JOptionPane.showMessageDialog(null, today.getTime()+ " " + diff/86400000, this.userName, JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null,userName, message, JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }
