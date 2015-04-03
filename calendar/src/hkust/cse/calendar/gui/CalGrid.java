@@ -732,6 +732,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	public void timeIsElapsing(CalendarClock emitter) {
 		
 		String message = "";
+		String digitHour = "";
 		Timestamp now = emitter.getCurrentTime();
 		
 		Timestamp start = new Timestamp(0);
@@ -775,9 +776,14 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 						if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
 							(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
 							(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
+							
+							if (appData[i].TimeSpan().StartTime().getMinutes() < 10 )
+								digitHour = "0";
+							else digitHour = "";
+							
 							message = "You have an appointment [" + appData[i].getTitle() + 
-								"] at " + appData[i].TimeSpan().StartTime().getHours() + " : " + 
-								  appData[i].TimeSpan().StartTime().getMinutes();
+								"] at " + appData[i].TimeSpan().StartTime().getHours() + ":" + 
+								  digitHour + appData[i].TimeSpan().StartTime().getMinutes();
 						
 							// Pop up a notification window 
 							JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
@@ -787,11 +793,4 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			}
 		}
 	}
-
-	@Override
-	public void timeIsStopped(CalendarClock emitter) {
-		// TODO Auto-generated method stub
-		// Leave empty
-	}
-	
 }

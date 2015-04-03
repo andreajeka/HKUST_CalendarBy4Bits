@@ -324,14 +324,5 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 	public void timeIsElapsing(CalendarClock emitter) {
 		// TODO Auto-generated method stub
 		currTime.setText(emitter.toString());
-	}
-
-	// Do nothing if clock is stopped 
-	@Override
-	public void timeIsStopped(CalendarClock emitter) {
-		// TODO Auto-generated method stub
-
-	}
-	
-	
+	}	
 }
