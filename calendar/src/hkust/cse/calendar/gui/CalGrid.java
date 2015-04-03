@@ -272,8 +272,8 @@ public class CalGrid extends JFrame implements ActionListener {
 		setVisible(true);	//set the window to be visible
 		
 		// Increment time normally
-		Timer timer = new Timer();
-		timer.schedule(new incrementTimeTask(), 6000);
+		//Timer timer = new Timer();
+		//timer.schedule(new incrementTimeTask(), 6000);
 	}
 
 	public TableModel prepareTableModel() {
@@ -735,14 +735,16 @@ public class CalGrid extends JFrame implements ActionListener {
 		return today;
 	}
 	
+	/*
 	private class incrementTimeTask extends TimerTask{
 		@Override
 		public void run(){
 			today.add(Calendar.MINUTE, 1);
 
 			Timer timer = new Timer();
-			timer.schedule(new incrementTimeTask(), 6000);
+			timer.schedule(new incrementTimeTask(), 60000);
 		}
 	}
+	*/
 
 }
