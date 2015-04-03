@@ -460,7 +460,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.addActionListener(listener);
 		timeMenu.add(mi);
 
-/********  adding a new menu item  *******/
+        // Add menu item
 		mi = new JMenuItem("Manage Locations");
 		mi.addActionListener(listener2);
 		Appmenu.add(mi);
@@ -746,7 +746,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Timestamp now = emitter.getCurrentTime();
 		
 		Timestamp start = new Timestamp(0);
-		start.setYear(now.getYear()-1900);
+		start.setYear(now.getYear());
 		start.setMonth(now.getMonth());
 		start.setDate(now.getDate());
 		start.setHours(0);
@@ -754,7 +754,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		start.setSeconds(0);
 		
 		Timestamp end = new Timestamp(0);
-		end.setYear(now.getYear()-1900);
+		end.setYear(now.getYear());
 		end.setMonth(now.getMonth());
 		end.setDate(now.getDate());
 		end.setHours(23);
@@ -762,16 +762,14 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		end.setSeconds(59);
 		
 		Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
-		if (appData == null) return;
+
 		// nextTime = time of clock + delay
 		Timestamp nextTime = (Timestamp) emitter.getCurrentTime().clone();
 		nextTime.setTime(emitter.getCurrentTime().getTime() + emitter.getDelay());
-		System.out.println("Next time: " + nextTime.getTime());
-			
-		
+					
 		Timestamp nextNextTime = (Timestamp) emitter.getCurrentTime().clone();
 		nextNextTime.setTime(emitter.getCurrentTime().getTime());
-		System.out.println("Next next time: " + nextNextTime.getTime());
+
 		if (appData != null) {
 			for (int i = 0; i < appData.length; i++) {
 				// If current clock time is less than the start time of the appointment
@@ -782,19 +780,19 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 								(Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == 0)))	{
 				
 					if (appData[i].reminder()) {
-						// Reminder 15 minutes before time of event!
+						// We set reminder pop up 15 mins before event.
 						Timestamp rTime = new Timestamp(0, 0, 0, 0, 15, 0 , 0);
 						nextNextTime.setTime(appData[i].TimeSpan().StartTime().getTime() - rTime.getMinutes());
 						if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
 								(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
 								(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
-							message = appData[i].TimeSpan().StartTime().getHours() + ":" + 
-									appData[i].TimeSpan().StartTime().getMinutes() + "/n" +
-									appData[i].getTitle() + "\n";
-						
-							JOptionPane.showMessageDialog(null, message);
+						message = "You have an appointment [" + appData[i].getTitle() + 
+								"] at " + appData[i].TimeSpan().StartTime().getHours() + " : " + 
+								  appData[i].TimeSpan().StartTime().getMinutes();
+
+						JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
 						}
-					}	
+					}
 				}
 			}
 		}
