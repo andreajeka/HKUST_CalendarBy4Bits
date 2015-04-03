@@ -783,11 +783,11 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
 						(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
 							(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
-						message = appData[i].TimeSpan().StartTime().getHours() + ":" + 
-								  appData[i].TimeSpan().StartTime().getMinutes() + "/n" +
-								  appData[i].getTitle() + "\n";
+						message = "You have an appointment [" + appData[i].getTitle() + 
+								"] at " + appData[i].TimeSpan().StartTime().getHours() + " : " + 
+								  appData[i].TimeSpan().StartTime().getMinutes();
 						
-						JOptionPane.showMessageDialog(null, message);
+						JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 				
