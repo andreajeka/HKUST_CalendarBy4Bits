@@ -1,18 +1,17 @@
 package hkust.cse.calendar.gui;
 
-import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.CalendarClock;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,13 +22,10 @@ import javax.swing.border.TitledBorder;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import hkust.cse.calendar.unit.ClockListeners;
+
 public class TimeMachine extends JFrame implements ActionListener, ClockListeners {
 
 	// Dialog items
@@ -37,19 +33,15 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 	private JLabel yearL;
 	private JTextField yearF;
 	private JLabel monthL;
-	private JComboBox monthB;
+	private JComboBox <String> monthB;
 	private int monthInt;
 	private JLabel dateL;
-	private JComboBox dateB;
+	private JComboBox <Integer> dateB;
 	private int dateInt;
 	private JLabel startTimeHL;
 	private JTextField startTimeH;
 	private JLabel startTimeML;
 	private JTextField startTimeM;
-	private JLabel endTimeHL;
-	private JTextField endTimeH;
-	private JLabel endTimeML;
-	private JTextField endTimeM;
 	private JLabel timeStepL;
 	private JTextField timeStep;
 	private JLabel currTime;
@@ -62,21 +54,14 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 	private JButton resetBut;
 
 	// Calendar object
-	private GregorianCalendar currToday, todayStamp;
+	private GregorianCalendar currToday;
 	private SimpleDateFormat dateFormat;
 
-	//appt array
-	private Appt[] mAppt;
-	private Date tempDate;
-	private GregorianCalendar tempCal;
-	private GregorianCalendar diffCal;
-	private Date diffDate;
-
-	// Constant array for combobox month & day
+	// Constant array for combo box month & day
 	private final int[] days = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
 			11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
 			21, 22, 23, 24, 25, 26, 27, 28, 29 ,30, 31};
-	private final String[] months = { "January", "Feburary", "March", "April",
+	private final String[] months = { "January", "February", "March", "April",
 			"May", "June", "July", "August", "September", "October",
 			"November", "December" };
 	
@@ -92,6 +77,7 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		// Initialization
 		CalClock = clock;
 		clock.runningClockListener(this);
+		
 		parent = cal;
 		this.setAlwaysOnTop(false);
 		setTitle(title);
@@ -114,7 +100,7 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		// Month
 		monthL = new JLabel("Month: ");
 		datePanel.add(monthL);
-		monthB = new JComboBox();
+		monthB = new JComboBox<String>();
 		monthB.addActionListener(this);
 		monthB.setPreferredSize(new Dimension(100, 30));
 		for (int cnt = 0; cnt < 12; cnt++)
@@ -124,7 +110,7 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		// Day
 		dateL = new JLabel("DAY: ");
 		datePanel.add(dateL);
-		dateB = new JComboBox();
+		dateB = new JComboBox<Integer>();
 		dateB.addActionListener(this);
 		dateB.setPreferredSize(new Dimension(50, 30));
 		for (int cnt = 0; cnt < 31; cnt++)
@@ -156,7 +142,7 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		JPanel timeStepPanel = new JPanel();
 		Border timestepBorder = new TitledBorder(null, "TIME STEP");
 		timeStepPanel.setBorder(timestepBorder);
-		timeStepL = new JLabel("Minute/second: ");
+		timeStepL = new JLabel("Minutes/system second: ");
 		timeStepPanel.add(timeStepL);
 		timeStep = new JTextField(4);
 		timeStepPanel.add(timeStep);
@@ -165,6 +151,7 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 
 		// Current time
 		currTime = new JLabel(dateFormat.format(currToday.getTime()));
+		currTime.setFont(new Font("", Font.BOLD, 25));
 		JPanel currTimePanel = new JPanel();
 		currTimePanel.add(currTime, BorderLayout.CENTER);
 
@@ -185,7 +172,7 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-		fastFBut = new JButton("Start");
+		fastFBut = new JButton("Fast Forward");
 		fastFBut.addActionListener(this);
 		panel2.add(fastFBut);
 
@@ -209,11 +196,19 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		resetBut.setEnabled(false);
 		panel2.add(resetBut);
 
+		if (CalClock.isStart()) {
+			fastFBut.setEnabled(false);
+			rewindBut.setEnabled(true);
+			stopBut.setEnabled(true);
+			resumeBut.setEnabled(false);
+			resetBut.setEnabled(true);
+		}
+		
 		contentPane.add("South", panel2);
-
 		pack();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// distinguish which button is clicked and continue with require function
@@ -233,74 +228,88 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 			resumeBut.setEnabled(false);
 			resetBut.setEnabled(true);
 		
+			// Run functions
 			CalClock.setStartTime(new Timestamp(Integer.parseInt(yearF.getText()) - 1900, monthInt, dateInt, Integer.parseInt(startTimeH.getText()), Integer.parseInt(startTimeM.getText()), 0, 0));
 			if (timeStep.getText().isEmpty()) 
 				CalClock.setDelay(60000);
 			else
 				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
 			
+			// Start clock
 			CalClock.start();
+			
+		} else if (e.getSource() == rewindBut){
+			
+			// Set buttons
+			resumeBut.setEnabled(false);
+			rewindBut.setEnabled(false);
+			resetBut.setEnabled(true);
+			stopBut.setEnabled(true);
+			fastFBut.setEnabled(false);
+
+		    // If field for delay is empty, just increment 1 minute
+			if (timeStep.getText().isEmpty()) 
+				CalClock.setDelay(60000);
+			else
+				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
+			
+			// Rewind clock
+			CalClock.rewind();
+		
+		} else if (e.getSource() == resumeBut){
+			
+			// Set buttons
+			resumeBut.setEnabled(false);
+			rewindBut.setEnabled(false);
+			resetBut.setEnabled(false);
+			fastFBut.setEnabled(false);
+			stopBut.setEnabled(true);
+			
+			// If field for delay is empty, just increment 1 minute
+			if (timeStep.getText().isEmpty()) 
+				CalClock.setDelay(60000);
+			else
+				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
+			
+			// Resume clock
+			CalClock.resume();
 
 		} else if (e.getSource() == stopBut){
 
-			CalClock.stop();
-			
 			// Set buttons
 			fastFBut.setEnabled(true);
 			resumeBut.setEnabled(true);
 			rewindBut.setEnabled(true);
 			resetBut.setEnabled(true);
+			
+			// Stop the clock
+			CalClock.stop();
 
-		} else if (e.getSource() == resumeBut){
+		} else if (e.getSource() == resetBut){
 			// Set buttons
 			resumeBut.setEnabled(false);
 			rewindBut.setEnabled(false);
 			resetBut.setEnabled(false);
-			fastFBut.setEnabled(false);
 			stopBut.setEnabled(true);
 			
-			if (timeStep.getText().isEmpty()) 
-				CalClock.setDelay(60000);
-			else
-				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
-			CalClock.resume();
-			
-			// Update
-			//updateDisplayTime();
-
-		} else if (e.getSource() == rewindBut){
-
-			// Set buttons
-			if (timeStep.getText().isEmpty()) 
-				CalClock.setDelay(60000);
-			else
-				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
-			CalClock.rewind();
-			
-			resumeBut.setEnabled(false);
-			rewindBut.setEnabled(false);
-			resetBut.setEnabled(true);
-			stopBut.setEnabled(true);
-			fastFBut.setEnabled(false);
-		} else if (e.getSource() == resetBut){
+			// Stop and reset clock
 			CalClock.stop();
 			CalClock.reset();
-			saveButtonResponse();
+			
+			// Update display
+			setTimeFromField();
 			updateDisplayTime();
-			resumeBut.setEnabled(false);
-			rewindBut.setEnabled(false);
-			resetBut.setEnabled(false);
-			stopBut.setEnabled(true);
 		}
 	}
 
 
 	private void updateDisplayTime(){
-		// Update draw
+		// Update display
 		currTime.setText(dateFormat.format(currToday.getTime()));
 	}
 
-	private void saveButtonResponse(){
+	// Set the time retrieved from the text fields
+	private void setTimeFromField(){
 		int year = Utility.getNumber(yearF.getText());
 		int month = monthInt;
 		int date = dateInt;
@@ -310,12 +319,14 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		currToday.set(year, month, date, hour, min);
 	}
 
+	// Handle the tick for each clock by displaying it in the display
 	@Override
 	public void timeIsElapsing(CalendarClock emitter) {
 		// TODO Auto-generated method stub
 		currTime.setText(emitter.toString());
 	}
 
+	// Do nothing if clock is stopped 
 	@Override
 	public void timeIsStopped(CalendarClock emitter) {
 		// TODO Auto-generated method stub

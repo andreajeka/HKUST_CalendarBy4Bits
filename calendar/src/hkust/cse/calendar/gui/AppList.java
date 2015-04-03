@@ -264,7 +264,6 @@ public class AppList extends JPanel implements ActionListener {
 	public void getDataArray(Object[][] data) {
 		int tam = 480;
 		int tpm = 60;
-		String s;
 		String am = new String("AM");
 		String pm = new String("PM");
 

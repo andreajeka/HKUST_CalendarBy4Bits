@@ -8,9 +8,6 @@ import hkust.cse.calendar.unit.User;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Map;
-
-import javax.swing.JOptionPane;
 
 public class ApptStorageNullImpl extends ApptStorage {
 
@@ -62,11 +59,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 			    if (Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == - 1 | 
 			    		Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == 0) {
 			    	apptsByTime.add(anAppt);
-			    	/* Debug to check if Utility.AfterBeforeEqual works correctly
-			    	System.out.println("Appt " + anAppt.getID() +": title is " + anAppt.getTitle() + 
-			    			", ST: " + anAppt.TimeSpan().StartTime().getHours() + " " +  anAppt.TimeSpan().StartTime().getMinutes() + 
-			    			", ET: " + anAppt.TimeSpan().EndTime().getHours() + " " +  anAppt.TimeSpan().EndTime().getMinutes());
-			    	*/
 			    }
 			}
 		}

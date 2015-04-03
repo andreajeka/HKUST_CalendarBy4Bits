@@ -2,12 +2,8 @@ package hkust.cse.calendar.unit;
 
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import java.util.Timer;
+
 
 public class Appt implements Serializable {
 

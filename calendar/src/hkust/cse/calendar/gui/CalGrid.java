@@ -19,12 +19,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -37,7 +34,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
@@ -51,8 +47,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import javax.swing.text.TableView;
-
 
 public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
@@ -72,7 +66,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	private BasicArrowButton eButton;
 	private BasicArrowButton wButton;
 	private JLabel year;
-	private JComboBox month;
+	private JComboBox<String> month;
 	public CalendarClock CalClock;
 	
 	private final Object[][] data = new Object[6][7];
@@ -175,7 +169,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		wButton.addActionListener(this);
 
 		year = new JLabel(new Integer(currentY).toString());
-		month = new JComboBox();
+		month = new JComboBox<String>();
 		month.addActionListener(this);
 		month.setPreferredSize(new Dimension(200, 30));
 		for (int cnt = 0; cnt < 12; cnt++)
@@ -195,6 +189,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		TableModel dataModel = prepareTableModel();
 		
 		tableView = new JTable(dataModel) {
+			@SuppressWarnings("deprecation")
 			public TableCellRenderer getCellRenderer(int row, int col) {
 				String tem = (String) data[row][col];
 
@@ -370,7 +365,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 						JOptionPane.showMessageDialog(null, "Input at least one location in 'Manage Locations'", "NO LOCATION!", JOptionPane.ERROR_MESSAGE);
 					}
 				}
-				else if (e.getActionCommand().equals("Set .. As Today")){
+				else if (e.getActionCommand().equals("Open")){
 					TimeMachine tm = new TimeMachine("Time Machine", CalGrid.this, CalClock);
 					tm.setLocationRelativeTo(null);
 					tm.show();
@@ -381,23 +376,18 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 			}
 		};
-		/*** actionlistener for "manage locations" ***/
 		
+		// Action Listener for Manage Location
 		ActionListener listener2 = new ActionListener(){
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e){
 				if(e.getActionCommand().equals("Manage Locations")){
 					LocationsDialog b = new LocationsDialog(controller);
-					//AppScheduler b = new AppScheduler("New", CalGrid.this);
 					b.show();
 					b.setLocationRelativeTo(null);
 					TableModel t = prepareTableModel();
 					tableView.setModel(t);
 					tableView.repaint();
-					//new notificationServices("userName: Jack Hui", "Message: Time's up", 2015, 3, 10, 13, 30, 20);
-					//Date da = new Date(2015-1900, 3, 2, 11, 30);
-					//new notificationServices(da, "jack", "time's up");
-
 				}
 			}
 		};
@@ -456,7 +446,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Appmenu.setMnemonic('t');
 		Appmenu.getAccessibleContext().setAccessibleDescription(
 				"Time Machine");
-		mi = new JMenuItem("Set .. As Today");
+		mi = new JMenuItem("Open");
 		mi.addActionListener(listener);
 		timeMenu.add(mi);
 
@@ -472,8 +462,6 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 		mCurrUser = this.controller.getDefaultUser();	//get User from controller
 		controller.LoadApptFromXml();
-		// Fix Me !
-		// Load the saved appointments from disk
 		checkUpdateJoinAppt();
 	}
 
@@ -739,6 +727,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	}
 
 	// TODO: IMPLEMENT THE HANDLER OF CLOCK EMITTER HERE
+	@SuppressWarnings("deprecation")
 	@Override
 	public void timeIsElapsing(CalendarClock emitter) {
 		
