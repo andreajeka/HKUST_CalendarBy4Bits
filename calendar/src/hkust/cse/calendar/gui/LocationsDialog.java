@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
-import hkust.cse.calendar.notificationServices.notificationServices;
 import hkust.cse.calendar.unit.Location;
 
 import javax.swing.DefaultListModel;

@@ -1,8 +1,7 @@
 package hkust.cse.calendar.gui;
 
-
-
 import hkust.cse.calendar.unit.Appt;
+import hkust.cse.calendar.unit.CalendarClock;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -14,6 +13,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,6 +21,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,7 +29,8 @@ import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TimeMachine extends JDialog implements ActionListener {
+import hkust.cse.calendar.unit.ClockListeners;
+public class TimeMachine extends JFrame implements ActionListener, ClockListeners {
 
 	// Dialog items
 	private CalGrid parent;
@@ -53,11 +55,11 @@ public class TimeMachine extends JDialog implements ActionListener {
 	private JLabel currTime;
 
 	// Dialog buttons
-	private JButton startBut;
-	private JButton cancelBut;
-	private JButton fastBut;
+	private JButton fastFBut;
 	private JButton rewindBut;
+	private JButton resumeBut;
 	private JButton stopBut;
+	private JButton resetBut;
 
 	// Calendar object
 	private GregorianCalendar currToday, todayStamp;
@@ -77,30 +79,26 @@ public class TimeMachine extends JDialog implements ActionListener {
 	private final String[] months = { "January", "Feburary", "March", "April",
 			"May", "June", "July", "August", "September", "October",
 			"November", "December" };
-
-	// Flags and helpers
-	private boolean incrementFlag;
-	private int incrementStep;
-	private Timer timer;
-
+	
+	private CalendarClock CalClock;
 
 	// Default constructor
-	TimeMachine(String title, CalGrid cal) {
-		commonConstructor(title, cal);
+	TimeMachine(String title, CalGrid cal, CalendarClock clock) {
+		commonConstructor(title, cal, clock);
 	}
 
-	private void commonConstructor(String title, CalGrid cal) {
+	private void commonConstructor(String title, CalGrid cal, CalendarClock clock) {
 
 		// Initialization
+		CalClock = clock;
+		clock.runningClockListener(this);
 		parent = cal;
 		this.setAlwaysOnTop(false);
 		setTitle(title);
-		setModal(false);
 		Container contentPane;
 		contentPane = getContentPane();
 		currToday = new GregorianCalendar();
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm");
-		incrementFlag = true;
 
 		// Date panel
 		JPanel datePanel = new JPanel();
@@ -187,35 +185,33 @@ public class TimeMachine extends JDialog implements ActionListener {
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-		startBut = new JButton("Start");
-		startBut.addActionListener(this);
-		panel2.add(startBut);
-
-		cancelBut = new JButton("Cancel");
-		cancelBut.addActionListener(this);
-		panel2.add(cancelBut);
-
-		fastBut = new JButton("Fast Forward");
-		fastBut.addActionListener(this);
-		fastBut.setEnabled(false);
-		panel2.add(fastBut);
+		fastFBut = new JButton("Start");
+		fastFBut.addActionListener(this);
+		panel2.add(fastFBut);
 
 		rewindBut = new JButton("Rewind");
 		rewindBut.addActionListener(this);
 		rewindBut.setEnabled(false);
 		panel2.add(rewindBut);
 
+		resumeBut = new JButton("Resume");
+		resumeBut.addActionListener(this);
+		resumeBut.setEnabled(false);
+		panel2.add(resumeBut);
+
 		stopBut = new JButton("Stop");
 		stopBut.addActionListener(this);
 		stopBut.setEnabled(false);
 		panel2.add(stopBut);
 
+		resetBut = new JButton("Reset");
+		resetBut.addActionListener(this);
+		resetBut.setEnabled(false);
+		panel2.add(resetBut);
+
 		contentPane.add("South", panel2);
 
 		pack();
-
-		// retrieve appts from cal
-		mAppt = cal.controller.RetrieveAllAppts();
 	}
 
 	@Override
@@ -227,123 +223,77 @@ public class TimeMachine extends JDialog implements ActionListener {
 		} else if (e.getSource() == dateB) {
 			if (dateB.getSelectedItem() != null)
 				dateInt = dateB.getSelectedIndex() + 1;
-		} else if (e.getSource() == cancelBut) {
-
-			// Close the dialog
-			incrementFlag = false;
-			setVisible(false);
-			dispose();
-
-		} else if (e.getSource() == startBut) {
-
+			
+		} else if (e.getSource() == fastFBut) {
+			
 			// Set buttons
-			stopBut.setEnabled(true);
-			fastBut.setEnabled(true);
+			fastFBut.setEnabled(false);
 			rewindBut.setEnabled(true);
-			startBut.setEnabled(false);
-
-			// Save and update
-			saveButtonResponse();
-			parent.setToday(currToday);
-			updateDisplayTime();
+			stopBut.setEnabled(true);
+			resumeBut.setEnabled(false);
+			resetBut.setEnabled(true);
+		
+			CalClock.setStartTime(new Timestamp(Integer.parseInt(yearF.getText()) - 1900, monthInt, dateInt, Integer.parseInt(startTimeH.getText()), Integer.parseInt(startTimeM.getText()), 0, 0));
+			if (timeStep.getText().isEmpty()) 
+				CalClock.setDelay(60000);
+			else
+				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
 			
-			diffDate = new Date(Utility.getNumber(yearF.getText())-1900, monthInt, dateInt, 
-					Utility.getNumber(startTimeH.getText()), Utility.getNumber(startTimeM.getText()));
-			
-			long diff;
-			GregorianCalendar diffG, diffD;
-			for(int i=0; i<mAppt.length; i++){
-				diffG = new GregorianCalendar();
-				diffD = new GregorianCalendar();
-				diffG.setTime(mAppt[i].getReminder());
-				diffD.setTime(diffDate);
-				diff = diffD.getTimeInMillis() - System.currentTimeMillis();
-				if(diff>0)
-				diffG.add(Calendar.MINUTE, -(int)diff/(60*1000));
-				else if(diff<0)
-					diffG.add(Calendar.MINUTE, (int)diff/(60*1000));
-				mAppt[i].setTempReminder(diffG.getTime());
-				
-				
-			//	System.out.println(diffG.getTime());
-			//	System.out.println(diffD.getTime());
-				System.out.println(diff);
-				
-			}
+			CalClock.start();
 
 		} else if (e.getSource() == stopBut){
 
-			incrementFlag = false;
-
-			// Set buttons
-			startBut.setEnabled(true);
-			fastBut.setEnabled(false);
-			rewindBut.setEnabled(false);
+			CalClock.stop();
 			
-			//reset all timer to original
-			for(int i=0; i<mAppt.length; i++){
-				mAppt[i].resetEveryTimer();
-			}
-
-		} else if (e.getSource() == fastBut){
-
 			// Set buttons
-			fastBut.setEnabled(false);
+			fastFBut.setEnabled(true);
+			resumeBut.setEnabled(true);
 			rewindBut.setEnabled(true);
+			resetBut.setEnabled(true);
 
-			// Set timer to increase time
-			incrementStep = Utility.getNumber(timeStep.getText());
-			timer = new Timer();
-			timer.schedule(new incrementTimeTask(), 1000);
-
+		} else if (e.getSource() == resumeBut){
+			// Set buttons
+			resumeBut.setEnabled(false);
+			rewindBut.setEnabled(false);
+			resetBut.setEnabled(false);
+			fastFBut.setEnabled(false);
+			stopBut.setEnabled(true);
+			
+			if (timeStep.getText().isEmpty()) 
+				CalClock.setDelay(60000);
+			else
+				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
+			CalClock.resume();
+			
 			// Update
-			updateDisplayTime();
+			//updateDisplayTime();
 
 		} else if (e.getSource() == rewindBut){
 
 			// Set buttons
-			fastBut.setEnabled(true);
+			if (timeStep.getText().isEmpty()) 
+				CalClock.setDelay(60000);
+			else
+				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
+			CalClock.rewind();
+			
+			resumeBut.setEnabled(false);
 			rewindBut.setEnabled(false);
-
-			incrementStep = - Utility.getNumber(timeStep.getText());
-		}
-	}
-
-	private class incrementTimeTask extends TimerTask{
-		@Override
-		public void run(){
-
-			currToday.add(Calendar.MINUTE, incrementStep);
+			resetBut.setEnabled(true);
+			stopBut.setEnabled(true);
+			fastFBut.setEnabled(false);
+		} else if (e.getSource() == resetBut){
+			CalClock.stop();
+			CalClock.reset();
+			saveButtonResponse();
 			updateDisplayTime();
-			parent.setToday(currToday);
-
-			// Repeatedly increment until stop
-			if (incrementFlag){
-				Timer timer = new Timer();
-				timer.schedule(new incrementTimeTask(), 1000);
-			}
-
-			// update all the timers
-			
-			diffCal = new GregorianCalendar();
-	
-			
-			//System.out.println("time machine start date: " + diffDate);
-			if(mAppt != null){
-				tempCal = new GregorianCalendar();
-				for(int i=0; i<mAppt.length; i++){
-					tempCal.setTime(mAppt[i].getTempReminder());
-					tempCal.add(Calendar.MINUTE, -incrementStep);
-					tempDate = tempCal.getTime();
-					if(mAppt[i].checkTimerLife()){
-						mAppt[i].setTempReminder(tempDate);
-						mAppt[i].resetTimer(tempDate);
-						//System.out.println(mAppt[i].checkTimerLife());
-					}
-				}
-			}
+			resumeBut.setEnabled(false);
+			rewindBut.setEnabled(false);
+			resetBut.setEnabled(false);
+			stopBut.setEnabled(true);
 		}
 	}
+
 
 	private void updateDisplayTime(){
 		// Update draw
@@ -359,4 +309,18 @@ public class TimeMachine extends JDialog implements ActionListener {
 
 		currToday.set(year, month, date, hour, min);
 	}
+
+	@Override
+	public void timeIsElapsing(CalendarClock emitter) {
+		// TODO Auto-generated method stub
+		currTime.setText(emitter.toString());
+	}
+
+	@Override
+	public void timeIsStopped(CalendarClock emitter) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	
 }

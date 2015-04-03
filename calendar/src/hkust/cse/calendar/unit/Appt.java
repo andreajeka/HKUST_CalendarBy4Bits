@@ -1,6 +1,5 @@
 package hkust.cse.calendar.unit;
 
-import hkust.cse.calendar.notificationServices.notificationServices;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -36,15 +35,8 @@ public class Appt implements Serializable {
 
 	private int frequencyAmount;				// The amount of frequency
 
-	private Date originalReminder;
-	private Date tempReminder;
-	private Date date;
-	boolean isReminder;
-	private Calendar cal;
-	private boolean alive;
-
-	private notificationServices timer;
-
+	private boolean reminder;					// Reminder flag. True if it is turned on
+	
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
 		mTimeSpan = null;
@@ -56,70 +48,7 @@ public class Appt implements Serializable {
 		waiting = new LinkedList<String>();
 		joinApptID = -1;
 		location = "";
-		setReminder(0,0,0,0,0);
-		isReminder = false;
-		alive = true;
-	}
-
-	public void setTimer(Date reminder){
-		if(isReminder){
-			timer = new notificationServices(reminder, mTitle, mInfo, alive);
-		}
-		else
-			return;
-	}
-
-	public void resetEveryTimer(){
-		if(alive){
-			timer.resetTimer(originalReminder);
-		}
-		else
-			return;
-	}
-	
-	public void resetTimer(Date reminder){
-		alive = checkTimerLife();
-		if(alive){
-			timer.resetTimer(reminder);
-		}
-		else
-			return;
-	}
-
-	public void setReminder(int year, int month, int day, int hour, int minute){
-		originalReminder = new Date(year-1900, month-1, day, hour, minute-10);
-
-		cal = new GregorianCalendar();
-		cal.setTime(originalReminder);
-		//System.out.println("GregorianCalendar  " + cal.getTime());
-		Date d = new Date();
-		d = cal.getTime();
-		tempReminder = originalReminder;
-	}
-
-	public boolean checkTimerLife(){
-		alive = timer.checkTimerLife();
-		return alive;
-	}
-
-	public void setTempReminder(Date date){
-		tempReminder = date;
-	}
-
-	public Date getTempReminder(){
-		return tempReminder;
-	}
-
-	public void setIsReminder(boolean r){
-		isReminder = r;
-	}
-
-	public boolean getIsReminder(){
-		return isReminder;
-	}
-
-	public Date getReminder(){
-		return originalReminder;
+		reminder = false;
 	}
 
 	// Getter of the mTimeSpan
@@ -295,6 +224,13 @@ public class Appt implements Serializable {
 		this.isjoint = isjoint;
 	}
 
-
+	public boolean reminder() {
+		return reminder;
+	}
+	
+	public void reminderOn(boolean logic) {
+		reminder = logic;
+	}
+	
 
 }

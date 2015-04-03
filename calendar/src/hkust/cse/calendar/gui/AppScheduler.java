@@ -5,7 +5,6 @@ import hkust.cse.calendar.gui.LocationsDialog;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
-import hkust.cse.calendar.notificationServices.notificationServices;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -508,21 +507,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		/* Assign information to the newly created appointment. */
 		int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
 		int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
-		/*
-		Timestamp stampStart = CreateTimeStamp(date,time[0]);
-		Timestamp stampEnd = CreateTimeStamp(date, time[1]);
-		TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
-		NewAppt.setTimeSpan(timeSpan);
-
-		String title = titleField.getText();
-		NewAppt.setTitle(title);
-	 
-		String info = detailArea.getText();
-		NewAppt.setInfo(info);
 		
-		String location = (String) locField.getSelectedItem();
-		NewAppt.setLocation(location);
-		 */
 		freqAmount = FreqAmountField.getSelectedIndex() + 1;
 		
 		// Check if there is no appointment selected in the appointment list
@@ -551,9 +536,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 			selectedApptId = -1;
 		}
 		
-		/* adding timer in the appscheduler  */
-		
-		
 		
 		setVisible(false);
 		dispose();
@@ -578,13 +560,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setLocation(location);
 			NewAppt.setFrequency("Once");
 			NewAppt.setFrequencyAmount(freqAmount);
-			NewAppt.setIsReminder(isReminderToggled);
-			NewAppt.setReminder(Integer.parseInt(yearF.getText()), Integer.parseInt(monthF.getText()),
-					Integer.parseInt(dayF.getText()), Integer.parseInt(sTimeH.getText()), Integer.parseInt(sTimeM.getText()));
-			
-			NewAppt.setTimer(NewAppt.getReminder());
-			
-			//System.out.println("NewAppt " + NewAppt.getReminder() + " " + NewAppt.getIsReminder());
+			NewAppt.reminderOn(reminderToggle.isSelected());
 			
 			parent.controller.ManageAppt(NewAppt, action);
 			
@@ -605,6 +581,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setLocation(location);
 				appt.setFrequency("Daily");
 				appt.setFrequencyAmount(freqAmount);
+				appt.reminderOn(reminderToggle.isSelected());
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -648,6 +625,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setLocation(location);
 				appt.setFrequency("Weekly");
 				appt.setFrequencyAmount(freqAmount);
+				appt.reminderOn(reminderToggle.isSelected());
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -689,6 +667,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 					appt.setLocation(location);
 					appt.setFrequency("Monthly");
 					appt.setFrequencyAmount(freqAmount);
+					appt.reminderOn(reminderToggle.isSelected());
 					
 					parent.controller.ManageAppt(appt, action);
 				} else {

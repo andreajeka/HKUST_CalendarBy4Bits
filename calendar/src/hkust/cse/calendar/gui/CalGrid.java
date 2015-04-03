@@ -2,10 +2,11 @@ package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.Main.CalendarMain;
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
-import hkust.cse.calendar.notificationServices.notificationServices;
 import hkust.cse.calendar.unit.Appt;
+import hkust.cse.calendar.unit.ClockListeners;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.unit.User;
+import hkust.cse.calendar.unit.CalendarClock;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -53,7 +54,7 @@ import javax.swing.text.StyledDocument;
 import javax.swing.text.TableView;
 
 
-public class CalGrid extends JFrame implements ActionListener {
+public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 	// private User mNewUser;
 	private static final long serialVersionUID = 1L;
@@ -72,7 +73,8 @@ public class CalGrid extends JFrame implements ActionListener {
 	private BasicArrowButton wButton;
 	private JLabel year;
 	private JComboBox month;
-
+	public CalendarClock CalClock;
+	
 	private final Object[][] data = new Object[6][7];
 	//private final Vector[][] apptMarker = new Vector[6][7];
 	private final String[] names = { "Sunday", "Monday", "Tuesday",
@@ -122,7 +124,8 @@ public class CalGrid extends JFrame implements ActionListener {
 
 		controller = con;
 		mCurrUser = null;
-
+		CalClock = new CalendarClock();
+		CalClock.runningClockListener(this);
 		previousRow = 0;
 		previousCol = 0;
 		currentRow = 0;
@@ -368,7 +371,7 @@ public class CalGrid extends JFrame implements ActionListener {
 					}
 				}
 				else if (e.getActionCommand().equals("Set .. As Today")){
-					TimeMachine tm = new TimeMachine("Time Machine", CalGrid.this);
+					TimeMachine tm = new TimeMachine("Time Machine", CalGrid.this, CalClock);
 					tm.setLocationRelativeTo(null);
 					tm.show();
 					TableModel t = prepareTableModel();
@@ -734,17 +737,70 @@ public class CalGrid extends JFrame implements ActionListener {
 	public GregorianCalendar getToday(){
 		return today;
 	}
-	
-	/*
-	private class incrementTimeTask extends TimerTask{
-		@Override
-		public void run(){
-			today.add(Calendar.MINUTE, 1);
 
-			Timer timer = new Timer();
-			timer.schedule(new incrementTimeTask(), 60000);
+	// TODO: IMPLEMENT THE HANDLER OF CLOCK EMITTER HERE
+	@Override
+	public void timeIsElapsing(CalendarClock emitter) {
+		
+		String message = "";
+		Timestamp now = emitter.getCurrentTime();
+		
+		Timestamp start = new Timestamp(0);
+		start.setYear(now.getYear());
+		start.setMonth(now.getMonth());
+		start.setDate(now.getDate());
+		start.setHours(0);
+		start.setMinutes(0);
+		start.setSeconds(0);
+
+		Timestamp end = new Timestamp(0);
+		end.setYear(now.getYear());
+		end.setMonth(now.getMonth());
+		end.setDate(now.getDate());
+		end.setHours(23);
+		end.setMinutes(59);
+		end.setSeconds(59);
+		
+		Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
+			
+		Timestamp nextTime = (Timestamp) emitter.getCurrentTime().clone();
+		nextTime.setTime(emitter.getCurrentTime().getTime() + emitter.getDelay());
+		
+		Timestamp nextNextTime = (Timestamp) emitter.getCurrentTime().clone();
+		nextNextTime.setTime(emitter.getCurrentTime().getTime());
+		
+		for (int i = 0; i < appData.length; i++) {
+			if (Utility.AfterBeforeEqual(now, appData[i].TimeSpan().StartTime()) == -1
+					&& ((Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == -1) ||
+						(Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == 0)))	{
+				if (appData[i].reminder() == true) {
+					/*
+					
+					Appt[] oldAppts = controller.RetrieveAppts(mCurrUser, new TimeSpan(appData[i].TimeSpan().StartTime(), nextNextTime))
+					*/
+					Timestamp rTime = new Timestamp(0, 0, 0, 0, 15, 0 , 0);
+					nextNextTime.setTime(appData[i].TimeSpan().StartTime().getTime() - rTime.getMinutes());
+					if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
+						(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
+							(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
+						message = appData[i].TimeSpan().StartTime().getHours() + ":" + 
+								  appData[i].TimeSpan().StartTime().getMinutes() + "/n" +
+								  appData[i].getTitle() + "\n";
+						
+						JOptionPane.showMessageDialog(null, message);
+					}
+				}
+				
+				
+					
+			}
 		}
 	}
-	*/
 
+	@Override
+	public void timeIsStopped(CalendarClock emitter) {
+		// TODO Auto-generated method stub
+		// Leave empty
+	}
+	
 }
