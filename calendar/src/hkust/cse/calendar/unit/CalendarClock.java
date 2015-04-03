@@ -22,7 +22,7 @@ public class CalendarClock implements ActionListener{
 	private ArrayList<ClockListeners> CListeners;
 	
 	public CalendarClock() {
-		sTime = new Timestamp(0);
+		sTime = new Timestamp(0, 0, 0, 0, 0, 0, 0);
 		currTime = sTime;
 		timeDelay = 1000;
 		start = false;
@@ -61,7 +61,7 @@ public class CalendarClock implements ActionListener{
 	}
 	
 	public void reset() {
-		sTime = new Timestamp(0);
+		sTime = new Timestamp(0, 0, 0, 0, 0, 0, 0);
 		currTime = sTime;
 		timeDelay = 1000;
 	}

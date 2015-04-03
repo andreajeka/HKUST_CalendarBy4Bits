@@ -746,15 +746,15 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Timestamp now = emitter.getCurrentTime();
 		
 		Timestamp start = new Timestamp(0);
-		start.setYear(now.getYear());
+		start.setYear(now.getYear()-1900);
 		start.setMonth(now.getMonth());
 		start.setDate(now.getDate());
 		start.setHours(0);
 		start.setMinutes(0);
 		start.setSeconds(0);
-
+		
 		Timestamp end = new Timestamp(0);
-		end.setYear(now.getYear());
+		end.setYear(now.getYear()-1900);
 		end.setMonth(now.getMonth());
 		end.setDate(now.getDate());
 		end.setHours(23);
@@ -762,37 +762,40 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		end.setSeconds(59);
 		
 		Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
-			
+		if (appData == null) return;
+		// nextTime = time of clock + delay
 		Timestamp nextTime = (Timestamp) emitter.getCurrentTime().clone();
 		nextTime.setTime(emitter.getCurrentTime().getTime() + emitter.getDelay());
+		System.out.println("Next time: " + nextTime.getTime());
+			
 		
 		Timestamp nextNextTime = (Timestamp) emitter.getCurrentTime().clone();
 		nextNextTime.setTime(emitter.getCurrentTime().getTime());
-		
-		for (int i = 0; i < appData.length; i++) {
-			if (Utility.AfterBeforeEqual(now, appData[i].TimeSpan().StartTime()) == -1
-					&& ((Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == -1) ||
-						(Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == 0)))	{
-				if (appData[i].reminder() == true) {
-					/*
-					
-					Appt[] oldAppts = controller.RetrieveAppts(mCurrUser, new TimeSpan(appData[i].TimeSpan().StartTime(), nextNextTime))
-					*/
-					Timestamp rTime = new Timestamp(0, 0, 0, 0, 15, 0 , 0);
-					nextNextTime.setTime(appData[i].TimeSpan().StartTime().getTime() - rTime.getMinutes());
-					if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
-						(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
-							(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
-						message = appData[i].TimeSpan().StartTime().getHours() + ":" + 
-								  appData[i].TimeSpan().StartTime().getMinutes() + "/n" +
-								  appData[i].getTitle() + "\n";
+		System.out.println("Next next time: " + nextNextTime.getTime());
+		if (appData != null) {
+			for (int i = 0; i < appData.length; i++) {
+				// If current clock time is less than the start time of the appointment
+				// AND if (the start time of the appointment is less than the nextTime AND
+				// the start time of the appointment is equal to the nextTime)
+				if ((Utility.AfterBeforeEqual(now, appData[i].TimeSpan().StartTime()) == -1)
+						&& ((Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == -1) || // needed if step skips the notification's pop up time
+								(Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == 0)))	{
+				
+					if (appData[i].reminder()) {
+						// Reminder 15 minutes before time of event!
+						Timestamp rTime = new Timestamp(0, 0, 0, 0, 15, 0 , 0);
+						nextNextTime.setTime(appData[i].TimeSpan().StartTime().getTime() - rTime.getMinutes());
+						if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
+								(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
+								(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
+							message = appData[i].TimeSpan().StartTime().getHours() + ":" + 
+									appData[i].TimeSpan().StartTime().getMinutes() + "/n" +
+									appData[i].getTitle() + "\n";
 						
-						JOptionPane.showMessageDialog(null, message);
-					}
+							JOptionPane.showMessageDialog(null, message);
+						}
+					}	
 				}
-				
-				
-					
 			}
 		}
 	}
