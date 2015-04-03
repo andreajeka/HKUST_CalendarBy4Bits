@@ -478,9 +478,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				TableModel t = prepareTableModel();
 				tableView.setModel(t);
 				tableView.repaint();
-
 			}
 			UpdateCal();
+			
 		} else if (e.getSource() == wButton) {
 			if (year == null)
 				return;
@@ -493,9 +493,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				TableModel t = prepareTableModel();
 				tableView.setModel(t);
 				tableView.repaint();
-
 			}
 			UpdateCal();
+			
 		} else if (e.getSource() == month) {
 			if (month.getSelectedItem() != null) {
 				currentM = month.getSelectedIndex() + 1;
@@ -690,7 +690,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		return controller.RetrieveAppts(mCurrUser, period);
 		
 	}
-
+	
 	public AppList getAppList() {
 		return applist;
 	}
@@ -773,13 +773,14 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 						Timestamp rTime = new Timestamp(0, 0, 0, 0, 15, 0 , 0);
 						nextNextTime.setTime(appData[i].TimeSpan().StartTime().getTime() - rTime.getMinutes());
 						if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
-								(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
-								(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
-						message = "You have an appointment [" + appData[i].getTitle() + 
+							(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
+							(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
+							message = "You have an appointment [" + appData[i].getTitle() + 
 								"] at " + appData[i].TimeSpan().StartTime().getHours() + " : " + 
 								  appData[i].TimeSpan().StartTime().getMinutes();
-
-						JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
+						
+							// Pop up a notification window 
+							JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
 				}

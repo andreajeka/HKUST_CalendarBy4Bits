@@ -120,6 +120,7 @@ public class CalendarClock implements ActionListener{
 	}
 	
 	// Get the next elapsed time by adding current time + delay time
+	// Timestamp is cloned to get exact duplicate, not referencing by just Timestamp ts = currTime.
 	public Timestamp getNextElapsedTime() {
 		Timestamp ts = (Timestamp) currTime.clone();
 		ts.setTime(currTime.getTime() + this.timeDelay);
