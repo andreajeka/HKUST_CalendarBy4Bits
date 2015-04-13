@@ -5,8 +5,8 @@ import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.ClockListeners;
 import hkust.cse.calendar.unit.TimeSpan;
-import hkust.cse.calendar.unit.User;
 import hkust.cse.calendar.unit.CalendarClock;
+import hkust.cse.calendar.users.User;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -534,7 +534,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	
 	public void UpdateCal() {
 		if (mCurrUser != null) {
-			mCurrTitle = "Desktop Calendar - " + mCurrUser.ID() + " - ";
+			mCurrTitle = "Desktop Calendar - " + mCurrUser.getUsername() + " - ";
 			this.setTitle(mCurrTitle + "(" + currentY + "-" + currentM + "-"
 					+ currentD + ")");
 			Appt[] monthAppts = null;

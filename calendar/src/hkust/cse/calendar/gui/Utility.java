@@ -2,7 +2,8 @@ package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.TimeSpan;
-import hkust.cse.calendar.unit.User;
+import hkust.cse.calendar.users.User;
+
 import java.sql.Timestamp;
 
 import javax.swing.JOptionPane;

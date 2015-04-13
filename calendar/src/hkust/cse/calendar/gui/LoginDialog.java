@@ -2,7 +2,7 @@ package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.apptstorage.ApptStorageNullImpl;
-import hkust.cse.calendar.unit.User;
+import hkust.cse.calendar.users.User;
 
 import java.awt.Container;
 import java.awt.FlowLayout;

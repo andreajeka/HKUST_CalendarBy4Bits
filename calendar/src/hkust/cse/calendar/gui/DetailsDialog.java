@@ -2,7 +2,7 @@ package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.TimeSpan;
-import hkust.cse.calendar.unit.User;
+import hkust.cse.calendar.users.User;
 
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -140,7 +140,7 @@ public class DetailsDialog extends JFrame implements ActionListener {
 		String temp2 = null;
 
 		for (int i = 0; i < entities.length; i++) {
-			area.append((i + 1) + ". " + entities[i].ID() + " :\n\n");
+			area.append((i + 1) + ". " + entities[i].getUsername() + " :\n\n");
 			for (int j = 0; j < vs[i].size(); j++) {
 				temp1 = ((TimeSpan) vs[i].elementAt(j)).StartTime().toString();
 				temp2 = ((TimeSpan) vs[i].elementAt(j)).EndTime().toString();
