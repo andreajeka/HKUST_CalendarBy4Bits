@@ -6,19 +6,29 @@ import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
+
+import com.thoughtworks.xstream.XStream;
 
 public class ApptStorageNullImpl extends ApptStorage {
 
 	private User defaultUser = null;
-	
+	private XStream xstream;
+	private Location[] _locations;
+	private File xmlFile;
+	private File locFile;
+
 	public ApptStorageNullImpl( User user )
 	{
 		defaultUser = user;
 		mAppts = new HashMap<Integer, Appt>();
+		xstream = new XStream();
 	}
-	
+
 	@Override
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
@@ -39,7 +49,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public Appt[] RetrieveAppts(TimeSpan d) {
 		// Retrieve appointment by time
 		// Create an array list, add items in, convert back to regular array and return
-		
+
 		// Retrieve the whole Appointments (in a set of keys) into the container ArrayList
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
 		// Create a container ArrayList to contain the appointments which fall inside the requirement
@@ -49,14 +59,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 			// System.out.println(anAppt.TimeSpan().EndTime().before(d.EndTime()));
 			// The below code returns true, which is weird.
 			// System.out.println(anAppt.TimeSpan().EndTime().after(d.EndTime()));
-						
+
 			// Check which appointments is inside TimeSpan d
 			if (Utility.AfterBeforeEqual(anAppt.TimeSpan().StartTime(), d.StartTime()) == 1  | 
 					Utility.AfterBeforeEqual(anAppt.TimeSpan().StartTime(), d.StartTime()) == 0) {
-			    if (Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == - 1 | 
-			    		Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == 0) {
-			    	apptsByTime.add(anAppt);
-			    }
+				if (Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == - 1 | 
+						Utility.AfterBeforeEqual(anAppt.TimeSpan().EndTime(), d.EndTime()) == 0) {
+					apptsByTime.add(anAppt);
+				}
 			}
 		}
 		if (apptsByTime.isEmpty()) {
@@ -78,6 +88,26 @@ public class ApptStorageNullImpl extends ApptStorage {
  			return RetrieveAppts(time);
  		}
  		return null;
+ 	}		 	
+ 		 
+ 	@Override		 	
+ 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
+ 		// TODO Retrieve Appointments by time and user (for now its default)
+ 		// Call RetrieveAPpts with time parameter
+ 		if (entity.equals(defaultUser)) {
+ 			return RetrieveAppts(time);
+ 		}
+ 		return null;
+	}		 	
+
+	@Override		 	
+	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
+		// TODO Retrieve Appointments by time and user (for now its default)
+		// Call RetrieveAPpts with time parameter
+		if (entity.equals(defaultUser)) {
+			return RetrieveAppts(time);
+		}
+		return null;
 	}
 
 	@Override
@@ -106,23 +136,58 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void LoadApptFromXml() {
-		// TODO Load ApptFrom XML
+		try{
+			xmlFile = new File("saveAppt.xml");
+			if(xmlFile.exists() && xmlFile.isFile()){
+				mAppts = (HashMap<Integer, Appt>)xstream.fromXML(xmlFile);
+			}
+		}catch(Exception e){
+			System.out.println("loadApptError");
+		}
 
 	}
-	
-	/* creating a Location array */
-	Location[] _locations;
-	
+
+	@Override
+	public void SaveApptToXml(){
+		try {
+			xstream.toXML(mAppts, new FileWriter("saveAppt.xml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void LoadLocFromXml(){
+		try{
+			locFile = new File("locations.xml");
+			if(locFile.exists() && locFile.isFile()){
+				_locations = (Location[])xstream.fromXML(locFile);
+				//System.out.println("enter loadLocFromXml" + _locations.length);
+			} 
+		}catch (Exception e){
+			System.out.println("loadLocationError");
+		}
+	}
+
+	@Override
+	public void SaveLocToXml(){
+		try{
+			xstream.toXML(_locations, new FileWriter("locations.xml"));
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public Location[] getLocationList(){
 		return _locations;
 	}
-	
+
 	@Override
 	public void setLocationList(Location[] locations){
 		this._locations = locations;
 	}
-	
+
 	@Override
 	public int getLocationCapacity(){
 		return this._locations.length;

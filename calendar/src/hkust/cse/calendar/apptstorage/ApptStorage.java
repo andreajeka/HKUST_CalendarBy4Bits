@@ -31,8 +31,13 @@ public abstract class ApptStorage {
 	
 	public abstract User getDefaultUser();		//abstract method to return the current user object
 	
-	public abstract void LoadApptFromXml();		//abstract method to load appointment from xml reocrd into hash map
+	public abstract void LoadApptFromXml();		//abstract method to load appointment from xml record into hash map
 	
+	public abstract void SaveApptToXml();       //abstract method to save appointment from hash map into xml record
+	
+	public abstract void SaveLocToXml();        //abstract method to save location from Location[] into xml
+	
+	public abstract void LoadLocFromXml();		//abstract method to load location from xml into Location[]
 	/*
 	 * Add other methods if necessary
 	 */
