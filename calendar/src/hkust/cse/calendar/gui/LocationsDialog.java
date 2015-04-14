@@ -81,6 +81,7 @@ public class LocationsDialog extends JFrame {
 								locNameText.setText("");
 								updateLocation();
 				}
+				_controller.SaveLocToXml();
 			}
 		});
 		
@@ -106,6 +107,7 @@ public class LocationsDialog extends JFrame {
 						}
 					}
 					_controller.setLocationList(loca);
+					_controller.SaveLocToXml();
 				}
 				
 			}
@@ -117,6 +119,7 @@ public class LocationsDialog extends JFrame {
 	private void loadLocation(){
 		if(_controller.getLocationList() != null){
 			Location[] locations = _controller.getLocationList();
+			//System.out.println("enter loadLocation " + locations.length);
 			if(locations.length != 0){
 				listModel.clear();
 				for(int i=0; i<locations.length; i++){
