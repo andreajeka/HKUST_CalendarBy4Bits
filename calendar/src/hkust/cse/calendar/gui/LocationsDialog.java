@@ -81,7 +81,6 @@ public class LocationsDialog extends JFrame {
 								locNameText.setText("");
 								updateLocation();
 				}
-				_controller.SaveLocToXml();
 			}
 		});
 		
@@ -107,7 +106,6 @@ public class LocationsDialog extends JFrame {
 						}
 					}
 					_controller.setLocationList(loca);
-					_controller.SaveLocToXml();
 				}
 				
 			}
