@@ -82,16 +82,6 @@ public class ApptStorageNullImpl extends ApptStorage {
  		 
  	@Override		 	
  	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
- 		// Retrieve Appointments by time and user (for now its default)
- 		// Call RetrieveAPpts with time parameter
- 		if (entity.equals(defaultUser)) {
- 			return RetrieveAppts(time);
- 		}
- 		return null;
- 	}		 	
- 		 
- 	@Override		 	
- 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
  		// TODO Retrieve Appointments by time and user (for now its default)
  		// Call RetrieveAPpts with time parameter
  		if (entity.equals(defaultUser)) {
@@ -99,16 +89,6 @@ public class ApptStorageNullImpl extends ApptStorage {
  		}
  		return null;
 	}		 	
-
-	@Override		 	
-	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
-		// TODO Retrieve Appointments by time and user (for now its default)
-		// Call RetrieveAPpts with time parameter
-		if (entity.equals(defaultUser)) {
-			return RetrieveAppts(time);
-		}
-		return null;
-	}
 
 	@Override
 	public Appt RetrieveAppts(int joinApptID) {
@@ -134,6 +114,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return defaultUser;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void LoadApptFromXml() {
 		try{
