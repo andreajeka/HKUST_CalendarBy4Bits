@@ -322,7 +322,6 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 	// Handle the tick for each clock by displaying it in the display
 	@Override
 	public void timeIsElapsing(CalendarClock emitter) {
-		// TODO Auto-generated method stub
 		currTime.setText(emitter.toString());
 	}	
 }

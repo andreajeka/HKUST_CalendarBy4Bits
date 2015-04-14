@@ -127,7 +127,6 @@ public class CalendarClock implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if (e.getSource() == timer) {
 			// If not rewinding, we fast forward
 			if (!rewind) 

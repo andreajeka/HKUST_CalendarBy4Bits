@@ -373,11 +373,14 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					tableView.setModel(t);
 					tableView.repaint();
 				}
+				else if (e.getActionCommand().equals("Manage Users")) {
+					
+				}
 
 			}
 		};
 		
-		// Action Listener for Manage Location
+		// Action Listeners
 		ActionListener listener2 = new ActionListener(){
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e){
@@ -396,12 +399,19 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		menuBar.getAccessibleContext().setAccessibleName("Calendar Choices");
 		JMenuItem mi;
 
-		JMenu Access = (JMenu) menuBar.add(new JMenu("Access"));
-		Access.setMnemonic('A');
-		Access.getAccessibleContext().setAccessibleDescription(
+		JMenu Settings = (JMenu) menuBar.add(new JMenu("Settings"));
+		Settings.setMnemonic('A');
+		Settings.getAccessibleContext().setAccessibleDescription(
 				"Account Access Management");
-
-		mi = (JMenuItem) Access.add(new JMenuItem("Logout"));	//adding a Logout menu button for user to logout
+		
+		/*TODO: Put Personal Settings here*/
+		
+		mi = (JMenuItem) Settings.add(new JMenuItem("Manage Users"));
+		mi.setMnemonic('M');
+		mi.getAccessibleContext().setAccessibleDescription("For managing other users");
+		mi.addActionListener(listener);
+		
+		mi = (JMenuItem) Settings.add(new JMenuItem("Logout"));	//adding a Logout menu button for user to logout
 		mi.setMnemonic('L');
 		mi.getAccessibleContext().setAccessibleDescription("For user logout");
 		mi.addActionListener(new ActionListener() {
@@ -418,7 +428,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			}
 		});
 		
-		mi = (JMenuItem) Access.add(new JMenuItem("Exit"));
+		mi = (JMenuItem) Settings.add(new JMenuItem("Exit"));
 		mi.setMnemonic('E');
 		mi.getAccessibleContext().setAccessibleDescription("Exit Program");
 		mi.addActionListener(new ActionListener() {
@@ -726,7 +736,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		return today;
 	}
 
-	// TODO: IMPLEMENT THE HANDLER OF CLOCK EMITTER HERE
+	// Implement the handler of clock emitter
 	@SuppressWarnings("deprecation")
 	@Override
 	public void timeIsElapsing(CalendarClock emitter) {
@@ -754,10 +764,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
 
 		// nextTime = time of clock + delay
-		Timestamp nextTime = (Timestamp) emitter.getCurrentTime().clone();
-		nextTime.setTime(emitter.getCurrentTime().getTime() + emitter.getDelay());
+		Timestamp nextTime = emitter.getNextElapsedTime();
 					
-		Timestamp nextNextTime = (Timestamp) emitter.getCurrentTime().clone();
+		Timestamp nextNextTime = (Timestamp) emitter.getCurrentTime();
 		nextNextTime.setTime(emitter.getCurrentTime().getTime());
 
 		if (appData != null) {

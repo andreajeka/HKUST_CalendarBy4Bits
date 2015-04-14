@@ -37,7 +37,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public Appt[] RetrieveAppts(TimeSpan d) {
-		// TODO Retrieve Appointments by time
+		// Retrieve appointment by time
 		// Create an array list, add items in, convert back to regular array and return
 		
 		// Retrieve the whole Appointments (in a set of keys) into the container ArrayList
@@ -49,10 +49,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			// System.out.println(anAppt.TimeSpan().EndTime().before(d.EndTime()));
 			// The below code returns true, which is weird.
 			// System.out.println(anAppt.TimeSpan().EndTime().after(d.EndTime()));
-			
-			// TODO MAKE YOUR OWN AFTER AND BEFORE AND EQUAL TIMESTAMP CHECKER
-			// Need to do more test cases
-			
+						
 			// Check which appointments is inside TimeSpan d
 			if (Utility.AfterBeforeEqual(anAppt.TimeSpan().StartTime(), d.StartTime()) == 1  | 
 					Utility.AfterBeforeEqual(anAppt.TimeSpan().StartTime(), d.StartTime()) == 0) {
@@ -75,7 +72,7 @@ public class ApptStorageNullImpl extends ApptStorage {
  		 
  	@Override		 	
  	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
- 		// TODO Retrieve Appointments by time and user (for now its default)
+ 		// Retrieve Appointments by time and user (for now its default)
  		// Call RetrieveAPpts with time parameter
  		if (entity.equals(defaultUser)) {
  			return RetrieveAppts(time);
@@ -85,7 +82,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public Appt RetrieveAppts(int joinApptID) {
-		// TODO RetrieveAppts with joinApptID
+		// RetrieveAppts with joinApptID
 		return null;
 	}
 

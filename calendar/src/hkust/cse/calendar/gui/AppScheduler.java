@@ -96,10 +96,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JComboBox<Integer> FreqAmountField;
 	private JLabel labelEnd;
 	JPanel pRemind;
-	
-	private Timer timer;
-	private Date getDate;
-	
 
 //	private JTextField attendField;
 //	private JTextField rejectField;
@@ -163,7 +159,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 		JPanel FnR = new JPanel();
 		FnR.setLayout(new BorderLayout());
 				
-		// TODO Add radio buttons
 		JPanel pFreq = new JPanel();
 		Border freqBorder = new TitledBorder(null, "FREQUENCY");
 		pFreq.setBorder(freqBorder);
@@ -494,7 +489,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	private void saveButtonResponse() {
 		// Save the appointment to the hard disk
-		// TODO Save Button Response
 		/* Assign information to the newly created appointment. */
 		int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
 		int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
@@ -589,17 +583,11 @@ public class AppScheduler extends JDialog implements ActionListener,
 					calendar.setTime(tempDate);
 					calendar.add(Calendar.DATE, 1);
 					tempDate = calendar.getTime();
-					
-					// Checking to prevent overflow to the month after next month
-					// e.g. 1-31 to 2-28, but not 3-2
-					if (calendar.get(Calendar.MONTH) + 1 > initMonth + 1) {
-						return;
-					}
+		
 					date[0] = calendar.get(Calendar.YEAR);
 					date[1] = calendar.get(Calendar.MONTH) + 1;
 					date[2] = calendar.get(Calendar.DAY_OF_MONTH);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -637,7 +625,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 					date[1] = calendar.get(Calendar.MONTH) + 1;
 					date[2] = calendar.get(Calendar.DAY_OF_MONTH);
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -696,7 +683,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	@SuppressWarnings("deprecation")
 	public void updateSetApp(Appt appt) {
 		
-		// TODO Update Appt Scheduler fields with the appropriate content 
+		// Update Appt Scheduler fields with the appropriate content 
 		TimeSpan time = appt.TimeSpan();
 		
 		// Use Calendar to fix year issue 
