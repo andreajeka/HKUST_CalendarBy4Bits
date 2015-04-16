@@ -83,9 +83,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	private JTextArea detailArea;
 	private Vector<String> items;
+	private String[] FreqStrings;
 	
 	private JSplitPane pDes;
-	JPanel detailPanel;
+	private JPanel detailPanel;
 	private DefaultComboBoxModel<String> listModelString;
 	private DefaultComboBoxModel<Integer> listModelInt;
 	private JLabel titleLoc;
@@ -95,7 +96,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JLabel titleFreqAmount;
 	private JComboBox<Integer> FreqAmountField;
 	private JLabel labelEnd;
-	JPanel pRemind;
+	private JPanel pRemind;
 
 //	private JTextField attendField;
 //	private JTextField rejectField;
@@ -166,7 +167,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		//Add two combo box
 		titleFreq = new JLabel("Frequency");
 		
-		String[] FreqStrings = {"Once","Daily","Weekly","Monthly"};
+		FreqStrings = new String[] {"Once","Daily","Weekly","Monthly"};
 		listModelString = new DefaultComboBoxModel<String>(FreqStrings);
 		FreqField = new JComboBox<String>(listModelString);
 		FreqField.setSelectedItem(FreqStrings[0]);
@@ -707,8 +708,25 @@ public class AppScheduler extends JDialog implements ActionListener,
 	    sTimeM.setText(timeMinS);
 	    eTimeH.setText(timeHourE);
 	    eTimeM.setText(timeMinE);
-	    
-	    reminderToggle.setSelected(isReminderToggled);
+	    String locationText = appt.getLocation();
+	    for (int i = 0; i < parent.controller.getLocationCapacity(); i++) {
+	    	if (locationText.equals(locField.getItemAt(i)))
+	    		locField.setSelectedIndex(i);		
+	    }
+	  
+	    reminderToggle.setSelected(appt.reminder());
+     	// Action listener does not change the gui state, so retype the following
+	    if (reminderToggle.isSelected()) {
+			reminderToggle.setText("REMINDER ON");
+			reminderToggle.setBorder(new BevelBorder(BevelBorder.LOWERED));
+			reminderToggle.setForeground(Color.RED);
+			isReminderToggled = true;
+		} else {
+			reminderToggle.setText("REMINDER OFF");
+			reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
+			reminderToggle.setForeground(Color.BLUE);
+			isReminderToggled = false;
+		}
 	    
 	    titleField.setText(appt.getTitle());
 	    detailArea.setText(appt.getInfo());

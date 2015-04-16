@@ -73,7 +73,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	//private final Vector[][] apptMarker = new Vector[6][7];
 	private final String[] names = { "Sunday", "Monday", "Tuesday",
 			"Wednesday", "Thursday", "Friday", "Saturday" };
-	private final String[] months = { "January", "Feburary", "March", "April",
+	private final String[] months = { "January", "February", "March", "April",
 			"May", "June", "July", "August", "September", "October",
 			"November", "December" };
 	private JTable tableView;
