@@ -1,31 +1,10 @@
 <map>
   <entry>
-    <int>0</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-22 01:00:00.0</mStartTime>
-        <mEndTime>2015-04-22 01:30:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>Untitled</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>0</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend/>
-      <reject/>
-      <waiting/>
-      <location>sfdasdf</location>
-      <frequency>Daily</frequency>
-      <frequencyAmount>7</frequencyAmount>
-      <reminder>true</reminder>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
     <int>1</int>
     <hkust.cse.calendar.unit.Appt>
       <mTimeSpan>
-        <mStartTime>2015-04-14 01:00:00.0</mStartTime>
-        <mEndTime>2015-04-14 01:30:00.0</mEndTime>
+        <mStartTime>2015-04-18 01:00:00.0</mStartTime>
+        <mEndTime>2015-04-18 01:30:00.0</mEndTime>
       </mTimeSpan>
       <mTitle>Untitled</mTitle>
       <mInfo>Input description of this appointment</mInfo>
@@ -35,9 +14,8 @@
       <attend/>
       <reject/>
       <waiting/>
-      <location>asdf</location>
-      <frequency>Once</frequency>
-      <frequencyAmount>1</frequencyAmount>
+      <location>d</location>
+      <frequencyAmount>3</frequencyAmount>
       <reminder>false</reminder>
     </hkust.cse.calendar.unit.Appt>
   </entry>
@@ -45,10 +23,10 @@
     <int>2</int>
     <hkust.cse.calendar.unit.Appt>
       <mTimeSpan>
-        <mStartTime>2015-04-14 02:00:00.0</mStartTime>
-        <mEndTime>2015-04-14 02:30:00.0</mEndTime>
+        <mStartTime>2015-04-19 01:00:00.0</mStartTime>
+        <mEndTime>2015-04-19 01:30:00.0</mEndTime>
       </mTimeSpan>
-      <mTitle>reminder</mTitle>
+      <mTitle>Untitled</mTitle>
       <mInfo>Input description of this appointment</mInfo>
       <mApptID>2</mApptID>
       <joinApptID>-1</joinApptID>
@@ -56,21 +34,20 @@
       <attend/>
       <reject/>
       <waiting/>
-      <location>sdfasd</location>
-      <frequency>Once</frequency>
-      <frequencyAmount>1</frequencyAmount>
-      <reminder>true</reminder>
+      <location>d</location>
+      <frequencyAmount>3</frequencyAmount>
+      <reminder>false</reminder>
     </hkust.cse.calendar.unit.Appt>
   </entry>
   <entry>
     <int>3</int>
     <hkust.cse.calendar.unit.Appt>
       <mTimeSpan>
-        <mStartTime>2015-04-14 06:00:00.0</mStartTime>
-        <mEndTime>2015-04-14 06:30:00.0</mEndTime>
+        <mStartTime>2015-04-20 01:00:00.0</mStartTime>
+        <mEndTime>2015-04-20 01:30:00.0</mEndTime>
       </mTimeSpan>
-      <mTitle>reminder2</mTitle>
-      <mInfo>hello, there is a reminder.</mInfo>
+      <mTitle>Untitled</mTitle>
+      <mInfo>Input description of this appointment</mInfo>
       <mApptID>3</mApptID>
       <joinApptID>-1</joinApptID>
       <isjoint>false</isjoint>
@@ -78,114 +55,8 @@
       <reject/>
       <waiting/>
       <location>d</location>
-      <frequency>Weekly</frequency>
-      <frequencyAmount>4</frequencyAmount>
+      <frequencyAmount>3</frequencyAmount>
       <reminder>false</reminder>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>4</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-21 06:00:00.0</mStartTime>
-        <mEndTime>2015-04-21 06:30:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>reminder2</mTitle>
-      <mInfo>hello, there is a reminder.</mInfo>
-      <mApptID>4</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend/>
-      <reject/>
-      <waiting/>
-      <location>d</location>
-      <frequency>Weekly</frequency>
-      <frequencyAmount>4</frequencyAmount>
-      <reminder>false</reminder>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>5</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-28 06:00:00.0</mStartTime>
-        <mEndTime>2015-04-28 06:30:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>reminder2</mTitle>
-      <mInfo>hello, there is a reminder.</mInfo>
-      <mApptID>5</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend/>
-      <reject/>
-      <waiting/>
-      <location>d</location>
-      <frequency>Weekly</frequency>
-      <frequencyAmount>4</frequencyAmount>
-      <reminder>false</reminder>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>6</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-05-05 06:00:00.0</mStartTime>
-        <mEndTime>2015-05-05 06:30:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>reminder2</mTitle>
-      <mInfo>hello, there is a reminder.</mInfo>
-      <mApptID>6</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend/>
-      <reject/>
-      <waiting/>
-      <location>d</location>
-      <frequency>Weekly</frequency>
-      <frequencyAmount>4</frequencyAmount>
-      <reminder>false</reminder>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>7</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-14 00:00:00.0</mStartTime>
-        <mEndTime>2015-04-14 00:30:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>reminder3</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>7</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend/>
-      <reject/>
-      <waiting/>
-      <location>sfdasdf</location>
-      <frequency>Daily</frequency>
-      <frequencyAmount>2</frequencyAmount>
-      <reminder>true</reminder>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>8</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-15 00:00:00.0</mStartTime>
-        <mEndTime>2015-04-15 00:30:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>reminder3</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>8</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend/>
-      <reject/>
-      <waiting/>
-      <location>sfdasdf</location>
-      <frequency>Daily</frequency>
-      <frequencyAmount>2</frequencyAmount>
-      <reminder>true</reminder>
     </hkust.cse.calendar.unit.Appt>
   </entry>
 </map>

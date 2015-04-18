@@ -70,6 +70,14 @@ public class ApptStorageControllerImpl {
 	public User getDefaultUser() {
 		return mApptStorage.getDefaultUser();
 	}
+	
+	public String getOverlapMessage() {
+		return mApptStorage.getOverlapMessage();
+	}
+
+	public boolean isOverlap() {
+		return mApptStorage.isOverlap();
+	}
 
 	// method used to load appointment from xml record into hash map
 	public void LoadApptFromXml(){

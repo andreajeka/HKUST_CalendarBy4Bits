@@ -6,6 +6,12 @@ import java.util.LinkedList;
 
 
 public class Appt implements Serializable {
+	
+	// Static variables for frequencies
+	public static final int MODE_ONCE = 0;
+	public static final int MODE_DAILY = 1;
+	public static final int MODE_WEEKLY = 2;
+	public static final int MODE_MONTHLY = 3;
 
 	private TimeSpan mTimeSpan;					// Include day, start time and end time of the appointments
 
@@ -27,11 +33,10 @@ public class Appt implements Serializable {
 
 	private String location;					// The location
 
-	private String frequency;					// The type of frequency
-
 	private int frequencyAmount;				// The amount of frequency
 
 	private boolean reminder;					// Reminder flag. True if it is turned on
+	
 	
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
@@ -71,11 +76,7 @@ public class Appt implements Serializable {
 	public String getLocation() {
 		return location;
 	}
-
-	public String getFrequency() {
-		return frequency;
-	}
-
+	
 	public int getFrequencyAmount() {
 		return frequencyAmount;
 	}
@@ -198,11 +199,6 @@ public class Appt implements Serializable {
 	// Setter of the location
 	public void setLocation(String location) {
 		this.location= location;
-	}
-
-	// Setter of frequency
-	public void setFrequency(String frequency) {
-		this.frequency = frequency;
 	}
 
 	// Setter of frequency amount

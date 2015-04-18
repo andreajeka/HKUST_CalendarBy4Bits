@@ -45,11 +45,6 @@ import javax.swing.border.TitledBorder;
 
 public class AppScheduler extends JDialog implements ActionListener,
 		ComponentListener {
-
-	private static final int MODE_ONCE = 0;
-	private static final int MODE_DAILY = 1;
-	private static final int MODE_WEEKLY = 2;
-	private static final int MODE_MONTHLY = 3;
 	
 	private JLabel yearL;
 	private JTextField yearF;
@@ -496,27 +491,52 @@ public class AppScheduler extends JDialog implements ActionListener,
 		
 		freqAmount = FreqAmountField.getSelectedIndex() + 1;
 		
-		// Check if there is no appointment selected in the appointment list
+		// Check if there is no appointment selected in the appointment list (via Manual Scheduling)
 		if (selectedApptId == -1) {
 			/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
 			if (FreqField.getSelectedItem().equals("Once")) {
-				addAppt(date, time, MODE_ONCE, ApptStorageControllerImpl.NEW);
+				addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.NEW);
 			} else if (FreqField.getSelectedItem().equals("Daily")) {
-				addAppt(date, time, MODE_DAILY, ApptStorageControllerImpl.NEW);
+				addAppt(date, time, Appt.MODE_DAILY, ApptStorageControllerImpl.NEW);
 			} else if (FreqField.getSelectedItem().equals("Weekly")) {
-				addAppt(date, time, MODE_WEEKLY, ApptStorageControllerImpl.NEW);
+				addAppt(date, time, Appt.MODE_WEEKLY, ApptStorageControllerImpl.NEW);
 			} else if (FreqField.getSelectedItem().equals("Monthly")) {
-				addAppt(date, time, MODE_MONTHLY, ApptStorageControllerImpl.NEW);
+				addAppt(date, time, Appt.MODE_MONTHLY, ApptStorageControllerImpl.NEW);
 			}
-		} else {
+		} 
+		
+		// TODO FREQUENCY UPDATED, PLEASE READ THE NOTE (ESP. MICHELE)
+		/* THIS PART IS TRICKY. WE CANNOT JUST IMPLEMENT APPTSTORAGECONTROLLER.NEW BECAUSE
+		 * IF WE DO THAT, THE VERY INITIAL APPOINTMENT THAT WE CHOOSE TO BE MODIFIED CANNOT BE MODIFIED AS WELL.
+		 * YOU CAN TRY TO COMMENT OUT THE METHOD addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY) 
+		 * FROM ONE OF THE FREQUENCY MODE BELOW AND TRY MODIFYING AN APPT BY ITS TIME AND FREQUENCY. THE RESULT WILL
+		 * SHOW THAT THE APPT WILL BE PRODUCED WITH THE APPROPRIATE FREQUENCY AND TIME BUT THE VERY FIRST APPT IS NOT MODIFIED
+		 * BY ITS TIME. HENCE WE NEED TO DO addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY) FIRST*/
+		
+		else { // if appointment tile is selected from AppList (via right click)
 			if (FreqField.getSelectedItem().equals("Once")) {
-				addAppt(date, time, MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+				addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+				
 			} else if (FreqField.getSelectedItem().equals("Daily")) {
-				addAppt(date, time, MODE_DAILY, ApptStorageControllerImpl.MODIFY);
+				// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
+				addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+				
+				// Add the following if user's modification only include the frequency part
+				addAppt(date, time, Appt.MODE_DAILY, ApptStorageControllerImpl.NEW);
+				
 			} else if (FreqField.getSelectedItem().equals("Weekly")) {
-				addAppt(date, time, MODE_WEEKLY, ApptStorageControllerImpl.MODIFY);
+				// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
+				addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+
+				// Add the following if user's modification only include the frequency part
+				addAppt(date, time, Appt.MODE_WEEKLY, ApptStorageControllerImpl.NEW);
+				
 			} else if (FreqField.getSelectedItem().equals("Monthly")) {
-				addAppt(date, time, MODE_MONTHLY, ApptStorageControllerImpl.MODIFY);
+				// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
+				addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+				
+				// Add the following if user's modification only include the frequency part
+				addAppt(date, time, Appt.MODE_MONTHLY, ApptStorageControllerImpl.NEW);
 			}
 			
 			selectedApptId = -1;
@@ -531,8 +551,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 		String title = titleField.getText();
 		String info = detailArea.getText();
 		String location = (String) locField.getSelectedItem();
+		JOptionPane messageWarning = new JOptionPane();
 		
-		if (mode == MODE_ONCE) {
+		if (mode == Appt.MODE_ONCE) {
 			Timestamp stampStart = CreateTimeStamp(date,time[0]);
 			Timestamp stampEnd = CreateTimeStamp(date, time[1]);
 			TimeSpan timeSpan = new TimeSpan(stampStart, stampEnd);
@@ -544,13 +565,17 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setTitle(title);
 			NewAppt.setInfo(info);
 			NewAppt.setLocation(location);
-			NewAppt.setFrequency("Once");
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
 			
 			parent.controller.ManageAppt(NewAppt, action);
+
+			if (parent.controller.isOverlap()) {
+				JOptionPane.showMessageDialog(this, parent.controller.getOverlapMessage(), "Warning",  JOptionPane.WARNING_MESSAGE);
+			}
 			
-		} else if (mode == MODE_DAILY) {
+			
+		} else if (mode == Appt.MODE_DAILY) {
 			Integer initMonth = date[1];
 			for (int i = 0; i < freqAmount; i++) {
 				Timestamp stampStart = CreateTimeStamp(date,time[0]);
@@ -565,11 +590,14 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setTitle(title);
 				appt.setInfo(info);
 				appt.setLocation(location);
-				appt.setFrequency("Daily");
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				
 				parent.controller.ManageAppt(appt, action);
+				
+				if (parent.controller.isOverlap()) {
+					JOptionPane.showMessageDialog(this, parent.controller.getOverlapMessage(), "Warning",  JOptionPane.WARNING_MESSAGE);
+				}
 				
 				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 				try {
@@ -592,7 +620,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 					e.printStackTrace();
 				}
 			}
-		} else if (mode == MODE_WEEKLY) {
+		} else if (mode == Appt.MODE_WEEKLY) {
 			for (int i = 0; i < freqAmount; i++) {
 				Timestamp stampStart = CreateTimeStamp(date,time[0]);
 				Timestamp stampEnd = CreateTimeStamp(date, time[1]);
@@ -603,11 +631,15 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setTitle(title);
 				appt.setInfo(info);
 				appt.setLocation(location);
-				appt.setFrequency("Weekly");
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				
 				parent.controller.ManageAppt(appt, action);
+				
+				if (parent.controller.isOverlap()) {
+					JOptionPane.showMessageDialog(this, parent.controller.getOverlapMessage(), "Warning",  JOptionPane.WARNING_MESSAGE);
+				}
+				
 				
 				DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 				try {
@@ -629,7 +661,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 					e.printStackTrace();
 				}
 			}
-		} else if (mode == MODE_MONTHLY) {
+		} else if (mode == Appt.MODE_MONTHLY) {
 			Integer initDay = date[2];
 			
 			for (int i = 0; i < freqAmount; i++) {
@@ -644,11 +676,16 @@ public class AppScheduler extends JDialog implements ActionListener,
 					appt.setTitle(title);
 					appt.setInfo(info);
 					appt.setLocation(location);
-					appt.setFrequency("Monthly");
 					appt.setFrequencyAmount(freqAmount);
 					appt.reminderOn(reminderToggle.isSelected());
 					
 					parent.controller.ManageAppt(appt, action);
+					
+					if (parent.controller.isOverlap()) {
+						JOptionPane.showMessageDialog(this, parent.controller.getOverlapMessage(), "Warning",  JOptionPane.WARNING_MESSAGE);
+					}
+					
+					
 				} else {
 					// Reset the day to the initial value for further computation
 					date[2] = initDay;

@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import com.thoughtworks.xstream.XStream;
 
 public class ApptStorageNullImpl extends ApptStorage {
@@ -21,6 +23,8 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private Location[] _locations;
 	private File xmlFile;
 	private File locFile;
+	private String overlapMessage="";
+	private boolean isOverlap = false;
 
 	public ApptStorageNullImpl( User user )
 	{
@@ -32,17 +36,36 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
+		String digitHour="";
 		if (!apptList.isEmpty()) {
 			for (Appt anAppt : apptList) {
 				if (anAppt.TimeSpan().Overlap(appt.TimeSpan())) {
+					isOverlap = true;
+					
+					if (appt.TimeSpan().StartTime().getMinutes() < 10 )
+						digitHour = "0";
+					else digitHour = "";
+					
+					overlapMessage = "Your new appointment: [" + appt.getTitle() + "] at " 
+							+ appt.TimeSpan().StartTime().getHours() + ":" + 
+							  digitHour + appt.TimeSpan().StartTime().getMinutes() + 
+							  " clashes with the following appointment: [" +
+							  anAppt.getTitle() + "] at " + anAppt.TimeSpan().StartTime().getHours() + ":" + 
+							  digitHour + anAppt.TimeSpan().StartTime().getMinutes() + "\n";
+					
 					return;
-				}
+					
+				} else 
+					isOverlap = false;
 			}
 		}
-		// We put the pair appointment and its id into the HashMap
-		int key = LengthInMemory() + 1;
-		appt.setID(key);
-		mAppts.put(key, appt);
+
+		if (isOverlap == false) {
+			// We put the pair appointment and its id into the HashMap
+			int key = LengthInMemory() + 1;
+			appt.setID(key);
+			mAppts.put(key, appt);
+		}
 	}
 
 	@Override
@@ -113,6 +136,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public User getDefaultUser() {
 		return defaultUser;
 	}
+	
+	public String getOverlapMessage() {
+		return overlapMessage;
+	}
+
+	public boolean isOverlap() {
+		return isOverlap;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -125,7 +156,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 		}catch(Exception e){
 			System.out.println("loadApptError");
 		}
-
 	}
 
 	@Override

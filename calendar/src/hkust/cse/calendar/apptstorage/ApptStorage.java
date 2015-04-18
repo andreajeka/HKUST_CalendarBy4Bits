@@ -31,6 +31,10 @@ public abstract class ApptStorage {
 	
 	public abstract User getDefaultUser();		//abstract method to return the current user object
 	
+	public abstract String getOverlapMessage(); //abstract method to get overlap message
+	
+	public abstract boolean isOverlap(); // abstract method to check if there is an overlap
+	
 	public abstract void LoadApptFromXml();		//abstract method to load appointment from xml record into hash map
 	
 	public abstract void SaveApptToXml();       //abstract method to save appointment from hash map into xml record
