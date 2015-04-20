@@ -4,9 +4,11 @@ package hkust.cse.calendar.unit;
 public class Location {
 
 	private String location;
+	private boolean bRemoval;
 	
 	public Location(String location){
 		this.location = location;
+		this.bRemoval = false;
 	}
 	
 	public String getName(){
@@ -15,5 +17,10 @@ public class Location {
 	
 	public void setName(String location){
 		this.location = location;
+	}
+	
+	public boolean getRemovalBool()
+	{
+		return bRemoval;
 	}
 }
