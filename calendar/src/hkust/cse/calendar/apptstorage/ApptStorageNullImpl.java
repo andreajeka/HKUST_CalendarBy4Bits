@@ -247,7 +247,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	}
 
 	@Override
-	public void update(User user){
+	public void updateUser(User user){
 		if(!userList.isEmpty()){
 			for(int i=0; i<userList.size(); i++){
 				if(user.getUserId() == userList.get(i).getUserId()){

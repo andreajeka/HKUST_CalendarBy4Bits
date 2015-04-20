@@ -58,6 +58,6 @@ public abstract class ApptStorage {
 	
 	public abstract void addUser(User user);
 	
-	public abstract void update(User user);
+	public abstract void updateUser(User user);
 
 }
