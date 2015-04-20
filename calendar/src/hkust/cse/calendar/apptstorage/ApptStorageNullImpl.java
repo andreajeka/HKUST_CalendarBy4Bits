@@ -20,7 +20,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	private User defaultUser = null;
 	private XStream xstream;
-	// private ArrayList<User> users = new ArrayList<Users>;
 	private Location[] _locations;
 	private File xmlFile;
 	private File locFile;
@@ -28,7 +27,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private boolean isOverlap = false;
 
 	private boolean checkDuplicateUser;
-	private ArrayList<User> userList = new ArrayList<User>();
+	private ArrayList<User> userList;
 
 	/************* MY TASKS ************/
 	// public getUserList
@@ -45,6 +44,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		defaultUser = user;
 		mAppts = new HashMap<Integer, Appt>();
 		xstream = new XStream();
+		userList = new ArrayList<User>();
 	}
 
 
@@ -235,7 +235,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		checkDuplicateUser = true;
 		if(!userList.isEmpty()){
 			for(int i=0; i<userList.size(); i++){
-				if(user.getUsername() == userList.get(i).getUsername()){
+				if(user.getUsername().equals(userList.get(i).getUsername())){
 					checkDuplicateUser = false;
 					break;
 				}
@@ -261,5 +261,18 @@ public class ApptStorageNullImpl extends ApptStorage {
 		}
 		else
 			JOptionPane.showMessageDialog(null, "The user list is empty", "invalid input", JOptionPane.WARNING_MESSAGE);
+	}
+	
+	// Search and return an instance of User class based on the username
+	public User searchUser(String username) {
+		User target = null;
+		if (!userList.isEmpty()){
+			for (User u : userList) {
+				if (u.getUsername().equals(username))
+					target = u;
+					break;
+			}
+		}
+		return target;
 	}
 }

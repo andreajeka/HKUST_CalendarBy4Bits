@@ -52,8 +52,8 @@ public class LocationsDialog extends JFrame {
 
 		locNameText = new JTextField(11);
 		buttonPane.add(locNameText);
-		buttonPane.add(addBt, BorderLayout.CENTER);
-		buttonPane.add(removeBt, BorderLayout.EAST);
+		buttonPane.add(addBt);
+		buttonPane.add(removeBt);
 		this.add(buttonPane, BorderLayout.PAGE_END);
 
 		/******   loading items to JList   ******/		

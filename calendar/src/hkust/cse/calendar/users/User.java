@@ -34,6 +34,7 @@ public class User implements Serializable {
 		setUsername(username);
 		setPassword(password);
 		mUserId = UUID.randomUUID();
+		isAdmin = false;
 	}
 
 	// Getter of user name
@@ -123,17 +124,20 @@ public class User implements Serializable {
 		this.isAdmin = isAdmin;
 	}
 
-	// Use this method to compare different users 
+	// Use this method to compare different users based on its UserId
 	@Override
 	public boolean equals(Object u) {
-		if (this == u) return true;
-		if (u == null) return false;
-		if (getClass() != u.getClass()) return false;
-		User temp = (User) u;
-		if (mUsername == temp.getUsername() && mPassword == temp.getPassword()) {
+		if (this == u) 
 			return true;
-		}
+		if (u == null) 
+			return false;
+		if (getClass() != u.getClass()) 
+			return false;
+		
+		User temp = (User) u;
+		
+		if (mUserId.equals(temp.getUserId()))
+			return true;
 		return false;
 	}
-
 }

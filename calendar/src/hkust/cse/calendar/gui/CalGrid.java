@@ -90,7 +90,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	// private boolean isLogin = false;
 	private JMenu Appmenu = new JMenu("Appointment");
 	private JMenu timeMenu = new JMenu("Time Machine");
-
+	private JMenu Settings = new JMenu("Settings");
+	private JMenuItem miManageUsers = new JMenuItem("Manage Users");
+	private JMenuItem miManageLocs = new JMenuItem("Manage Locations");
 
 	private final String[] holidays = {
 			"New Years Day\nSpring Festival\n",
@@ -264,6 +266,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		
 		initializeSystem(); // for you to add.
 		//mCurrUser = getCurrUser(); // totally meaningless code
+		Settings.setEnabled(true);
 		Appmenu.setEnabled(true);
 		timeMenu.setEnabled(true);
 
@@ -376,7 +379,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					tableView.repaint();
 				}
 				else if (e.getActionCommand().equals("Manage Users")) {
-					ManageUsersDialog mud = new ManageUsersDialog();
+					ManageUsersDialog mud = new ManageUsersDialog(controller , mCurrUser);
 					mud.show();
 					mud.setLocationRelativeTo(null);
 					TableModel t  = prepareTableModel();
@@ -411,8 +414,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		menuBar.getAccessibleContext().setAccessibleName("Calendar Choices");
 		JMenuItem mi;
 
-		JMenu Settings = (JMenu) menuBar.add(new JMenu("Settings"));
-		Settings.setMnemonic('A');
+		menuBar.add(Settings);
+		Settings.setMnemonic('S');
+		Settings.setEnabled(false);
 		Settings.getAccessibleContext().setAccessibleDescription(
 				"Account Access Management");
 		
@@ -422,10 +426,10 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.getAccessibleContext().setAccessibleDescription("To change your infomation");
 		mi.addActionListener(listener);
 		
-		mi = (JMenuItem) Settings.add(new JMenuItem("Manage Users"));
-		mi.setMnemonic('M');
-		mi.getAccessibleContext().setAccessibleDescription("For managing other users");
-		mi.addActionListener(listener);
+		Settings.add(miManageUsers);
+		miManageUsers.setMnemonic('M');
+		miManageUsers.getAccessibleContext().setAccessibleDescription("For managing other users");
+		miManageUsers.addActionListener(listener);
 		
 		mi = (JMenuItem) Settings.add(new JMenuItem("Logout"));	//adding a Logout menu button for user to logout
 		mi.setMnemonic('L');
@@ -433,7 +437,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int n = JOptionPane.showConfirmDialog(null, "Logout?",
-						"Comfirm", JOptionPane.YES_NO_OPTION);
+						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION){
 					//controller.dumpStorageToFile();
 					//System.out.println("closed");
@@ -459,36 +463,48 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			}
 		});
 
+		// Add "Appointment" to menuBar
 		menuBar.add(Appmenu);
 		Appmenu.setEnabled(false);
 		Appmenu.setMnemonic('p');
 		Appmenu.getAccessibleContext().setAccessibleDescription(
 				"Appointment Management");
+		
+		// Add manual scheduling to Appmenu
 		mi = new JMenuItem("Manual Scheduling");
 		mi.addActionListener(listener);
 		Appmenu.add(mi);
 		
-		// Add Time Machine button to the menu
+        // Add location to Appmenu
+		miManageLocs.addActionListener(listener2);
+		Appmenu.add(miManageLocs);
+		
+		// Add "Time Machine" to the menuBar
 		menuBar.add(timeMenu);
-		Appmenu.setEnabled(false);
-		Appmenu.setMnemonic('t');
-		Appmenu.getAccessibleContext().setAccessibleDescription(
+		timeMenu.setEnabled(false);
+		timeMenu.setMnemonic('t');
+		timeMenu.getAccessibleContext().setAccessibleDescription(
 				"Time Machine");
 		mi = new JMenuItem("Open");
 		mi.addActionListener(listener);
 		timeMenu.add(mi);
 		
-        // Add menu item
-		mi = new JMenuItem("Manage Locations");
-		mi.addActionListener(listener2);
-		Appmenu.add(mi);
+
 		
 		return menuBar;
 	}
 
 	private void initializeSystem() {
-
-		mCurrUser = this.controller.getDefaultUser();	//get User from controller
+		mCurrUser = controller.getDefaultUser();	//get User from controller
+		
+		if (!mCurrUser.isAdmin()) {
+			miManageUsers.setEnabled(false);
+			miManageLocs.setEnabled(false);
+		} else { 
+			miManageUsers.setEnabled(true);
+			miManageLocs.setEnabled(true);
+		}
+		
 		controller.LoadApptFromXml();
 		controller.LoadLocFromXml();					//load location from xml file
 		checkUpdateJoinAppt();
@@ -651,7 +667,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				|| currentCol > 6)
 			return;
 
-		if (tableView.getModel().getValueAt(currentRow, currentCol) != "")
+		if (!tableView.getModel().getValueAt(currentRow, currentCol).equals(""))
 			try {
 				currentD = new Integer((String) tableView.getModel()
 						.getValueAt(currentRow, currentCol)).intValue();

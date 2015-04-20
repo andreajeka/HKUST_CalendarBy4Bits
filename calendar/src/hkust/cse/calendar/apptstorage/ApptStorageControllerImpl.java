@@ -125,5 +125,9 @@ public class ApptStorageControllerImpl {
 	public void updateUser(User user){
 		mApptStorage.updateUser(user);
 	}
+	
+	public User searchUser(String username) {
+		return mApptStorage.searchUser(username);
+	}
 
 }

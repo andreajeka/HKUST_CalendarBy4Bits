@@ -328,7 +328,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		NewAppt = new Appt();
 
 		if (this.getTitle().equals("Join Appointment Content Change") || this.getTitle().equals("Join Appointment Invitation")){
-			inviteBut.show(false);
+			//inviteBut.show(false);
 			rejectBut.show(true);
 			CancelBut.setText("Consider Later");
 			saveBut.setText("Accept");
@@ -551,7 +551,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 		String title = titleField.getText();
 		String info = detailArea.getText();
 		String location = (String) locField.getSelectedItem();
-		JOptionPane messageWarning = new JOptionPane();
 		
 		if (mode == Appt.MODE_ONCE) {
 			Timestamp stampStart = CreateTimeStamp(date,time[0]);
