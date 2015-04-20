@@ -25,7 +25,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private File locFile;
 	private String overlapMessage="";
 	private boolean isOverlap = false;
-	private ArrayList<User> users = new ArrayList<User>();
+	private ArrayList<User> userList = new ArrayList<User>();
 	
 	/************* MY TASKS ************/
 	// public getUserList
@@ -225,7 +225,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public ArrayList<User> getUserList(){
-		return null;//implement later
+		return userList;
 	}
 	
 	@Override
