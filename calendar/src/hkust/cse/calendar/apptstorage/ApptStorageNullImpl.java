@@ -25,14 +25,27 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private File locFile;
 	private String overlapMessage="";
 	private boolean isOverlap = false;
-
+	private ArrayList<User> users = new ArrayList<User>();
+	
+	/************* MY TASKS ************/
+	// public getUserList
+	// public addUser (check the userList(authenticate) before adding a new user)
+	// public update(change the info of user, eg. username, password etc)
+	/************* MY TASKS ************/
+	
+	// private(should be public) (boolean) authenticate
+	// public boolean/User getUser(User user);
+	
+	
+	
 	public ApptStorageNullImpl( User user )
 	{
 		defaultUser = user;
 		mAppts = new HashMap<Integer, Appt>();
 		xstream = new XStream();
 	}
-
+	
+	
 	@Override
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
@@ -208,5 +221,20 @@ public class ApptStorageNullImpl extends ApptStorage {
 	// Return the length of mAppts
 	public int LengthInMemory() {
 		return mAppts.size();
+	}	
+
+	@Override
+	public ArrayList<User> getUserList(){
+		return null;//implement later
+	}
+	
+	@Override
+	public void addUser(User user){
+		//implement later
+	}
+	
+	@Override
+	public void update(User user){
+		//implement later
 	}
 }
