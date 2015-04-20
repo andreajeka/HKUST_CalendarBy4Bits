@@ -25,27 +25,28 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private File locFile;
 	private String overlapMessage="";
 	private boolean isOverlap = false;
+	private boolean checkDuplicateUser;
 	private ArrayList<User> userList = new ArrayList<User>();
-	
+
 	/************* MY TASKS ************/
 	// public getUserList
 	// public addUser (check the userList(authenticate) before adding a new user)
 	// public update(change the info of user, eg. username, password etc)
 	/************* MY TASKS ************/
-	
+
 	// private(should be public) (boolean) authenticate
 	// public boolean/User getUser(User user);
-	
-	
-	
+
+
+
 	public ApptStorageNullImpl( User user )
 	{
 		defaultUser = user;
 		mAppts = new HashMap<Integer, Appt>();
 		xstream = new XStream();
 	}
-	
-	
+
+
 	@Override
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
@@ -54,20 +55,20 @@ public class ApptStorageNullImpl extends ApptStorage {
 			for (Appt anAppt : apptList) {
 				if (anAppt.TimeSpan().Overlap(appt.TimeSpan())) {
 					isOverlap = true;
-					
+
 					if (appt.TimeSpan().StartTime().getMinutes() < 10 )
 						digitHour = "0";
 					else digitHour = "";
-					
+
 					overlapMessage = "Your new appointment: [" + appt.getTitle() + "] at " 
 							+ appt.TimeSpan().StartTime().getHours() + ":" + 
-							  digitHour + appt.TimeSpan().StartTime().getMinutes() + 
-							  " clashes with the following appointment: [" +
-							  anAppt.getTitle() + "] at " + anAppt.TimeSpan().StartTime().getHours() + ":" + 
-							  digitHour + anAppt.TimeSpan().StartTime().getMinutes() + "\n";
-					
+							digitHour + appt.TimeSpan().StartTime().getMinutes() + 
+							" clashes with the following appointment: [" +
+							anAppt.getTitle() + "] at " + anAppt.TimeSpan().StartTime().getHours() + ":" + 
+							digitHour + anAppt.TimeSpan().StartTime().getMinutes() + "\n";
+
 					return;
-					
+
 				} else 
 					isOverlap = false;
 			}
@@ -114,16 +115,16 @@ public class ApptStorageNullImpl extends ApptStorage {
 			apptArray = apptsByTime.toArray(apptArray);
 			return apptArray;	
 		}
- 	}		 	
- 		 
- 	@Override		 	
- 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
- 		// TODO Retrieve Appointments by time and user (for now its default)
- 		// Call RetrieveAPpts with time parameter
- 		if (entity.equals(defaultUser)) {
- 			return RetrieveAppts(time);
- 		}
- 		return null;
+	}		 	
+
+	@Override		 	
+	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
+		// TODO Retrieve Appointments by time and user (for now its default)
+		// Call RetrieveAPpts with time parameter
+		if (entity.equals(defaultUser)) {
+			return RetrieveAppts(time);
+		}
+		return null;
 	}		 	
 
 	@Override
@@ -149,7 +150,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public User getDefaultUser() {
 		return defaultUser;
 	}
-	
+
 	public String getOverlapMessage() {
 		return overlapMessage;
 	}
@@ -227,14 +228,37 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public ArrayList<User> getUserList(){
 		return userList;
 	}
-	
+
 	@Override
 	public void addUser(User user){
-		//implement later
+		checkDuplicateUser = true;
+		if(!userList.isEmpty()){
+			for(int i=0; i<userList.size(); i++){
+				if(user.getUsername() == userList.get(i).getUsername()){
+					checkDuplicateUser = false;
+					break;
+				}
+			}
+		}
+		if(checkDuplicateUser)
+			userList.add(user);
+		else
+			JOptionPane.showMessageDialog(null, "Duplicate User Name", "invalid input", JOptionPane.WARNING_MESSAGE);
 	}
-	
+
 	@Override
 	public void update(User user){
-		//implement later
+		if(!userList.isEmpty()){
+			for(int i=0; i<userList.size(); i++){
+				if(user.getUserId() == userList.get(i).getUserId()){
+					userList.get(i).setUsername(user.getUsername());
+					userList.get(i).setPassword(user.getPassword());
+					userList.get(i).setFirstName(user.getFirstName());
+					userList.get(i).setLastName(user.getLastName());
+				}
+			}
+		}
+		else
+			JOptionPane.showMessageDialog(null, "The user list is empty", "invalid input", JOptionPane.WARNING_MESSAGE);
 	}
 }
