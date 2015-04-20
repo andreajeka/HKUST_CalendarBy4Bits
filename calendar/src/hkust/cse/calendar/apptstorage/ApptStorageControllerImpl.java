@@ -113,5 +113,17 @@ public class ApptStorageControllerImpl {
 	public int LengthInMemory() {
 		return mApptStorage.LengthInMemory();
 	}
+	
+	public ArrayList<User> getUserList(){
+		return mApptStorage.getUserList();
+	}
+	
+	public void addUser(User user){
+		mApptStorage.addUser(user);
+	}
+	
+	public void updateUser(User user){
+		mApptStorage.updateUser(user);
+	}
 
 }

@@ -383,7 +383,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					tableView.setModel(t);
 					tableView.repaint();
 				}
-
+				else if(e.getActionCommand().equals("Personal Setting"))
+				{	
+					PersonalSettingDialog psd = new PersonalSettingDialog(controller, mCurrUser);
+					psd.setLocationRelativeTo(null);
+					psd.show();
+				}
 			}
 		};
 		
@@ -411,7 +416,11 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Settings.getAccessibleContext().setAccessibleDescription(
 				"Account Access Management");
 		
-		/*TODO: Put Personal Settings here*/
+		// Add personal setting button to the menu
+		mi = (JMenuItem) Settings.add(new JMenuItem("Personal Setting"));
+		mi.setMnemonic('P');
+		mi.getAccessibleContext().setAccessibleDescription("To change your infomation");
+		mi.addActionListener(listener);
 		
 		mi = (JMenuItem) Settings.add(new JMenuItem("Manage Users"));
 		mi.setMnemonic('M');
@@ -468,7 +477,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi = new JMenuItem("Open");
 		mi.addActionListener(listener);
 		timeMenu.add(mi);
-
+		
         // Add menu item
 		mi = new JMenuItem("Manage Locations");
 		mi.addActionListener(listener2);
