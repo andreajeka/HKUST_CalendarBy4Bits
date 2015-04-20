@@ -1,12 +1,16 @@
 package hkust.cse.calendar.users;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class User implements Serializable {
 
 	// User name and password is used for login and sign up credentials
 	private String mUsername;
-	private String mPassword;				
+	private String mPassword;	
+	
+	// each user has an unique id number which is not changeable
+	private UUID mUserId;
 			
 	// Extra info to be used in Personal Settings
 	private String mFirstName;
@@ -29,6 +33,7 @@ public class User implements Serializable {
 	public User(String username, String password) {
 		setUsername(username);
 		setPassword(password);
+		mUserId = UUID.randomUUID();
 	}
 
 	// Getter of user name
@@ -36,6 +41,10 @@ public class User implements Serializable {
 		return mUsername;
 	}
 
+	//Getter of user ID
+	public UUID getUserId(){
+		return mUserId;
+	}
 
 	// Setter of user name
 	public void setUsername(String mUsername) {
