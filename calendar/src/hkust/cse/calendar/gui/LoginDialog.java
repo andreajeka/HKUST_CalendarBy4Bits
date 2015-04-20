@@ -97,8 +97,9 @@ public class LoginDialog extends JFrame implements ActionListener
 		{
 			// When the button is clicked, check the user name and password, and try to log the user in
 			
-			//login();
 			User user = new User( "noname", "nopass");
+			//login(User);
+
 			CalGrid grid = new CalGrid(new ApptStorageControllerImpl(new ApptStorageNullImpl(user)));
 			setVisible( false );
 		}

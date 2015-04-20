@@ -20,12 +20,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	private User defaultUser = null;
 	private XStream xstream;
+	// private ArrayList<User> users = new ArrayList<Users>;
 	private Location[] _locations;
 	private File xmlFile;
 	private File locFile;
 	private String overlapMessage="";
 	private boolean isOverlap = false;
-
+	           
 	public ApptStorageNullImpl( User user )
 	{
 		defaultUser = user;

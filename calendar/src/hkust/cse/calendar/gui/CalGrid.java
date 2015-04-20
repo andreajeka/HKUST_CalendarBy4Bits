@@ -376,7 +376,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					tableView.repaint();
 				}
 				else if (e.getActionCommand().equals("Manage Users")) {
-					
+					ManageUsersDialog mud = new ManageUsersDialog();
+					mud.show();
+					mud.setLocationRelativeTo(null);
+					TableModel t  = prepareTableModel();
+					tableView.setModel(t);
+					tableView.repaint();
 				}
 
 			}
