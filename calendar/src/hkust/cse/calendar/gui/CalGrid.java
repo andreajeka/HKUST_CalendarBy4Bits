@@ -116,6 +116,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			public void windowClosing(WindowEvent e) {
 				controller.SaveApptToXml();
 				controller.SaveLocToXml();
+				controller.SaveUserToXml();
 				System.exit(0);
 			}
 		});
@@ -507,6 +508,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		
 		controller.LoadApptFromXml();
 		controller.LoadLocFromXml();					//load location from xml file
+		controller.LoadUserFromXml();
 		checkUpdateJoinAppt();
 	}
 
