@@ -55,3 +55,13 @@ The basic required features in the Phase II of the calendar system development i
 
 6. <b>Intelligence</b>: The calendar supports a certain degree of computational intelligence to ease the scheduling of events. It should at least support two pieces of scheduling intelligence. First, after the initiator selects the participants and the date (may several days), it should provide a list of "schedulable" timeslots which are available for all the participants for the initiator to choose from. Second, it should be able to perform automatic event scheduling, especially for group events. All the participants can choose multiple available timeslots, it should locate the earliest timeslot that satisfies all the constraints from the participants.
     
+
+##Architecture Document
+
+For the system design document, you are required to write a design document that describes the use of design patterns in your project. You are required to identify the usages of two design patterns in the existing code and one new application of design patterns that can improve the existing design of your code. For the new application, you are not required to implement them in your code, since this is a design document. For each of the three descriptions of patterns, you should follow the following sectioning guidelines:
+1. <b>Name</b>: The name of the pattern.
+2. <b>Motivation</b>: What design problem, in the context of the calendar software, exists without the use of this particular pattern. You are encouraged to think in the context of real world usages that involve many users and a large amount of information.
+3. <b>Solution</b>: How this pattern solves the problem for the calendar software in theory according to the real world usage.
+4. <b>Class diagram</b>: Give the class diagram in each description that shows the proper inheritance relationships of Calendar classes with respect to the general pattern classes, in the style consistent with the lecture notes. For instance, you should diagram the generic classes of Observer pattern, and show how your classes inherit from them. You are not required to show all fields and methods for the clarity of the diagram. You can just show the necessary fields and methods that are relevant to the implementation of the specific pattern.
+
+The requirement for the document is a A4/12 point font for no less than 3 pages. The document will be graded on the correctness and clarity of the presentation and the discussion.
