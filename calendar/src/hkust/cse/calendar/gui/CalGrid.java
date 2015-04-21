@@ -437,6 +437,8 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.getAccessibleContext().setAccessibleDescription("For user logout");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				controller.SaveApptToXml();
+				controller.SaveUserToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Logout?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION){
@@ -456,6 +458,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			public void actionPerformed(ActionEvent e) {
 				// save data from hasp map into disk
 				controller.SaveApptToXml();
+				controller.SaveUserToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Exit Program ?",
 						"Comfirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION)
@@ -507,8 +510,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		}
 		
 		controller.LoadApptFromXml();
-		controller.LoadLocFromXml();					//load location from xml file
-		controller.LoadUserFromXml();
+		controller.LoadLocFromXml();	
 		checkUpdateJoinAppt();
 	}
 
