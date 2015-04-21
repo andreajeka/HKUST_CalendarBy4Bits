@@ -59,6 +59,7 @@ The basic required features in the Phase II of the calendar system development i
 ##Architecture Document
 
 For the system design document, you are required to write a design document that describes the use of design patterns in your project. You are required to identify the usages of two design patterns in the existing code and one new application of design patterns that can improve the existing design of your code. For the new application, you are not required to implement them in your code, since this is a design document. For each of the three descriptions of patterns, you should follow the following sectioning guidelines:
+
 1. <b>Name</b>: The name of the pattern.
 2. <b>Motivation</b>: What design problem, in the context of the calendar software, exists without the use of this particular pattern. You are encouraged to think in the context of real world usages that involve many users and a large amount of information.
 3. <b>Solution</b>: How this pattern solves the problem for the calendar software in theory according to the real world usage.
