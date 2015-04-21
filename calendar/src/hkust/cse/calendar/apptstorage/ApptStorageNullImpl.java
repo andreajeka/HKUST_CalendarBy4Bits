@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.swing.JOptionPane;
 
@@ -287,5 +288,29 @@ public class ApptStorageNullImpl extends ApptStorage {
 			}
 		}
 		return target;
+	}
+	
+	@Override
+	public void removeUser(String username){
+		if(!userList.isEmpty()){
+			for(int i=0; i<userList.size(); i++){
+				if(userList.get(i).getUsername().equals(username)){
+					userList.remove(i);
+					break;
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void removeUser(UUID userId){
+		if(!userList.isEmpty()){
+			for(int i=0; i<userList.size(); i++){
+				if(userList.get(i).getUserId().equals(userId)){
+					userList.remove(i);
+					break;
+				}
+			}
+		}
 	}
 }

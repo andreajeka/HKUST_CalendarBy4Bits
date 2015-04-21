@@ -6,12 +6,6 @@
     <isAdmin>true</isAdmin>
   </hkust.cse.calendar.users.User>
   <hkust.cse.calendar.users.User>
-    <mUsername>123</mUsername>
-    <mPassword>123</mPassword>
-    <mUserId>0cb1f897-6c58-4450-bfd9-8c6eb708dd68</mUserId>
-    <isAdmin>false</isAdmin>
-  </hkust.cse.calendar.users.User>
-  <hkust.cse.calendar.users.User>
     <mUsername>user</mUsername>
     <mPassword>user</mPassword>
     <mUserId>fe6cc719-2f89-47bd-b2b7-88441c08f080</mUserId>
@@ -36,15 +30,21 @@
     <isAdmin>true</isAdmin>
   </hkust.cse.calendar.users.User>
   <hkust.cse.calendar.users.User>
-    <mUsername>222</mUsername>
-    <mPassword>222</mPassword>
-    <mUserId>7ae5db29-23a4-44ac-9241-3a9e8736cd71</mUserId>
-    <isAdmin>false</isAdmin>
+    <mUsername>user</mUsername>
+    <mPassword>user</mPassword>
+    <mUserId>ecaa8dbc-2d92-4adb-a5e4-9132817639f7</mUserId>
+    <isAdmin>true</isAdmin>
   </hkust.cse.calendar.users.User>
   <hkust.cse.calendar.users.User>
     <mUsername>user</mUsername>
     <mPassword>user</mPassword>
-    <mUserId>ecaa8dbc-2d92-4adb-a5e4-9132817639f7</mUserId>
+    <mUserId>b767c7c1-92d3-4db1-b600-f35d53d2ce5b</mUserId>
+    <isAdmin>true</isAdmin>
+  </hkust.cse.calendar.users.User>
+  <hkust.cse.calendar.users.User>
+    <mUsername>user</mUsername>
+    <mPassword>user</mPassword>
+    <mUserId>c908c6e5-2219-482c-aa12-0f2118ae3cb6</mUserId>
     <isAdmin>true</isAdmin>
   </hkust.cse.calendar.users.User>
 </list>

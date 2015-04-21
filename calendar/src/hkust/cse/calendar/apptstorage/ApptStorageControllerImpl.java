@@ -1,6 +1,7 @@
 package hkust.cse.calendar.apptstorage;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
@@ -140,6 +141,14 @@ public class ApptStorageControllerImpl {
 	
 	public User searchUser(String username) {
 		return mApptStorage.searchUser(username);
+	}
+	
+	public void removeUser(String username){
+		mApptStorage.removeUser(username);
+	}
+	
+	public void removeUser(UUID userId){
+		mApptStorage.removeUser(userId);
 	}
 
 }

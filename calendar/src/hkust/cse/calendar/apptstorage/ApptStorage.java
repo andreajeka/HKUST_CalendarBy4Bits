@@ -7,6 +7,7 @@ import hkust.cse.calendar.users.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 
 public abstract class ApptStorage {
@@ -67,5 +68,9 @@ public abstract class ApptStorage {
 	public abstract void updateUser(User user);
 	
 	public abstract User searchUser(String username);
+	
+	public abstract void removeUser(String username);
+	
+	public abstract void removeUser(UUID userId);
 
 }
