@@ -23,6 +23,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private Location[] _locations;
 	private File xmlFile;
 	private File locFile;
+	private File userFile;
 	private String overlapMessage="";
 	private boolean isOverlap = false;
 
@@ -45,7 +46,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		userList = new ArrayList<User>();
 	}
 
-	
+
 	@Override
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
@@ -148,7 +149,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public void setCurrentUser(User user) {
 		currentUser = user;
 	}
-	
+
 	@Override
 	public User getCurrentUser() {
 		return currentUser;
@@ -171,7 +172,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 				mAppts = (HashMap<Integer, Appt>)xstream.fromXML(xmlFile);
 			}
 		}catch(Exception e){
-			System.out.println("loadApptError");
+			System.out.println("loadApptFailed");
 		}
 	}
 
@@ -193,7 +194,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 				//System.out.println("enter loadLocFromXml" + _locations.length);
 			} 
 		}catch (Exception e){
-			System.out.println("loadLocationError");
+			System.out.println("loadLocationFailed");
 		}
 	}
 
@@ -202,6 +203,26 @@ public class ApptStorageNullImpl extends ApptStorage {
 		try{
 			xstream.toXML(_locations, new FileWriter("locations.xml"));
 		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void LoadUserFromXml(){
+		try{
+			userFile = new File("userList.xml");
+			if(userFile.exists() && userFile.isFile()){
+				userList = (ArrayList<User>)xstream.fromXML(userFile);
+			}
+		}catch (Exception e){
+			System.out.println("loadUserListFailed");
+		}
+	}
+	@Override
+	public void SaveUserToXml(){
+		try{
+			xstream.toXML(userList, new FileWriter("userList.xml"));
+		} catch(IOException e){
 			e.printStackTrace();
 		}
 	}
@@ -253,7 +274,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		else
 			JOptionPane.showMessageDialog(null, "The user list is empty", "invalid input", JOptionPane.WARNING_MESSAGE);
 	}
-	
+
 	// Search and return an instance of User class based on the username
 	public User searchUser(String username) {
 		User target = null;
