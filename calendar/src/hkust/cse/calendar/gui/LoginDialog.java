@@ -32,15 +32,15 @@ public class LoginDialog extends JFrame implements ActionListener
 	private JButton button;
 	private JButton closeButton;
 	private JButton signupButton;
-	
+
 	private ApptStorageControllerImpl controller;
 	private boolean textFieldEmpty;
-	
+
 	public LoginDialog()		// Create a dialog to log in
 	{
-		
+
 		setTitle("Log in");
-		
+
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
@@ -50,61 +50,61 @@ public class LoginDialog extends JFrame implements ActionListener
 		controller = new ApptStorageControllerImpl(new ApptStorageNullImpl());
 		//load userList from xml
 		controller.LoadUserFromXml();
-		
-		User user = new User("user", "user");
-		user.setAdmin(true);
-		controller.addUser(user);
-		
+		if(!controller.userExist("user")){
+			User user = new User("user", "user");
+			user.setAdmin(true);
+			controller.addUser(user);
+		}
 		Container contentPane;
 		contentPane = getContentPane();
-		
+
 		JPanel top = new JPanel();
 		top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
-		
+
 		JPanel messPanel = new JPanel();
 		messPanel.add(new JLabel("Please input your user name and password to log in."));
 		top.add(messPanel);
-		
+
 		JPanel namePanel = new JPanel();
 		namePanel.add(new JLabel("User Name:"));
 		userName = new JTextField(15);
 		namePanel.add(userName);
 		top.add(namePanel);
-		
+
 		JPanel pwPanel = new JPanel();
 		pwPanel.add(new JLabel("Password:  "));
 		password = new JPasswordField(15);
 		pwPanel.add(password);
 		top.add(pwPanel);
-		
+
 		JPanel signupPanel = new JPanel();
 		signupPanel.add(new JLabel("If you don't have an account, please sign up:"));
 		signupButton = new JButton("Sign up now");
 		signupButton.addActionListener(this);
 		signupPanel.add(signupButton);
 		top.add(signupPanel);
-		
+
 		contentPane.add("North", top);
-		
+
 		JPanel butPanel = new JPanel();
 		butPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
 		button = new JButton("Log in (No user name and password required)");
 		button.addActionListener(this);
 		butPanel.add(button);
-		
+
 		closeButton = new JButton("Close program");
 		closeButton.addActionListener(this);
 		butPanel.add(closeButton);
-		
+
 		contentPane.add("South", butPanel);
-		
+
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);	
-		
+
 	}
-	
+
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == button)
@@ -112,7 +112,7 @@ public class LoginDialog extends JFrame implements ActionListener
 			// Trim to remove whitespaces
 			String username = userName.getText().trim();
 			String pw = new String(password.getPassword()).trim();
-			
+
 			areFieldsEmpty(username, pw);
 			if (textFieldEmpty) {
 				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -134,7 +134,7 @@ public class LoginDialog extends JFrame implements ActionListener
 			// Trim to remove whitespaces
 			String username = userName.getText().trim();
 			String pw = new String(password.getPassword()).trim();
-			
+
 			areFieldsEmpty(username, pw);
 			if (textFieldEmpty) {
 				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -153,7 +153,7 @@ public class LoginDialog extends JFrame implements ActionListener
 				System.exit(0);			
 		}
 	}
-	
+
 	// This method checks whether a string is a valid user name or password, as they can contains only letters and numbers
 	public static boolean ValidString(String s)
 	{
@@ -170,12 +170,12 @@ public class LoginDialog extends JFrame implements ActionListener
 		}
 		return true;
 	}
-	
+
 	public void areFieldsEmpty(String username, String password) {
 		if (username.isEmpty() || password.isEmpty()) 
 			textFieldEmpty = true;
 		else 
 			textFieldEmpty = false;
-		
+
 	}
 }

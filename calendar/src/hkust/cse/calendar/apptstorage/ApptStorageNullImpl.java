@@ -313,4 +313,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 			}
 		}
 	}
+	
+	public boolean userExist(String userName){
+		if(!userList.isEmpty()){
+			for(int i=0; i<userList.size(); i++){
+				if(userList.get(i).getUsername().equals(userName));
+				return true;
+			}
+		}
+		return false;
+	}
 }
