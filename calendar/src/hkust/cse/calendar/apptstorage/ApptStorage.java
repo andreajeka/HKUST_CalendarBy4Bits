@@ -44,6 +44,10 @@ public abstract class ApptStorage {
 	public abstract void SaveLocToXml();        //abstract method to save location from Location[] into xml
 	
 	public abstract void LoadLocFromXml();		//abstract method to load location from xml into Location[]
+	
+	public abstract void SaveUserToXml();       //abstract method to save userList to xml
+	
+	public abstract void LoadUserFromXml();     //abstract method to load userList from xml
 	/*
 	 * Add other methods if necessary
 	 */
