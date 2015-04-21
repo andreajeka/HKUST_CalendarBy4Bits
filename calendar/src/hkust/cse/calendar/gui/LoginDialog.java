@@ -20,7 +20,11 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-
+/** NOTE FOR LOGIN DIALOG **/
+/*
+ * Currently for this version, I only hardcode id: user and pw: user as the user admin
+ * When you sign up as a new user, you won't be able to access manage users and manage locations.
+ */
 public class LoginDialog extends JFrame implements ActionListener
 {
 	private JTextField userName;
@@ -28,6 +32,9 @@ public class LoginDialog extends JFrame implements ActionListener
 	private JButton button;
 	private JButton closeButton;
 	private JButton signupButton;
+	
+	private ApptStorageControllerImpl controller;
+	private boolean textFieldEmpty;
 	
 	public LoginDialog()		// Create a dialog to log in
 	{
@@ -40,6 +47,10 @@ public class LoginDialog extends JFrame implements ActionListener
 			}
 		});
 
+		controller = new ApptStorageControllerImpl(new ApptStorageNullImpl());
+		User user = new User("user", "user");
+		user.setAdmin(true);
+		controller.addUser(user);
 		
 		Container contentPane;
 		contentPane = getContentPane();
@@ -95,20 +106,41 @@ public class LoginDialog extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == button)
 		{
-			// When the button is clicked, check the user name and password, and try to log the user in
+			// Trim to remove whitespaces
+			String username = userName.getText().trim();
+			String pw = new String(password.getPassword()).trim();
 			
-			User user = new User( "noname", "nopass");
-			// set true for admin to access manage location and manage users
-			user.setAdmin(true);
-			
-			//login(User);
-
-			CalGrid grid = new CalGrid(new ApptStorageControllerImpl(new ApptStorageNullImpl(user)));
-			setVisible( false );
+			areFieldsEmpty(username, pw);
+			if (textFieldEmpty) {
+				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.ERROR_MESSAGE);
+			} else if (controller.searchUser(username) != null) {
+				User user = controller.searchUser(username);
+				if (user.getPassword().equals(pw)) {
+					controller.setCurrentUser(user);
+					CalGrid grid = new CalGrid(controller);
+					setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(this, "Invalid Password", "Input Error", JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Invalid Username", "Input Error", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		else if(e.getSource() == signupButton)
 		{
-			// Create a new account
+			// Trim to remove whitespaces
+			String username = userName.getText().trim();
+			String pw = new String(password.getPassword()).trim();
+			
+			areFieldsEmpty(username, pw);
+			if (textFieldEmpty) {
+				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.ERROR_MESSAGE);
+			} else if (controller.searchUser(username) != null) {
+				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.ERROR_MESSAGE);
+			} else {
+				controller.addUser(new User(username, pw));
+				JOptionPane.showMessageDialog(this, "Sign Up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 		else if(e.getSource() == closeButton)
 		{
@@ -134,5 +166,13 @@ public class LoginDialog extends JFrame implements ActionListener
 				return false;
 		}
 		return true;
+	}
+	
+	public void areFieldsEmpty(String username, String password) {
+		if (username.isEmpty() || password.isEmpty()) 
+			textFieldEmpty = true;
+		else 
+			textFieldEmpty = false;
+		
 	}
 }

@@ -18,15 +18,14 @@ import com.thoughtworks.xstream.XStream;
 
 public class ApptStorageNullImpl extends ApptStorage {
 
-	private User defaultUser = null;
 	private XStream xstream;
+	private User currentUser;
 	private Location[] _locations;
 	private File xmlFile;
 	private File locFile;
 	private String overlapMessage="";
 	private boolean isOverlap = false;
 
-	private boolean checkDuplicateUser;
 	private ArrayList<User> userList;
 
 	/************* MY TASKS ************/
@@ -39,15 +38,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 	// public boolean/User getUser(User user);
 
 
-	public ApptStorageNullImpl( User user )
+	public ApptStorageNullImpl()
 	{
-		defaultUser = user;
 		mAppts = new HashMap<Integer, Appt>();
 		xstream = new XStream();
 		userList = new ArrayList<User>();
 	}
 
-
+	
 	@Override
 	public void SaveAppt(Appt appt) {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
@@ -147,9 +145,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 		mAppts.remove(appt.getID(), appt);
 	}
 
+	public void setCurrentUser(User user) {
+		currentUser = user;
+	}
+	
 	@Override
-	public User getDefaultUser() {
-		return defaultUser;
+	public User getCurrentUser() {
+		return currentUser;
 	}
 
 	public String getOverlapMessage() {
@@ -232,19 +234,8 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void addUser(User user){
-		checkDuplicateUser = true;
-		if(!userList.isEmpty()){
-			for(int i=0; i<userList.size(); i++){
-				if(user.getUsername().equals(userList.get(i).getUsername())){
-					checkDuplicateUser = false;
-					break;
-				}
-			}
-		}
-		if(checkDuplicateUser)
-			userList.add(user);
-		else
-			JOptionPane.showMessageDialog(null, "Duplicate User Name", "invalid input", JOptionPane.WARNING_MESSAGE);
+		// Duplication is checked in logindialog
+		userList.add(user);
 	}
 
 	@Override
@@ -268,9 +259,10 @@ public class ApptStorageNullImpl extends ApptStorage {
 		User target = null;
 		if (!userList.isEmpty()){
 			for (User u : userList) {
-				if (u.getUsername().equals(username))
+				if (u.getUsername().equals(username)) {
 					target = u;
 					break;
+				}
 			}
 		}
 		return target;

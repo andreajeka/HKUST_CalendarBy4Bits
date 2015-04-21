@@ -495,7 +495,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	}
 
 	private void initializeSystem() {
-		mCurrUser = controller.getDefaultUser();	//get User from controller
+		mCurrUser = controller.getCurrentUser();	//get User from controller
 		
 		if (!mCurrUser.isAdmin()) {
 			miManageUsers.setEnabled(false);

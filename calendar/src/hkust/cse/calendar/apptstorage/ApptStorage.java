@@ -29,7 +29,9 @@ public abstract class ApptStorage {
 
 	public abstract void RemoveAppt(Appt appt);	//abstract method to remove an appointment record
 	
-	public abstract User getDefaultUser();		//abstract method to return the current user object
+	public abstract void setCurrentUser(User user);		//abstract method to set current user 
+	
+	public abstract User getCurrentUser();		//abstract method to return the current user object
 	
 	public abstract String getOverlapMessage(); //abstract method to get overlap message
 	

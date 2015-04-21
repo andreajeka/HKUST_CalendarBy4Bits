@@ -66,9 +66,13 @@ public class ApptStorageControllerImpl {
 		} 
 	}
 
-	/* Get the defaultUser of mApptStorage */
-	public User getDefaultUser() {
-		return mApptStorage.getDefaultUser();
+	public void setCurrentUser(User user) {
+		mApptStorage.setCurrentUser(user);
+	}
+	
+	/* Get the currentUser of mApptStorage */
+	public User getCurrentUser() {
+		return mApptStorage.getCurrentUser();
 	}
 	
 	public String getOverlapMessage() {
