@@ -151,7 +151,4 @@ public class ApptStorageControllerImpl {
 		mApptStorage.removeUser(userId);
 	}
 
-	public boolean userExist(String userName){
-		return mApptStorage.userExist(userName);
-	}
 }

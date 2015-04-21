@@ -50,7 +50,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		controller = new ApptStorageControllerImpl(new ApptStorageNullImpl());
 		//load userList from xml
 		controller.LoadUserFromXml();
-		if(!controller.userExist("user")){
+		if(controller.searchUser("user") == null){
 			User user = new User("user", "user");
 			user.setAdmin(true);
 			controller.addUser(user);

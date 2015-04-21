@@ -72,7 +72,4 @@ public abstract class ApptStorage {
 	public abstract void removeUser(String username);
 	
 	public abstract void removeUser(UUID userId);
-	
-	public abstract boolean userExist(String userName);
-
 }
