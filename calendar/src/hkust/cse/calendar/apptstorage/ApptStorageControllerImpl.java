@@ -99,6 +99,14 @@ public class ApptStorageControllerImpl {
 	public void SaveLocToXml(){
 		mApptStorage.SaveLocToXml();
 	}
+	
+	public void SaveUserToXml(){
+		mApptStorage.SaveUserToXml();
+	}
+	
+	public void LoadUserFromXml(){
+		mApptStorage.LoadUserFromXml();
+	}
 	/* get the locationList of mApptStorage */
 	public Location[] getLocationList(){
 		return mApptStorage.getLocationList();
