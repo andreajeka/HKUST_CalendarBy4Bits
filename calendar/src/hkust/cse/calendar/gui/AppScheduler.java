@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Timer;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -366,9 +367,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 		} else if (e.getSource() == rejectBut){
 			if (JOptionPane.showConfirmDialog(this, "Reject this joint appointment?", "Confirmation", JOptionPane.YES_NO_OPTION) == 0){
-				NewAppt.addReject(getCurrentUser());
-				NewAppt.getAttendList().remove(getCurrentUser());
-				NewAppt.getWaitingList().remove(getCurrentUser());
+				NewAppt.addReject(getCurrentUserUUID());
+				NewAppt.getAttendList().remove(getCurrentUserUUID());
+				NewAppt.getWaitingList().remove(getCurrentUserUUID());
 				this.setVisible(false);
 				dispose();
 			}
@@ -791,9 +792,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	}
 	
-	public String getCurrentUser()		// get the id of the current user
+	public UUID getCurrentUserUUID()		// get the id of the current user
 	{
-		return this.parent.mCurrUser.getUsername();
+		return this.parent.mCurrUser.getUserId();
 	}
 	
 	private void allDisableEdit(){

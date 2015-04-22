@@ -3,6 +3,7 @@ package hkust.cse.calendar.unit;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.UUID;
 
 
 public class Appt implements Serializable {
@@ -25,11 +26,11 @@ public class Appt implements Serializable {
 
 	private boolean isjoint;					// The appointment is a joint appointment
 
-	private LinkedList<String> attend;			// The Attendant list
+	private LinkedList<UUID> attend;			// The Attendant list
 
-	private LinkedList<String> reject;			// The reject list
+	private LinkedList<UUID> reject;			// The reject list
 
-	private LinkedList<String> waiting;			// The waiting list
+	private LinkedList<UUID> waiting;			// The waiting list
 
 	private String location;					// The location
 
@@ -44,9 +45,9 @@ public class Appt implements Serializable {
 		mTitle = "Untitled";
 		mInfo = "";
 		isjoint = false;
-		attend = new LinkedList<String>();
-		reject = new LinkedList<String>();
-		waiting = new LinkedList<String>();
+		attend = new LinkedList<UUID>();
+		reject = new LinkedList<UUID>();
+		waiting = new LinkedList<UUID>();
 		joinApptID = -1;
 		location = "";
 		reminder = false;
@@ -90,83 +91,83 @@ public class Appt implements Serializable {
 		this.joinApptID = joinID;
 	}
 	// Getter of the attend LinkedList<String>
-	public LinkedList<String> getAttendList(){
+	public LinkedList<UUID> getAttendList(){
 		return attend;
 	}
 
 	// Getter of the reject LinkedList<String>
-	public LinkedList<String> getRejectList(){
+	public LinkedList<UUID> getRejectList(){
 		return reject;
 	}
 
 	// Getter of the waiting LinkedList<String>
-	public LinkedList<String> getWaitingList(){
+	public LinkedList<UUID> getWaitingList(){
 		return waiting;
 	}
 
-	public LinkedList<String> getAllPeople(){
-		LinkedList<String> allList = new LinkedList<String>();
+	public LinkedList<UUID> getAllPeople(){
+		LinkedList<UUID> allList = new LinkedList<UUID>();
 		allList.addAll(attend);
 		allList.addAll(reject);
 		allList.addAll(waiting);
 		return allList;
 	}
 
-	public void addAttendant(String addID){
+	public void addAttendant(UUID addID){
 		if (attend == null)
-			attend = new LinkedList<String>();
+			attend = new LinkedList<UUID>();
 		attend.add(addID);
 	}
 
-	public void addReject(String addID){
+	public void addReject(UUID addID){
 		if (reject == null)
-			reject = new LinkedList<String>();
+			reject = new LinkedList<UUID>();
 		reject.add(addID);
 	}
 
-	public void addWaiting(String addID){
+	public void addWaiting(UUID addID){
 		if (waiting == null)
-			waiting = new LinkedList<String>();
+			waiting = new LinkedList<UUID>();
 		waiting.add(addID);
 	}
 
-	public void setWaitingList(LinkedList<String> waitingList){
+	public void setWaitingList(LinkedList<UUID> waitingList){
 		waiting = waitingList;
 	}
 
-	public void setWaitingList(String[] waitingList){
-		LinkedList<String> tempLinkedList = new LinkedList<String>();
+	public void setWaitingList(UUID[] waitingList){
+		LinkedList<UUID> tempLinkedList = new LinkedList<UUID>();
 		if (waitingList !=null){
-			for (int a=0; a<waitingList.length; a++){
-				tempLinkedList.add(waitingList[a].trim());
+			for (int a = 0; a < waitingList.length; a++){
+				tempLinkedList.add(waitingList[a]);
 			}
 		}
 		waiting = tempLinkedList;
 	}
 
-	public void setRejectList(LinkedList<String> rejectLinkedList) {
+	public void setRejectList(LinkedList<UUID> rejectLinkedList) {
 		reject = rejectLinkedList;
 	}
 
-	public void setRejectList(String[] rejectList){
-		LinkedList<String> tempLinkedList = new LinkedList<String>();
+	public void setRejectList(UUID[] rejectList){
+		LinkedList<UUID> tempLinkedList = new LinkedList<UUID>();
 		if (rejectList !=null){
 			for (int a=0; a<rejectList.length; a++){
-				tempLinkedList.add(rejectList[a].trim());
+				tempLinkedList.add(rejectList[a]);
 			}
 		}
 		reject = tempLinkedList;
 	}
 
-	public void setAttendList(LinkedList<String> attendLinkedList) {
+	public void setAttendList(LinkedList<UUID> attendLinkedList) {
 		attend = attendLinkedList;
 	}
 
-	public void setAttendList(String[] attendList){
-		LinkedList<String> tempLinkedList = new LinkedList<String>();
+	public void setAttendList(UUID[] attendList){
+		LinkedList<UUID> tempLinkedList = new LinkedList<UUID>();
 		if (attendList !=null){
-			for (int a=0; a<attendList.length; a++){
-				tempLinkedList.add(attendList[a].trim());
+			for (int a = 0; a < attendList.length; a++){
+				tempLinkedList.add(attendList[a]);
 			}
 		}
 		attend = tempLinkedList;

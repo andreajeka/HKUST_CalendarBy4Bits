@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.util.LinkedList;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -99,7 +100,7 @@ public class DetailsDialog extends JFrame implements ActionListener {
 //		area.append("Reminder: " + appt.getFrequency() + "\n");
 		area.append("\nParticipants:\n");
 		area.append("  Attend:");
-		LinkedList<String> attendList = appt.getAttendList();
+		LinkedList<UUID> attendList = appt.getAttendList();
 		if(attendList != null)
 		{
 			for(int i = 0; i < attendList.size(); i++)
@@ -108,7 +109,7 @@ public class DetailsDialog extends JFrame implements ActionListener {
 			}
 		}
 		area.append("\n\n  Reject:");
-		LinkedList<String> rejectList = appt.getRejectList();
+		LinkedList<UUID> rejectList = appt.getRejectList();
 		if(rejectList != null)
 		{
 			for(int i = 0; i < rejectList.size(); i++)
@@ -117,7 +118,7 @@ public class DetailsDialog extends JFrame implements ActionListener {
 			}
 		}
 		area.append("\n\n  Waiting:");
-		LinkedList<String> waitingList = appt.getWaitingList();
+		LinkedList<UUID> waitingList = appt.getWaitingList();
 		if(waitingList != null)
 		{
 			for(int i = 0; i < waitingList.size(); i++)
