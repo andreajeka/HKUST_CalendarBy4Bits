@@ -10,6 +10,7 @@ import hkust.cse.calendar.users.User;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -72,11 +73,28 @@ public class PersonalSettingDialog extends JFrame {
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					// Save
-					_user.setUsername(usernameTF.getText());
+					// Since there can't be duplicate in usernames, we have to do checking
+					String username = usernameTF.getText();
+					if (controller.searchUser(username) == null) {
+						_user.setUsername(usernameTF.getText());
+					} else {
+						if (!_user.getUsername().equals(username)) {
+							JOptionPane.showMessageDialog(null, "Username already exists", "Username not available", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+					}
 					_user.setFirstName(firstnameTF.getText());
 					_user.setLastName(lastnameTF.getText());
-					_user.setPassword(passwordTF.getText());
+					
+					// Don't allow empty password field
+					String pw = new String(passwordTF.getPassword()).trim();
+					if (!pw.equals(""))
+						_user.setPassword(pw);
+					else {
+						JOptionPane.showMessageDialog(null, "Password field cannot be empty", "Empty password", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+						
 					
 					// Close
 					setVisible(false);
