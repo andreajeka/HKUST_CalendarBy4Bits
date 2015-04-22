@@ -13,7 +13,6 @@ import java.util.UUID;
 public abstract class ApptStorage {
 
 	public HashMap<Integer, Appt> mAppts;		//a hashmap to save every thing to it, write to memory by the memory based storage implementation	
-	public User defaultUser;	//a user object, now is single user mode without login
 	public int mAssignedApptID;	//a global appointment ID for each appointment record
 	public ApptStorage() {	//default constructor
 	}

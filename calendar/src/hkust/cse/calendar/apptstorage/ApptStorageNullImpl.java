@@ -122,7 +122,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
 		// TODO Retrieve Appointments by time and user (for now its default)
 		// Call RetrieveAPpts with time parameter
-		if (entity.equals(defaultUser)) {
+		if (entity.equals(currentUser)) {
 			return RetrieveAppts(time);
 		}
 		return null;
