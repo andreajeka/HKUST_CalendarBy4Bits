@@ -124,13 +124,9 @@ public class LoginDialog extends JFrame implements ActionListener
 					// TODO Check if user is to be removed. 
 					String currUsername = user.getUsername();
 					if (user.isTobeRemoved()) {
-						int result = JOptionPane.showConfirmDialog(this, "You are about to be removed. Confirm?", "Confirmation of Removal", JOptionPane.YES_NO_OPTION);
-						if (result == JOptionPane.YES_OPTION) {
-							controller.removeUser(currUsername);
-							JOptionPane.showMessageDialog(this, "User " + currUsername + " has been removed", "Removal Succesful", JOptionPane.INFORMATION_MESSAGE);
-							return;
-						} else user.setTobeRemoved(false);
-						
+						JOptionPane.showMessageDialog(this, "You have been removed", "User Removed", JOptionPane.INFORMATION_MESSAGE);
+						controller.removeUser(currUsername);
+						return;
 					}	
 					
 					CalGrid grid = new CalGrid(controller);

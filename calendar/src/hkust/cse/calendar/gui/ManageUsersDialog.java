@@ -94,8 +94,8 @@ public class ManageUsersDialog extends JFrame {
 						user = controller.searchUser(username);
 					
 					if (user != null) { // Not necessary to check, but safety comes first
-						userListModel.setElementAt(username + " - Removal Pending", selectedIndex);
 						user.setTobeRemoved(true);
+						userListModel.removeElementAt(selectedIndex);
 					}
 				}
 				else
@@ -117,7 +117,7 @@ public class ManageUsersDialog extends JFrame {
 				if (!user.equals(currentUser)) {
 					String username = user.getUsername();
 					if (user.isTobeRemoved())
-						userListModel.addElement(username + " - Removal Pending");
+						continue;
 					else userListModel.addElement(user.getUsername());
 				}
 			}
