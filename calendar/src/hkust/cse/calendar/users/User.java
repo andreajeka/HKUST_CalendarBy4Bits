@@ -22,6 +22,9 @@ public class User implements Serializable {
 	// To indicate which use is an admin or a regular
 	private boolean isAdmin;
 	
+	//
+	private boolean tobeRemoved;
+	
 	/**NOTE**/
 	// I'm not convince we should put a isInitiator boolean here.
 	// Suppose a user initiate an event, then he/she is the initiator
@@ -139,5 +142,12 @@ public class User implements Serializable {
 		if (mUserId.equals(temp.getUserId()))
 			return true;
 		return false;
+	}
+	
+	public boolean isTobeRemoved() {
+		return tobeRemoved;
+	}
+	public void setTobeRemoved(boolean tobeRemoved) {
+		this.tobeRemoved = tobeRemoved;
 	}
 }

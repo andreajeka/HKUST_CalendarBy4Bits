@@ -38,9 +38,10 @@ public class ManageUsersDialog extends JFrame {
 		
 		this.controller = controller;
 		currentUser = user;
+		this.setTitle("Manage Users");
 		this.setLayout(new BorderLayout());
 		this.setLocationByPlatform(true);
-		this.setSize(500, 500);
+		this.setSize(300, 300);
 
 		userListModel = new DefaultListModel<String>();
 		userJList = new JList<String>(userListModel);
@@ -56,6 +57,7 @@ public class ManageUsersDialog extends JFrame {
 		buttonPane.add(removeButton);
 		this.add(buttonPane, BorderLayout.PAGE_END);
 		
+		// Response to Modify button being clicked
 		modifyButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -73,7 +75,8 @@ public class ManageUsersDialog extends JFrame {
 						psd.setLocationRelativeTo(null);
 						psd.show();
 					}
-				}
+				} else
+					JOptionPane.showMessageDialog(null, "Please Select a User to be Modified", "MODIFY ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 			
 		});
@@ -91,7 +94,8 @@ public class ManageUsersDialog extends JFrame {
 						user = controller.searchUser(username);
 					
 					if (user != null) { // Not necessary to check, but safety comes first
-						userListModel.setElementAt(username + " - Waiting for confirmation to be removed", selectedIndex);
+						userListModel.setElementAt(username + " - Removal Pending", selectedIndex);
+						user.setTobeRemoved(true);
 					}
 				}
 				else
@@ -99,10 +103,7 @@ public class ManageUsersDialog extends JFrame {
 			}
 			
 		});
-		User u = new User("andrea", "haha");
-		u.setFirstName("Andrea");
-		u.setLastName("Kurniasari");
-		controller.addUser(u);
+
 		loadUserList();
 
 	}
@@ -113,8 +114,12 @@ public class ManageUsersDialog extends JFrame {
 			userListModel.clear();
 			for (User user : userList) {
 				// Don't show yourself in the list. Just display other users
-				if (!user.equals(currentUser))
-					userListModel.addElement(user.getUsername());
+				if (!user.equals(currentUser)) {
+					String username = user.getUsername();
+					if (user.isTobeRemoved())
+						userListModel.addElement(username + " - Removal Pending");
+					else userListModel.addElement(user.getUsername());
+				}
 			}
 			
 		}

@@ -55,6 +55,7 @@ public class LoginDialog extends JFrame implements ActionListener
 			user.setAdmin(true);
 			controller.addUser(user);
 		}
+		
 		Container contentPane;
 		contentPane = getContentPane();
 
@@ -120,8 +121,21 @@ public class LoginDialog extends JFrame implements ActionListener
 				User user = controller.searchUser(username);
 				if (user.getPassword().equals(pw)) {
 					controller.setCurrentUser(user);
+					// TODO Check if user is to be removed. 
+					String currUsername = user.getUsername();
+					if (user.isTobeRemoved()) {
+						int result = JOptionPane.showConfirmDialog(this, "You are about to be removed. Confirm?", "Confirmation of Removal", JOptionPane.YES_NO_OPTION);
+						if (result == JOptionPane.YES_OPTION) {
+							controller.removeUser(currUsername);
+							JOptionPane.showMessageDialog(this, "User " + currUsername + " has been removed", "Removal Succesful", JOptionPane.INFORMATION_MESSAGE);
+							return;
+						} else user.setTobeRemoved(false);
+						
+					}	
+					
 					CalGrid grid = new CalGrid(controller);
 					setVisible(false);
+					
 				} else {
 					JOptionPane.showMessageDialog(this, "Invalid Password", "Input Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -141,7 +155,8 @@ public class LoginDialog extends JFrame implements ActionListener
 			} else if (controller.searchUser(username) != null) {
 				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.ERROR_MESSAGE);
 			} else {
-				controller.addUser(new User(username, pw));
+				User user = new User(username,pw);
+				controller.addUser(user);
 				JOptionPane.showMessageDialog(this, "Sign Up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
@@ -149,8 +164,10 @@ public class LoginDialog extends JFrame implements ActionListener
 		{
 			int n = JOptionPane.showConfirmDialog(null, "Exit Program ?",
 					"Confirm", JOptionPane.YES_NO_OPTION);
-			if (n == JOptionPane.YES_OPTION)
+			if (n == JOptionPane.YES_OPTION) {
+				controller.SaveUserToXml();
 				System.exit(0);			
+			}
 		}
 	}
 

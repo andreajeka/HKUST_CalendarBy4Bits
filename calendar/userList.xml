@@ -2,7 +2,8 @@
   <hkust.cse.calendar.users.User>
     <mUsername>user</mUsername>
     <mPassword>user</mPassword>
-    <mUserId>5064072b-dda4-476f-9b40-f9ee1390729e</mUserId>
+    <mUserId>df68381c-62e8-4299-9718-50bc52007255</mUserId>
     <isAdmin>true</isAdmin>
+    <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
 </list>

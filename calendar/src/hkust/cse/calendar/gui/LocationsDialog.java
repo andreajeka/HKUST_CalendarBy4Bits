@@ -63,14 +63,14 @@ public class LocationsDialog extends JFrame {
 		/******   add item to JList and Location[]   ******/
 		addBt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				if(locNameText.getText().equals("")){
+				if(locNameText.getText().trim().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Invalid Input! Please Input Again", "INPUT ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 				else{
 					if(_controller.getLocationList() != null){
 						Location[] checkLocations = _controller.getLocationList();
 						for(int i=0; i<checkLocations.length; i++){
-							if(checkLocations[i].getName().equals(locNameText.getText().toString())){
+							if(checkLocations[i].getName().equals(locNameText.getText().trim())){
 								JOptionPane.showMessageDialog(null, "Duplicate Location", "INPUT ERROR", JOptionPane.ERROR_MESSAGE);
 								locNameText.setText("");
 								return;
@@ -90,8 +90,10 @@ public class LocationsDialog extends JFrame {
 				selectedIndex = list.getSelectedIndex();
 				if(selectedIndex != -1)
 					listModel.remove(selectedIndex);
-				else if(selectedIndex == -1)
-					JOptionPane.showMessageDialog(null, "Please Select a Loacation", "REMOVE ERROR", JOptionPane.ERROR_MESSAGE);
+				else if(selectedIndex == -1) {
+					JOptionPane.showMessageDialog(null, "Please Select a Location", "REMOVE ERROR", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				capacity = 0;
 				if(_controller.getLocationList() != null){
 					capacity = _controller.getLocationCapacity();
@@ -99,6 +101,7 @@ public class LocationsDialog extends JFrame {
 					Location[] loca = new Location[capacity-1];
 					for(int i=0; i<capacity; i++){
 						if(i < selectedIndex){
+							System.out.println("Not empty");
 							loca[i] = locations[i];
 						}
 						else if(i > selectedIndex){
