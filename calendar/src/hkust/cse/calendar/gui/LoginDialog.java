@@ -12,12 +12,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /** NOTE FOR LOGIN DIALOG **/
@@ -33,11 +35,36 @@ public class LoginDialog extends JFrame implements ActionListener
 	private JButton closeButton;
 	private JButton signupButton;
 
+	public JRadioButton adminButton;
+	public JRadioButton userButton;
+	private ButtonGroup userbg;
+
+
 	private ApptStorageControllerImpl controller;
 	private boolean textFieldEmpty;
 
 	public LoginDialog()		// Create a dialog to log in
 	{
+
+		adminButton = new JRadioButton("Admin");
+		userButton = new JRadioButton("Regular User");
+
+		userbg = new ButtonGroup();
+
+		adminButton.setActionCommand("Admin");
+		userButton.setActionCommand("Regular User");
+
+		userbg.add(adminButton);
+		userbg.add(userButton);
+
+		JPanel userTypePanel = new JPanel();
+		userTypePanel.add(new JLabel("User Type:"));
+		userTypePanel.add(adminButton);
+		userTypePanel.add(userButton);
+		userButton.setSelected(true);
+		adminButton.addActionListener(this);
+		userButton.addActionListener(this);
+		
 
 		setTitle("Log in");
 
@@ -55,7 +82,7 @@ public class LoginDialog extends JFrame implements ActionListener
 			user.setAdmin(true);
 			controller.addUser(user);
 		}
-		
+
 		Container contentPane;
 		contentPane = getContentPane();
 
@@ -77,6 +104,8 @@ public class LoginDialog extends JFrame implements ActionListener
 		password = new JPasswordField(15);
 		pwPanel.add(password);
 		top.add(pwPanel);
+
+		top.add(userTypePanel);
 
 		JPanel signupPanel = new JPanel();
 		signupPanel.add(new JLabel("If you don't have an account, please sign up:"));
@@ -128,10 +157,10 @@ public class LoginDialog extends JFrame implements ActionListener
 						controller.removeUser(currUsername);
 						return;
 					}	
-					
+
 					CalGrid grid = new CalGrid(controller);
 					setVisible(false);
-					
+
 				} else {
 					JOptionPane.showMessageDialog(this, "Invalid Password", "Input Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -152,9 +181,23 @@ public class LoginDialog extends JFrame implements ActionListener
 				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.ERROR_MESSAGE);
 			} else {
 				User user = new User(username,pw);
+				
+				if(adminButton.isSelected()){
+					user.setAdmin(true);
+				}
+				else
+				{
+					user.setAdmin(false);
+				}
+				
 				controller.addUser(user);
+				
 				JOptionPane.showMessageDialog(this, "Sign Up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
 			}
+			
+			
+			
+			
 		}
 		else if(e.getSource() == closeButton)
 		{
@@ -165,7 +208,14 @@ public class LoginDialog extends JFrame implements ActionListener
 				System.exit(0);			
 			}
 		}
+	
 	}
+	
+	
+	
+	
+	
+	
 
 	// This method checks whether a string is a valid user name or password, as they can contains only letters and numbers
 	public static boolean ValidString(String s)
