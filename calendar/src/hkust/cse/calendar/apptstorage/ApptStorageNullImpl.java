@@ -9,6 +9,7 @@ import hkust.cse.calendar.users.User;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -45,12 +46,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 		mAppts = new HashMap<Integer, Appt>();
 		xstream = new XStream();
 		userList = new ArrayList<User>();
+		
 	}
 
 
 	@Override
 	public void SaveAppt(Appt appt) {
-		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
+		Appt[] userApptList = RetrieveAppts(currentUser);
+		ArrayList<Appt> apptList = new ArrayList<Appt>(Arrays.asList(userApptList));
 		String digitHour="";
 		if (!apptList.isEmpty()) {
 			for (Appt anAppt : apptList) {
@@ -80,6 +83,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			int key = LengthInMemory() + 1;
 			appt.setID(key);
 			mAppts.put(key, appt);
+			appt.addAttendant(currentUser.getUserId());
 		}
 	}
 
@@ -92,12 +96,8 @@ public class ApptStorageNullImpl extends ApptStorage {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
 		// Create a container ArrayList to contain the appointments which fall inside the requirement
 		ArrayList<Appt> apptsByTime = new ArrayList<Appt>();
+		
 		for (Appt anAppt: apptList) {
-			// The below code returns false, which is weird.
-			// System.out.println(anAppt.TimeSpan().EndTime().before(d.EndTime()));
-			// The below code returns true, which is weird.
-			// System.out.println(anAppt.TimeSpan().EndTime().after(d.EndTime()));
-
 			// Check which appointments is inside TimeSpan d
 			if (Utility.AfterBeforeEqual(anAppt.TimeSpan().StartTime(), d.StartTime()) == 1  | 
 					Utility.AfterBeforeEqual(anAppt.TimeSpan().StartTime(), d.StartTime()) == 0) {
@@ -119,14 +119,53 @@ public class ApptStorageNullImpl extends ApptStorage {
 	}		 	
 
 	@Override		 	
-	public Appt[] RetrieveAppts(User entity, TimeSpan time) {		 	
-		// TODO Retrieve Appointments by time and user (for now its default)
-		// Call RetrieveAPpts with time parameter
-		if (entity.equals(currentUser)) {
-			return RetrieveAppts(time);
+	public Appt[] RetrieveAppts(User entity, TimeSpan time) {	
+		
+		// TODO Get attendance list. Right now we use attendant list only 
+		// because we have not implemented group event yet.
+		
+		// Retrieve all appointments according to the specified timespan
+		Appt[] apptList = RetrieveAppts(time);
+		if (apptList == null) return null;
+		// Create a new array list to contain list of appointments that involves currentUser
+		ArrayList<Appt> userApptList = new ArrayList<Appt>();
+		
+		// Iterate through the list of retrieved appointments
+		for (int i = 0; i < apptList.length; i++) {
+			// Retrieve all the attendants (by its id) of the appointment
+			ArrayList<UUID> attendantList = new ArrayList<UUID>(apptList[i].getAttendList());
+			// If the list of attendant contains current user, add that appointment to userApptList
+			if (attendantList.contains(currentUser.getUserId()))
+				userApptList.add(apptList[i]);
 		}
-		return null;
-	}		 	
+		
+		
+		Appt[] userApptArray = new Appt[userApptList.size()];
+		userApptArray = userApptList.toArray(userApptArray);
+		return userApptArray;		
+	}	
+	
+	public Appt[] RetrieveAppts(User entity) {
+		
+		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
+		if (apptList == null) return null;
+		
+		// Create a new array list to contain list of appointments that involves currentUser
+		ArrayList<Appt> userApptList = new ArrayList<Appt>();
+		
+		// Iterate through the list of retrieved appointments
+		for (Appt appt : apptList) {
+			// Retrieve all the attendants (by its id) of the appointment
+			ArrayList<UUID> attendantList = new ArrayList<UUID>(appt.getAttendList());
+			// If the list of attendant contains current user, add that appointment to userApptList
+			if (attendantList.contains(currentUser.getUserId()))
+				userApptList.add(appt);
+		}
+		
+		Appt[] userApptArray = new Appt[userApptList.size()];
+		userApptArray = userApptList.toArray(userApptArray);
+		return userApptArray;
+	}
 
 	@Override
 	public Appt RetrieveAppts(int joinApptID) {
