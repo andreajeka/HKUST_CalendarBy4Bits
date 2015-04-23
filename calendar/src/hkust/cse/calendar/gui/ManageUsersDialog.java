@@ -10,6 +10,8 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -59,7 +61,6 @@ public class ManageUsersDialog extends JFrame {
 		
 		// Response to Modify button being clicked
 		modifyButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = userJList.getSelectedIndex();
@@ -72,9 +73,49 @@ public class ManageUsersDialog extends JFrame {
 					
 					if (user != null) {
 						PersonalSettingDialog psd = new PersonalSettingDialog(controller, user);
+						psd.addWindowListener(new WindowListener() {
+							
+							@Override
+							public void windowClosed(WindowEvent arg0) {
+								// Load user list when window is closed
+								loadUserList();
+							}
+							
+							/** ALL UNUSED METHODS **/
+							@Override
+							public void windowActivated(WindowEvent arg0) {
+							}
+
+							@Override
+							public void windowClosing(WindowEvent arg0) {
+							}
+
+							@Override
+							public void windowDeactivated(WindowEvent arg0) {
+							}
+
+							@Override
+							public void windowDeiconified(WindowEvent arg0) {	
+							}
+
+							@Override
+							public void windowIconified(WindowEvent arg0) {
+							}
+
+							@Override
+							public void windowOpened(WindowEvent arg0) {
+							}
+							/*******************************************/
+							
+						});
 						psd.setLocationRelativeTo(null);
 						psd.show();
+						
 					}
+					
+			
+					
+					
 				} else
 					JOptionPane.showMessageDialog(null, "Please Select a User to be Modified", "MODIFY ERROR", JOptionPane.ERROR_MESSAGE);
 			}
@@ -95,8 +136,8 @@ public class ManageUsersDialog extends JFrame {
 					
 					if (user != null) { // Not necessary to check, but safety comes first
 						user.setTobeRemoved(true);
-						userListModel.removeElementAt(selectedIndex);
 					}
+					loadUserList();
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Please Select a User to be Removed", "REMOVE ERROR", JOptionPane.ERROR_MESSAGE);
@@ -111,21 +152,17 @@ public class ManageUsersDialog extends JFrame {
 	private void loadUserList() {
 		if (!controller.getUserList().isEmpty()) {
 			ArrayList<User> userList = controller.getUserList();
-			userListModel.clear();
+			userListModel.removeAllElements();
 			for (User user : userList) {
 				// Don't show yourself in the list. Just display other users
 				if (!user.equals(currentUser)) {
 					String username = user.getUsername();
 					if (user.isTobeRemoved())
 						continue;
-					else userListModel.addElement(user.getUsername());
+					else userListModel.addElement(username);
 				}
 			}
 			
 		}
-	}
-	
-	private void removeUser() {
-		// Notif thingy
 	}
 }

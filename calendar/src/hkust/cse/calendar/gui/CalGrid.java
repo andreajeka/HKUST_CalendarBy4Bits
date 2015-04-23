@@ -357,7 +357,6 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equals("Manual Scheduling")) {
-					System.out.println(controller.getLocationList());
 					if (controller.getLocationList().length != 0) {
 						AppScheduler a = new AppScheduler("New", CalGrid.this);
 						a.updateSetApp(hkust.cse.calendar.gui.Utility
