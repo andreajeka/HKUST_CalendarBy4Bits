@@ -316,11 +316,26 @@ public class ApptStorageNullImpl extends ApptStorage {
 	}
 
 	// Search and return an instance of User class based on the username
+	// Heavily needed for login and sign up
 	public User searchUser(String username) {
 		User target = null;
 		if (!userList.isEmpty()){
 			for (User u : userList) {
 				if (u.getUsername().equals(username)) {
+					target = u;
+					break;
+				}
+			}
+		}
+		return target;
+	}
+	
+	// Search and return an instance of User class based on the userid
+	public User searchUser(UUID userID) {
+		User target = null;
+		if (!userList.isEmpty()){
+			for (User u : userList) {
+				if (u.getUserId().equals(userID)) {
 					target = u;
 					break;
 				}

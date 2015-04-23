@@ -143,6 +143,10 @@ public class ApptStorageControllerImpl {
 		return mApptStorage.searchUser(username);
 	}
 	
+	public User searchUser(UUID userID) {
+		return mApptStorage.searchUser(userID);
+	}
+	
 	public void removeUser(String username){
 		mApptStorage.removeUser(username);
 	}

@@ -103,7 +103,10 @@ public class AppList extends JPanel implements ActionListener {
 	private int pressCol;
 	private int releaseRow;
 	private int releaseCol;
-	private CalGrid parent;
+	
+	// Need to make it public so details dialog can access it
+	public CalGrid parent;
+	
 	private Color currColor = Color.green;
 	private Color currColorForJoint = Color.red;
 	public final static int COLORED_TITLE = 1;
@@ -408,7 +411,7 @@ public class AppList extends JPanel implements ActionListener {
 		if (apptTitle == null)
 			return;
 
-		DetailsDialog info = new DetailsDialog(apptTitle, "Appointment Details");
+		DetailsDialog info = new DetailsDialog(this, apptTitle, "Appointment Details");
 
 		info.setVisible(true);
 

@@ -108,7 +108,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		top.add(userTypePanel);
 
 		JPanel signupPanel = new JPanel();
-		signupPanel.add(new JLabel("If you don't have an account, please sign up:"));
+		signupPanel.add(new JLabel("If you don't have an account, please:"));
 		signupButton = new JButton("Sign up now");
 		signupButton.addActionListener(this);
 		signupPanel.add(signupButton);
@@ -117,16 +117,16 @@ public class LoginDialog extends JFrame implements ActionListener
 		contentPane.add("North", top);
 
 		JPanel butPanel = new JPanel();
-		butPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		butPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-		button = new JButton("Log in (No user name and password required)");
+		button = new JButton("Log in");
 		button.addActionListener(this);
 		butPanel.add(button);
 
 		closeButton = new JButton("Close program");
 		closeButton.addActionListener(this);
 		butPanel.add(closeButton);
-
+		
 		contentPane.add("South", butPanel);
 
 		pack();

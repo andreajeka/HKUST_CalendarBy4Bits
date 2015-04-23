@@ -4,6 +4,7 @@ import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -26,24 +27,26 @@ import javax.swing.border.TitledBorder;
 public class DetailsDialog extends JFrame implements ActionListener {
 	private JButton exitBut;
 	private JTextArea area;
+	private Component parentRef;
+	
 
-	public DetailsDialog(String msg, String title) {
+	/*public DetailsDialog(String msg, String title) {
 		paintContent(title);
 		Display(msg);
 		this.setSize(500, 350);
 		pack();
-	}
+	}*/
 
-	public DetailsDialog(Appt appt, String title) {
-		paintContent(title);
-		this.setSize(500, 350);
-		Display(appt);
-		pack();
-
+	public DetailsDialog(Component component, Appt appt, String title) {
+		if (component instanceof AppList)
+			parentRef= component;
+			paintContent(title);
+			this.setSize(500, 350);
+			Display(appt);
+			pack();
 	}
 
 	public void paintContent(String title) {
-
 		Container content = getContentPane();
 		setTitle(title);
 		
@@ -69,18 +72,19 @@ public class DetailsDialog extends JFrame implements ActionListener {
 
 	}
 
-	public void Display(String msg) {
+/*	public void Display(String msg) {
 		area.setFont(new Font("bold", Font.BOLD, 14));
 
 		if (msg.length() == 0)
 			msg = new String("No Information Inputed");
 		area.setText(msg);
 		area.setEditable(false);
-	}
+	}*/
 
 	@SuppressWarnings("deprecation")
 	public void Display(Appt appt) {
-
+		
+		AppList appList = (AppList) parentRef;
 		Timestamp sTime = appt.TimeSpan().StartTime();
 		Timestamp eTime = appt.TimeSpan().EndTime();
 		String time = sTime.getHours() + ":";
@@ -103,9 +107,11 @@ public class DetailsDialog extends JFrame implements ActionListener {
 		LinkedList<UUID> attendList = appt.getAttendList();
 		if(attendList != null)
 		{
+			
 			for(int i = 0; i < attendList.size(); i++)
 			{
-				area.append("  " + attendList.get(i));
+				// Map user id to username
+				area.append("  " + appList.parent.controller.searchUser(attendList.get(i)).getUsername());
 			}
 		}
 		area.append("\n\n  Reject:");

@@ -68,6 +68,8 @@ public abstract class ApptStorage {
 	
 	public abstract User searchUser(String username);
 	
+	public abstract User searchUser(UUID userID);
+	
 	public abstract void removeUser(String username);
 	
 	public abstract void removeUser(UUID userId);

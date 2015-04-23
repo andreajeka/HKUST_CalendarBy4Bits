@@ -439,6 +439,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			public void actionPerformed(ActionEvent e) {
 				controller.SaveApptToXml();
 				controller.SaveUserToXml();
+				controller.SaveLocToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Logout?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION){

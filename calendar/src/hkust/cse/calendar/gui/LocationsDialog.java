@@ -33,7 +33,7 @@ public class LocationsDialog extends JFrame {
 	
 	public LocationsDialog(ApptStorageControllerImpl controller){
 		_controller = controller;
-
+		
 		/**set the border layout***/
 
 		this.setLayout(new BorderLayout());
@@ -77,9 +77,9 @@ public class LocationsDialog extends JFrame {
 							}
 						}
 					}
-					listModel.addElement(locNameText.getText().toString());
-								locNameText.setText("");
-								updateLocation();
+					listModel.addElement(locNameText.getText().trim());
+					locNameText.setText("");
+					updateLocation();
 				}
 			}
 		});
@@ -101,7 +101,6 @@ public class LocationsDialog extends JFrame {
 					Location[] loca = new Location[capacity-1];
 					for(int i=0; i<capacity; i++){
 						if(i < selectedIndex){
-							System.out.println("Not empty");
 							loca[i] = locations[i];
 						}
 						else if(i > selectedIndex){
