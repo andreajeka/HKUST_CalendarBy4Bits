@@ -459,6 +459,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			public void actionPerformed(ActionEvent e) {
 				// save data from hasp map into disk
 				controller.SaveApptToXml();
+				controller.SaveLocToXml();
 				controller.SaveUserToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Exit Program ?",
 						"Comfirm", JOptionPane.YES_NO_OPTION);

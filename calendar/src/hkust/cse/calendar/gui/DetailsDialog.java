@@ -6,8 +6,10 @@ import hkust.cse.calendar.users.User;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
@@ -27,19 +29,38 @@ import javax.swing.border.TitledBorder;
 public class DetailsDialog extends JFrame implements ActionListener {
 	private JButton exitBut;
 	private JTextArea area;
+	JPanel panel;
 	private Component parentRef;
 	
 
-	/*public DetailsDialog(String msg, String title) {
+	public DetailsDialog(String msg, String title) {
+		parentRef = null;
+		this.setResizable(false);
+		panel = new JPanel();
+		Border border = new TitledBorder(null, "Information");
+		panel.setBorder(border);
+		
+		area = new JTextArea(13, 23);
+		area.setMargin(new Insets(10,10,0,0));
+		panel.add(area);
 		paintContent(title);
+		this.setPreferredSize(new Dimension(300,350));
 		Display(msg);
-		this.setSize(500, 350);
+		
 		pack();
-	}*/
+		this.setLocationRelativeTo(parentRef);
+	}
 
 	public DetailsDialog(Component component, Appt appt, String title) {
 		if (component instanceof AppList)
 			parentRef= component;
+			
+			panel = new JPanel();
+			Border border = new TitledBorder(null, "Information");
+			panel.setBorder(border);
+			
+			area = new JTextArea(25, 40);
+			panel.add(area);
 			paintContent(title);
 			this.setSize(500, 350);
 			Display(appt);
@@ -50,15 +71,6 @@ public class DetailsDialog extends JFrame implements ActionListener {
 		Container content = getContentPane();
 		setTitle(title);
 		
-		JScrollPane panel = new JScrollPane();
-		Border border = new TitledBorder(null, "Information");
-		panel.setBorder(border);
-
-		area = new JTextArea(25, 40);
-//		area.setPreferredSize(new Dimension(400, 300));
-
-		panel.getViewport().add(area);
-
 		exitBut = new JButton("Exit");
 		exitBut.addActionListener(this);
 
@@ -69,17 +81,13 @@ public class DetailsDialog extends JFrame implements ActionListener {
 
 		content.add("Center", panel);
 		content.add("South", p2);
-
 	}
 
-/*	public void Display(String msg) {
-		area.setFont(new Font("bold", Font.BOLD, 14));
-
-		if (msg.length() == 0)
-			msg = new String("No Information Inputed");
+	public void Display(String msg) {
+		area.setFont(new Font("", Font.BOLD + Font.ITALIC, 14));
 		area.setText(msg);
 		area.setEditable(false);
-	}*/
+	}
 
 	@SuppressWarnings("deprecation")
 	public void Display(Appt appt) {
