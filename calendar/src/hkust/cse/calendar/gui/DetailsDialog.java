@@ -4,6 +4,7 @@ import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -42,6 +43,7 @@ public class DetailsDialog extends JFrame implements ActionListener {
 		
 		area = new JTextArea(13, 23);
 		area.setMargin(new Insets(10,10,0,0));
+		area.setEditable(false);
 		panel.add(area);
 		paintContent(title);
 		this.setPreferredSize(new Dimension(300,350));
@@ -60,6 +62,7 @@ public class DetailsDialog extends JFrame implements ActionListener {
 			panel.setBorder(border);
 			
 			area = new JTextArea(25, 40);
+			
 			panel.add(area);
 			paintContent(title);
 			this.setSize(500, 350);

@@ -38,6 +38,7 @@ public class Appt implements Serializable {
 
 	private boolean reminder;					// Reminder flag. True if it is turned on
 	
+	private boolean isPublic;					// Public flag. True if the creator of this event make this public
 	
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
@@ -223,6 +224,14 @@ public class Appt implements Serializable {
 	
 	public void reminderOn(boolean logic) {
 		reminder = logic;
+	}
+
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
 	}
 	
 

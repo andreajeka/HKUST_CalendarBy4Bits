@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -93,6 +95,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	private JMenu Settings = new JMenu("Settings");
 	private JMenuItem miManageUsers = new JMenuItem("Manage Users");
 	private JMenuItem miManageLocs = new JMenuItem("Manage Locations");
+	private JButton publicEvents = new JButton("Public Events");
 
 	private final String[] holidays = {
 			"New Years Day\nSpring Festival\n",
@@ -393,6 +396,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					psd.setLocationRelativeTo(null);
 					psd.show();
 				}
+				else if(e.getActionCommand().equals("Public Events")) 
+				{
+					PublicEvents pubEvents = new PublicEvents(CalGrid.this);
+					pubEvents.setLocationRelativeTo(null);
+					pubEvents.show();
+				}
 			}
 		};
 		
@@ -419,8 +428,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Settings.setMnemonic('S');
 		Settings.setEnabled(false);
 		Settings.getAccessibleContext().setAccessibleDescription(
-				"Account Access Management");
-		
+				"Account Access Management");		
 		// Add personal setting button to the menu
 		mi = (JMenuItem) Settings.add(new JMenuItem("Personal Setting"));
 		mi.setMnemonic('P');
@@ -493,9 +501,14 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				"Time Machine");
 		mi = new JMenuItem("Open");
 		mi.addActionListener(listener);
+		
 		timeMenu.add(mi);
 		
-
+		// Put items after the following line to align them to the right of menu bar
+	    menuBar.add(Box.createHorizontalGlue());
+		menuBar.add(publicEvents);
+		publicEvents.addActionListener(listener);
+	
 		
 		return menuBar;
 	}

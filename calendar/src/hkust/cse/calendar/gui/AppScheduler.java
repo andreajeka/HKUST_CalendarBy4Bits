@@ -28,6 +28,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -87,6 +88,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private DefaultComboBoxModel<Integer> listModelInt;
 	private JLabel titleLoc;
 	private JComboBox<String> locField;
+	private JCheckBox publicCheckBox;
 	private JLabel titleFreq;
 	private JComboBox<String> FreqField;
 	private JLabel titleFreqAmount;
@@ -284,6 +286,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 		locField = new JComboBox<String>(listModelString);
 		titleAndTextPanel.add(locField);
 		
+		publicCheckBox = new JCheckBox("PUBLIC");
+		titleAndTextPanel.add(publicCheckBox);
 
 		detailPanel = new JPanel();
 		detailPanel.setLayout(new BorderLayout());
@@ -373,7 +377,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 				this.setVisible(false);
 				dispose();
 			}
-		}
+		} 
+		
 		parent.getAppList().clear();
 		parent.getAppList().setTodayAppt(parent.GetTodayAppt());
 		parent.repaint();
@@ -506,7 +511,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			}
 		} 
 		
-		// TODO FREQUENCY UPDATED, PLEASE READ THE NOTE (ESP. MICHELE)
+		// TODO FREQUENCY UPDATED, PLEASE READ THE NOTE (ESP. MICHELLE)
 		/* THIS PART IS TRICKY. WE CANNOT JUST IMPLEMENT APPTSTORAGECONTROLLER.NEW BECAUSE
 		 * IF WE DO THAT, THE VERY INITIAL APPOINTMENT THAT WE CHOOSE TO BE MODIFIED CANNOT BE MODIFIED AS WELL.
 		 * YOU CAN TRY TO COMMENT OUT THE METHOD addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY) 
@@ -567,6 +572,8 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setLocation(location);
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
+			NewAppt.setPublic(publicCheckBox.isSelected());
+			System.out.println(publicCheckBox.isSelected());
 			
 			parent.controller.ManageAppt(NewAppt, action);
 
@@ -592,6 +599,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setLocation(location);
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
+				appt.setPublic(publicCheckBox.isSelected());
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -633,6 +641,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setLocation(location);
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
+				appt.setPublic(publicCheckBox.isSelected());
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -678,6 +687,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 					appt.setLocation(location);
 					appt.setFrequencyAmount(freqAmount);
 					appt.reminderOn(reminderToggle.isSelected());
+					appt.setPublic(publicCheckBox.isSelected());
 					
 					parent.controller.ManageAppt(appt, action);
 					
