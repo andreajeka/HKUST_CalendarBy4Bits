@@ -64,7 +64,7 @@ public class LocationsDialog extends JFrame {
 		addBt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				if(locNameText.getText().trim().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Invalid Input! Please Input Again", "INPUT ERROR", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Invalid Input! Please Input Again", "INPUT ERROR", JOptionPane.WARNING_MESSAGE);
 				}
 				else{
 					if(_controller.getLocationList() != null){

@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -95,6 +96,12 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JComboBox<Integer> FreqAmountField;
 	private JLabel labelEnd;
 	private JPanel pRemind;
+	private JLabel remindHour;
+	private JTextField remindHF;
+	private JLabel remindMinute;
+	private JTextField remindMF;
+	private JLabel remindSecond;
+	private JTextField remindSF;
 
 //	private JTextField attendField;
 //	private JTextField rejectField;
@@ -182,15 +189,12 @@ public class AppScheduler extends JDialog implements ActionListener,
 					if (FreqField.getSelectedItem().equals(FreqStrings[1])) {
 						titleFreqAmount.setText("For");
 						labelEnd.setText("day(s)");
-						pRemind.setBorder(new EmptyBorder(15,5,5,15));
 					} else if (FreqField.getSelectedItem().equals(FreqStrings[2])) {
 						titleFreqAmount.setText("Every");
 						labelEnd.setText("week(s)");
-						pRemind.setBorder(new EmptyBorder(15,10,5,5));
 					} else if (FreqField.getSelectedItem().equals(FreqStrings[3])) {
 						titleFreqAmount.setText("Every");
 						labelEnd.setText("month(s)");
-						pRemind.setBorder(new EmptyBorder(15,20,5,3));
 					}
 				}
 			}
@@ -220,43 +224,66 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 		// Create a reminder toggle button
 		pRemind = new JPanel();
-		pRemind.setBorder(new EmptyBorder(15,5,5,25));
+		Border reminderBorder = new TitledBorder(null, "REMINDER");
+		pRemind.setBorder(reminderBorder);
 		
-		reminderToggle = new JToggleButton("REMINDER OFF");
+		reminderToggle = new JToggleButton("OFF");
 		reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
 		reminderToggle.setForeground(Color.BLUE);
 		reminderToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (reminderToggle.isSelected()) {
-					reminderToggle.setText("REMINDER ON");
+					reminderToggle.setText("ON");
 					reminderToggle.setBorder(new BevelBorder(BevelBorder.LOWERED));
 					reminderToggle.setForeground(Color.RED);
 					isReminderToggled = true;
+					remindHF.setEnabled(true);
+					remindMF.setEnabled(true);
+					remindSF.setEnabled(true);
 				} else {
-					reminderToggle.setText("REMINDER OFF");
+					reminderToggle.setText("OFF");
 					reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
 					reminderToggle.setForeground(Color.BLUE);
 					isReminderToggled = false;
+					remindHF.setEnabled(false);
+					remindMF.setEnabled(false);
+					remindSF.setEnabled(false);
 				}
 			}
 		});
 		
 		pRemind.add(reminderToggle);
 		
-		FnR.add(pFreq, BorderLayout.WEST);
-		FnR.add(pRemind, BorderLayout.EAST);
-
-		JPanel pTime = new JPanel();
-		pTime.setLayout(new BorderLayout());
-		pTime.add("West", psTime);
-		pTime.add("East", peTime);
-		pTime.add("South", FnR);
+		remindHour = new JLabel("HOUR");
+		remindHF = new JTextField(4);
+		remindMinute = new JLabel("MINUTE");
+        remindMF = new JTextField(4);
+		remindSecond = new JLabel("SECOND");;
+		remindSF = new JTextField(4);
+		
+		pRemind.add(remindHour);
+		pRemind.add(remindHF);
+		pRemind.add(remindMinute);
+		pRemind.add(remindMF);
+		pRemind.add(remindSecond);
+		pRemind.add(remindSF);
+		
+		remindHF.setEnabled(false);
+		remindMF.setEnabled(false);
+		remindSF.setEnabled(false);
+		
+		JPanel pTimeFreqRem = new JPanel();
+		pTimeFreqRem.setLayout(new GridLayout(2,2));
+		pTimeFreqRem.add(psTime);
+		pTimeFreqRem.add(peTime);
+		pTimeFreqRem.add(pFreq);
+		pTimeFreqRem.add(pRemind);
 		
 		JPanel top = new JPanel();
 		top.setLayout(new BorderLayout());
 		top.setBorder(new BevelBorder(BevelBorder.RAISED));
 		top.add(pDate, BorderLayout.NORTH);
-		top.add(pTime, BorderLayout.CENTER);
+		top.add(pTimeFreqRem, BorderLayout.CENTER);
 
 		contentPane.add("North", top);
 
@@ -495,6 +522,11 @@ public class AppScheduler extends JDialog implements ActionListener,
 		int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
 		int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
 		
+		if (remindHF.getText().isEmpty() || remindMF.getText().isEmpty() || remindSF.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Don't leave the fields in Reminder empty", "Warning",  JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
 		freqAmount = FreqAmountField.getSelectedIndex() + 1;
 		
 		// Check if there is no appointment selected in the appointment list (via Manual Scheduling)
@@ -557,6 +589,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 		String title = titleField.getText();
 		String info = detailArea.getText();
 		String location = (String) locField.getSelectedItem();
+		long RemindH = Long.parseLong(remindHF.getText());
+		long RemindM = Long.parseLong(remindMF.getText());
+		long RemindS = Long.parseLong(remindSF.getText());
 		
 		if (mode == Appt.MODE_ONCE) {
 			Timestamp stampStart = CreateTimeStamp(date,time[0]);
@@ -573,6 +608,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
 			NewAppt.setPublic(publicCheckBox.isSelected());
+			NewAppt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
 
 			parent.controller.ManageAppt(NewAppt, action);
 
@@ -597,6 +633,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
+				appt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -639,6 +676,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
+				appt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
 				
 				parent.controller.ManageAppt(appt, action);
 				
@@ -685,6 +723,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 					appt.setFrequencyAmount(freqAmount);
 					appt.reminderOn(reminderToggle.isSelected());
 					appt.setPublic(publicCheckBox.isSelected());
+					appt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
 					
 					parent.controller.ManageAppt(appt, action);
 					
@@ -761,16 +800,21 @@ public class AppScheduler extends JDialog implements ActionListener,
 	    reminderToggle.setSelected(appt.reminder());
      	// Action listener does not change the gui state, so retype the following
 	    if (reminderToggle.isSelected()) {
-			reminderToggle.setText("REMINDER ON");
+			reminderToggle.setText("ON");
 			reminderToggle.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			reminderToggle.setForeground(Color.RED);
-			isReminderToggled = true;
+			isReminderToggled = true;	
+			
 		} else {
-			reminderToggle.setText("REMINDER OFF");
+			reminderToggle.setText("OFF");
 			reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
 			reminderToggle.setForeground(Color.BLUE);
 			isReminderToggled = false;
 		}
+	    
+	    remindHF.setText(Long.toString(appt.getRemindBefore()/3600000));
+	    remindMF.setText(Long.toString(appt.getRemindBefore()/60000));
+	    remindSF.setText(Long.toString(appt.getRemindBefore()/1000));
 	    
 	    titleField.setText(appt.getTitle());
 	    detailArea.setText(appt.getInfo());

@@ -91,7 +91,7 @@ public class PersonalSettingDialog extends JFrame {
 					if (!pw.equals(""))
 						_user.setPassword(pw);
 					else {
-						JOptionPane.showMessageDialog(null, "Password field cannot be empty", "Empty password", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Password field cannot be empty", "Empty password", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 						

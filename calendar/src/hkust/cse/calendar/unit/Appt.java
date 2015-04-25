@@ -38,6 +38,8 @@ public class Appt implements Serializable {
 
 	private boolean reminder;					// Reminder flag. True if it is turned on
 	
+	private long remindBefore;				    // Store how long should the reminder be activated before start time
+	
 	private boolean isPublic;					// Public flag. True if the creator of this event make this public
 	
 	public Appt() {								// A default constructor used to set all the attribute to default values
@@ -232,6 +234,14 @@ public class Appt implements Serializable {
 
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
+	}
+
+	public long getRemindBefore() {
+		return remindBefore;
+	}
+
+	public void setRemindBefore(long remindBefore) {
+		this.remindBefore = remindBefore;
 	}
 	
 

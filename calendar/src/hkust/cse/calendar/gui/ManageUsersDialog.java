@@ -182,14 +182,9 @@ public class ManageUsersDialog extends JFrame {
 						psd.show();
 						
 					}
-					
-			
-					
-					
 				} else
 					JOptionPane.showMessageDialog(null, "Please Select a User to be Modified", "MODIFY ERROR", JOptionPane.ERROR_MESSAGE);
 			}
-			
 		});
 		
 		removeButton.addActionListener(new ActionListener() {
@@ -212,7 +207,6 @@ public class ManageUsersDialog extends JFrame {
 				else
 					JOptionPane.showMessageDialog(null, "Please Select a User to be Removed", "REMOVE ERROR", JOptionPane.ERROR_MESSAGE);
 			}
-			
 		});
 
 		loadUserList();

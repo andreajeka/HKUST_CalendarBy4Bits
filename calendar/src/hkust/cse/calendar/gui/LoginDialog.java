@@ -145,7 +145,7 @@ public class LoginDialog extends JFrame implements ActionListener
 
 			areFieldsEmpty(username, pw);
 			if (textFieldEmpty) {
-				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.WARNING_MESSAGE);
 			} else if (controller.searchUser(username) != null) {
 				User user = controller.searchUser(username);
 				if (user.getPassword().equals(pw)) {
@@ -176,9 +176,9 @@ public class LoginDialog extends JFrame implements ActionListener
 
 			areFieldsEmpty(username, pw);
 			if (textFieldEmpty) {
-				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.WARNING_MESSAGE);
 			} else if (controller.searchUser(username) != null) {
-				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.WARNING_MESSAGE);
 			} else {
 				User user = new User(username,pw);
 				
@@ -210,12 +210,6 @@ public class LoginDialog extends JFrame implements ActionListener
 		}
 	
 	}
-	
-	
-	
-	
-	
-	
 
 	// This method checks whether a string is a valid user name or password, as they can contains only letters and numbers
 	public static boolean ValidString(String s)

@@ -788,7 +788,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 		if (appData != null) {
 			for (int i = 0; i < appData.length; i++) {
-				timeForReminder.setTime(appData[i].TimeSpan().StartTime().getTime() - 15 * 60000);
+				timeForReminder.setTime(appData[i].TimeSpan().StartTime().getTime() - appData[i].getRemindBefore());
 				
 				/*System.out.println("Now " + now + "equal to time for reminder " + (Utility.AfterBeforeEqual(now, timeForReminder) == 0) );
 				System.out.println("Now " + now + "less than time for reminder " + (Utility.AfterBeforeEqual(now, timeForReminder) == -1) );
