@@ -581,7 +581,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 			}
 			
 		} else if (mode == Appt.MODE_DAILY) {
-			Integer initMonth = date[1];
 			for (int i = 0; i < freqAmount; i++) {
 				Timestamp stampStart = CreateTimeStamp(date,time[0]);
 				Timestamp stampEnd = CreateTimeStamp(date, time[1]);

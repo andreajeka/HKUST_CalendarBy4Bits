@@ -179,6 +179,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// According to Java Doc, If the map previously contained a mapping for this key, 
 		// the old value is replaced by the specified value.
 		mAppts.put(apptID, appt);
+		appt.addAttendant(currentUser.getUserId());
 	}
 
 	@Override
