@@ -573,14 +573,12 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
 			NewAppt.setPublic(publicCheckBox.isSelected());
-			System.out.println(publicCheckBox.isSelected());
-			
+
 			parent.controller.ManageAppt(NewAppt, action);
 
 			if (parent.controller.isOverlap()) {
 				JOptionPane.showMessageDialog(this, parent.controller.getOverlapMessage(), "Warning",  JOptionPane.WARNING_MESSAGE);
 			}
-			
 			
 		} else if (mode == Appt.MODE_DAILY) {
 			Integer initMonth = date[1];
@@ -777,7 +775,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	    
 	    titleField.setText(appt.getTitle());
 	    detailArea.setText(appt.getInfo());
-	    
+	    publicCheckBox.setSelected(appt.isPublic());
 	    
 	}
 

@@ -638,21 +638,6 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	    int dateIntMax = g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 	    String dateMax = Integer.toString(dateIntMax);
 		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+dateMax+" 23:59:59");
-
-		/* 
-		Timestamp start = new Timestamp(0);
-		start.setYear(currentY);
-		start.setMonth(currentM - 1);
-		start.setDate(1);
-		start.setHours(0);
-		Timestamp end = new Timestamp(0);
-		end.setYear(currentY);
-		end.setMonth(currentM - 1);
-		GregorianCalendar g = new GregorianCalendar(currentY, currentM - 1, 1);
-		end.setDate(g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH));
-		end.setHours(23);
-		*/
-
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
 	}
@@ -721,26 +706,6 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	}
 
 	public Appt[] GetTodayAppt() {
-		/*
-		Integer temp;
-		temp = new Integer(currentD);
-		Timestamp start = new Timestamp(0);
-		start.setYear(currentY);
-		start.setMonth(currentM-1);
-		start.setDate(currentD);
-		start.setHours(0);
-		start.setMinutes(0);
-		start.setSeconds(0);
-		
-		Timestamp end = new Timestamp(0);
-		end.setYear(currentY);
-		end.setMonth(currentM-1);
-		end.setDate(currentD);
-		end.setHours(23);
-		end.setMinutes(59);
-		end.setSeconds(59);
-		*/
-
 		String curYear = Integer.toString(currentY);
 	    int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
 	    String curMonth = Integer.toString(month);
@@ -817,40 +782,30 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		
 		Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
 
-		// nextTime = time of clock + delay
-		Timestamp nextTime = emitter.getNextElapsedTime();
-					
-		Timestamp nextNextTime = (Timestamp) emitter.getCurrentTime();
-		nextNextTime.setTime(emitter.getCurrentTime().getTime());
+		// nextElapsedTime = time of clock + delay
+		Timestamp nextElapsedTime = emitter.getNextElapsedTime();					
+		Timestamp timeForReminder = new Timestamp(0);
 
 		if (appData != null) {
 			for (int i = 0; i < appData.length; i++) {
-				// If current clock time is less than the start time of the appointment
-				// AND if (the start time of the appointment is less than the nextTime AND
-				// the start time of the appointment is equal to the nextTime)
-				if ((Utility.AfterBeforeEqual(now, appData[i].TimeSpan().StartTime()) == -1)
-						&& ((Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == -1) || // needed if step skips the notification's pop up time
-								(Utility.AfterBeforeEqual(appData[i].TimeSpan().StartTime(), nextTime) == 0)))	{
+				timeForReminder.setTime(appData[i].TimeSpan().StartTime().getTime() - 15 * 60000);
 				
+				/*System.out.println("Now " + now + "equal to time for reminder " + (Utility.AfterBeforeEqual(now, timeForReminder) == 0) );
+				System.out.println("Now " + now + "less than time for reminder " + (Utility.AfterBeforeEqual(now, timeForReminder) == -1) );
+				System.out.println("Next elapsed " + nextElapsedTime + "greater than time for reminder " + (Utility.AfterBeforeEqual(nextElapsedTime, timeForReminder) == 1) );*/
+				
+				if ((Utility.AfterBeforeEqual(now, timeForReminder) == 0) || 
+						((Utility.AfterBeforeEqual(now, timeForReminder) == -1) && (Utility.AfterBeforeEqual(nextElapsedTime, timeForReminder) == 1 ))) {
 					if (appData[i].reminder()) {
-						// We set reminder pop up 15 mins before event.
-						Timestamp rTime = new Timestamp(0, 0, 0, 0, 15, 0 , 0);
-						nextNextTime.setTime(appData[i].TimeSpan().StartTime().getTime() - rTime.getMinutes());
-						if (((Utility.AfterBeforeEqual(now, nextNextTime) == -1) || 
-							(Utility.AfterBeforeEqual(now, nextNextTime) == 0)) && 
-							(Utility.AfterBeforeEqual(nextNextTime, nextTime) == -1)) {
-							
-							if (appData[i].TimeSpan().StartTime().getMinutes() < 10 )
-								digitHour = "0";
-							else digitHour = "";
-							
-							message = "You have an appointment [" + appData[i].getTitle() + 
-								"] at " + appData[i].TimeSpan().StartTime().getHours() + ":" + 
-								  digitHour + appData[i].TimeSpan().StartTime().getMinutes();
+						if (appData[i].TimeSpan().StartTime().getMinutes() < 10 )
+							digitHour = "0";
+						else digitHour = "";
 						
-							// Pop up a notification window 
-							JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
-						}
+						message = "You have an appointment [" + appData[i].getTitle() + 
+							"] at " + appData[i].TimeSpan().StartTime().getHours() + ":" + 
+							  digitHour + appData[i].TimeSpan().StartTime().getMinutes();
+						// Pop up a notification window 
+						JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			}

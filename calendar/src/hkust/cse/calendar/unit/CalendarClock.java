@@ -3,7 +3,9 @@ package hkust.cse.calendar.unit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import javax.swing.Timer;
 
 public class CalendarClock implements ActionListener{
@@ -105,11 +107,10 @@ public class CalendarClock implements ActionListener{
 	}
 	
 	// Output the representation of the current time of the Calendar Clock
-	@SuppressWarnings("deprecation")
 	@Override
 	public String toString() {
-		return String.format("%04d-%02d-%02d %02d:%02d", currTime.getYear() + 1900, currTime.getMonth() + 1, currTime.getDate(), 
-				currTime.getHours(), currTime.getMinutes());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd    kk:mm:ss");
+		return dateFormat.format(currTime.getTime());
 	}
 	
 	// Get the current time

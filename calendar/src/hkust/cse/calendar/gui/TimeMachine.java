@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
@@ -42,8 +43,14 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 	private JTextField startTimeH;
 	private JLabel startTimeML;
 	private JTextField startTimeM;
-	private JLabel timeStepL;
-	private JTextField timeStep;
+	private JLabel startTimeSL;
+	private JTextField startTimeS;
+	private JLabel timeStepHourL;
+	private JTextField timeStepHour;
+	private JLabel timeStepMinuteL;
+	private JTextField timeStepMinute;
+	private JLabel timeStepSecondL;
+	private JTextField timeStepSecond;
 	private JLabel currTime;
 
 	// Dialog buttons
@@ -84,7 +91,7 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		Container contentPane;
 		contentPane = getContentPane();
 		currToday = new GregorianCalendar();
-		dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm");
+		dateFormat = new SimpleDateFormat("yyyy-MM-dd    kk:mm:ss");
 
 		// Date panel
 		JPanel datePanel = new JPanel();
@@ -133,6 +140,12 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		timePanel.add(startTimeML);
 		startTimeM = new JTextField(4);
 		timePanel.add(startTimeM);
+		
+		// Start Second
+		startTimeSL = new JLabel("Second");
+		timePanel.add(startTimeSL);
+		startTimeS = new JTextField(4);
+		timePanel.add(startTimeS);
 
 		JPanel psTime = new JPanel();
 		psTime.setLayout(new BorderLayout());
@@ -142,16 +155,27 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		JPanel timeStepPanel = new JPanel();
 		Border timestepBorder = new TitledBorder(null, "TIME STEP");
 		timeStepPanel.setBorder(timestepBorder);
-		timeStepL = new JLabel("Minutes/system second: ");
-		timeStepPanel.add(timeStepL);
-		timeStep = new JTextField(4);
-		timeStepPanel.add(timeStep);
+		
+		timeStepHourL = new JLabel("Hour: ");
+		timeStepPanel.add(timeStepHourL);
+		timeStepHour = new JTextField(4);
+		timeStepPanel.add(timeStepHour);
+		
+		timeStepMinuteL = new JLabel("Minute: ");
+		timeStepPanel.add(timeStepMinuteL);
+		timeStepMinute = new JTextField(4);
+		timeStepPanel.add(timeStepMinute);
+
+		timeStepSecondL = new JLabel("Second: ");
+		timeStepPanel.add(timeStepSecondL);
+		timeStepSecond = new JTextField(4);
+		timeStepPanel.add(timeStepSecond);
 
 		psTime.add(timeStepPanel);
 
 		// Current time
 		currTime = new JLabel(dateFormat.format(currToday.getTime()));
-		currTime.setFont(new Font("", Font.BOLD, 25));
+		currTime.setFont(new Font("", Font.BOLD, 48));
 		JPanel currTimePanel = new JPanel();
 		currTimePanel.add(currTime, BorderLayout.CENTER);
 
@@ -165,12 +189,18 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 
 		// Set default values
 		yearF.setText(Integer.toString(parent.currentY));
-		startTimeH.setText("12");
+		monthB.setSelectedIndex(parent.currentM - 1);
+		dateB.setSelectedIndex(parent.currentD - 1);
+		startTimeH.setText("8");
 		startTimeM.setText("0");
+		startTimeS.setText("0");
+		timeStepHour.setText("0");
+		timeStepMinute.setText("0");
+		timeStepSecond.setText("1");
 
 		// Save and cancel
 		JPanel panel2 = new JPanel();
-		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		fastFBut = new JButton("Fast Forward");
 		fastFBut.addActionListener(this);
@@ -220,25 +250,41 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 				dateInt = dateB.getSelectedIndex() + 1;
 			
 		} else if (e.getSource() == fastFBut) {
-			
+		
+			// Run functions
+			CalClock.setStartTime(new Timestamp(Integer.parseInt(yearF.getText()) - 1900, monthInt, dateInt, Integer.parseInt(startTimeH.getText()), Integer.parseInt(startTimeM.getText()), Integer.parseInt(startTimeS.getText()), 0));
+			if (timeStepHour.getText().isEmpty() || timeStepMinute.getText().isEmpty() || timeStepSecond.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Empty fields for time steps. Set 0 to unused field", "Input Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else {
+				CalClock.setDelay(Integer.parseInt(timeStepHour.getText())* 3600000 + 
+						Integer.parseInt(timeStepMinute.getText()) * 60000 + 
+						Integer.parseInt(timeStepSecond.getText()) * 1000);
+			}
+			// Start clock
+			CalClock.start();
 			// Set buttons
 			fastFBut.setEnabled(false);
 			rewindBut.setEnabled(true);
 			stopBut.setEnabled(true);
 			resumeBut.setEnabled(false);
 			resetBut.setEnabled(true);
-		
-			// Run functions
-			CalClock.setStartTime(new Timestamp(Integer.parseInt(yearF.getText()) - 1900, monthInt, dateInt, Integer.parseInt(startTimeH.getText()), Integer.parseInt(startTimeM.getText()), 0, 0));
-			if (timeStep.getText().isEmpty()) 
-				CalClock.setDelay(60000);
-			else
-				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
-			
-			// Start clock
-			CalClock.start();
 			
 		} else if (e.getSource() == rewindBut){
+
+		    // If field for delay is empty, just increment 1 minute
+			if (timeStepHour.getText().isEmpty() || timeStepMinute.getText().isEmpty() || timeStepSecond.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Empty fields for time steps. Set 0 to unused field", "Input Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else {
+				CalClock.setDelay(Integer.parseInt(timeStepHour.getText())* 3600000 + 
+						Integer.parseInt(timeStepMinute.getText()) * 60000 + 
+						Integer.parseInt(timeStepSecond.getText()) * 1000);
+			}
+			// Rewind clock
+			CalClock.rewind();
 			
 			// Set buttons
 			resumeBut.setEnabled(false);
@@ -246,33 +292,30 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 			resetBut.setEnabled(true);
 			stopBut.setEnabled(true);
 			fastFBut.setEnabled(false);
-
-		    // If field for delay is empty, just increment 1 minute
-			if (timeStep.getText().isEmpty()) 
-				CalClock.setDelay(60000);
-			else
-				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
-			
-			// Rewind clock
-			CalClock.rewind();
 		
 		} else if (e.getSource() == resumeBut){
 			
+			// If field for delay is empty, just increment 1 minute
+			if (timeStepHour.getText().isEmpty() || timeStepMinute.getText().isEmpty() || timeStepSecond.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Empty fields for time steps. Set 0 to unused field", "Input Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			else {
+				CalClock.setDelay(Integer.parseInt(timeStepHour.getText())* 3600000 + 
+						Integer.parseInt(timeStepMinute.getText()) * 60000 + 
+						Integer.parseInt(timeStepSecond.getText()) * 1000);
+			}
+			
+			// Resume clock
+			CalClock.resume();
+			
+
 			// Set buttons
 			resumeBut.setEnabled(false);
 			rewindBut.setEnabled(false);
 			resetBut.setEnabled(false);
 			fastFBut.setEnabled(false);
 			stopBut.setEnabled(true);
-			
-			// If field for delay is empty, just increment 1 minute
-			if (timeStep.getText().isEmpty()) 
-				CalClock.setDelay(60000);
-			else
-				CalClock.setDelay((Integer.parseInt(timeStep.getText()) * 60000));
-			
-			// Resume clock
-			CalClock.resume();
 
 		} else if (e.getSource() == stopBut){
 
@@ -315,8 +358,9 @@ public class TimeMachine extends JFrame implements ActionListener, ClockListener
 		int date = dateInt;
 		int hour = Utility.getNumber(startTimeH.getText());
 		int min = Utility.getNumber(startTimeM.getText());
+		int sec = Utility.getNumber(startTimeS.getText());
 
-		currToday.set(year, month, date, hour, min);
+		currToday.set(year, month, date, hour, min, sec);
 	}
 
 	// Handle the tick for each clock by displaying it in the display

@@ -1,2 +1,6 @@
 <hkust.cse.calendar.unit.Location-array>
+  <hkust.cse.calendar.unit.Location>
+    <location>Hong Kong</location>
+    <bRemoval>false</bRemoval>
+  </hkust.cse.calendar.unit.Location>
 </hkust.cse.calendar.unit.Location-array>
