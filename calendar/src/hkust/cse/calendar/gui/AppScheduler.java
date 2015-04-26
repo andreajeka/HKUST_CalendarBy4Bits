@@ -32,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -102,10 +103,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private JTextField remindMF;
 	private JLabel remindSecond;
 	private JTextField remindSF;
-
-//	private JTextField attendField;
-//	private JTextField rejectField;
-//	private JTextField waitingField;
+/*
+    private JTextField attendField;
+	private JTextField rejectField;
+	private JTextField waitingField;*/
 	private int selectedApptId = -1;
 	private int freqAmount = 0;
 	private boolean isReminderToggled = false;
@@ -339,9 +340,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-//		inviteBut = new JButton("Invite");
-//		inviteBut.addActionListener(this);
-//		panel2.add(inviteBut);
+		inviteBut = new JButton("Invite");
+		inviteBut.addActionListener(this);
+		panel2.add(inviteBut);
 		
 		saveBut = new JButton("Save");
 		saveBut.addActionListener(this);
@@ -350,7 +351,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 		rejectBut = new JButton("Reject");
 		rejectBut.addActionListener(this);
 		panel2.add(rejectBut);
-		rejectBut.show(false);
 
 		CancelBut = new JButton("Cancel");
 		CancelBut.addActionListener(this);
@@ -404,32 +404,16 @@ public class AppScheduler extends JDialog implements ActionListener,
 				this.setVisible(false);
 				dispose();
 			}
-		} 
+		} else if (e.getSource() == inviteBut) {
+			/*CreateGroupEvent inviteUserD = new CreateGroupEvent(parent);*/
+			
+		}
 		
 		parent.getAppList().clear();
 		parent.getAppList().setTodayAppt(parent.GetTodayAppt());
 		parent.repaint();
 	}
 	
-
-	private JPanel createPartOperaPane() {
-		JPanel POperaPane = new JPanel();
-		JPanel browsePane = new JPanel();
-		JPanel controPane = new JPanel();
-
-		POperaPane.setLayout(new BorderLayout());
-		TitledBorder titledBorder1 = new TitledBorder(BorderFactory
-				.createEtchedBorder(Color.white, new Color(178, 178, 178)),
-				"Add Participant:");
-		browsePane.setBorder(titledBorder1);
-
-		POperaPane.add(controPane, BorderLayout.SOUTH);
-		POperaPane.add(browsePane, BorderLayout.CENTER);
-		POperaPane.setBorder(new BevelBorder(BevelBorder.LOWERED));
-		return POperaPane;
-
-	}
-
 	private int[] getValidDate() {
 
 		int[] date = new int[3];

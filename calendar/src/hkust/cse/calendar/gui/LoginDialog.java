@@ -192,7 +192,7 @@ public class LoginDialog extends JFrame implements ActionListener
 				
 				controller.addUser(user);
 				
-				JOptionPane.showMessageDialog(this, "Sign Up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Sign up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 			

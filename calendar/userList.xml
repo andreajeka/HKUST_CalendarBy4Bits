@@ -6,4 +6,18 @@
     <isAdmin>true</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
+  <hkust.cse.calendar.users.User>
+    <mUsername>andrea</mUsername>
+    <mPassword>andrea</mPassword>
+    <mUserId>f3009cba-4ffe-41af-aea9-11a7c0fa0966</mUserId>
+    <isAdmin>false</isAdmin>
+    <tobeRemoved>false</tobeRemoved>
+  </hkust.cse.calendar.users.User>
+  <hkust.cse.calendar.users.User>
+    <mUsername>user2</mUsername>
+    <mPassword>user2</mPassword>
+    <mUserId>0670a29e-05ca-4d35-bc4a-3efae0ff71d7</mUserId>
+    <isAdmin>false</isAdmin>
+    <tobeRemoved>false</tobeRemoved>
+  </hkust.cse.calendar.users.User>
 </list>

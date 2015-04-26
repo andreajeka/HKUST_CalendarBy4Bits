@@ -401,6 +401,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					PublicEvents pubEvents = new PublicEvents(CalGrid.this);
 					pubEvents.setLocationRelativeTo(null);
 					pubEvents.show();
+				} 
+				else if (e.getActionCommand().equals("Automatic")) {
+					
+				}
+				else if (e.getActionCommand().equals("Manual")) {
+					CreateGroupEvent createGroupE = new CreateGroupEvent(CalGrid.this);
 				}
 			}
 		};
@@ -483,6 +489,18 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Appmenu.setMnemonic('p');
 		Appmenu.getAccessibleContext().setAccessibleDescription(
 				"Appointment Management");
+		
+		// Add group event scheduling
+		JMenu menu = new JMenu("Group Event Scheduling");
+		Appmenu.add(menu);
+		
+		// Add submenu to group event
+		JMenuItem submi = new JMenuItem("Automatic");
+		submi.addActionListener(listener);
+		menu.add(submi);
+		submi = new JMenuItem("Manual");
+		submi.addActionListener(listener);
+		menu.add(submi);
 		
 		// Add manual scheduling to Appmenu
 		mi = new JMenuItem("Manual Scheduling");
