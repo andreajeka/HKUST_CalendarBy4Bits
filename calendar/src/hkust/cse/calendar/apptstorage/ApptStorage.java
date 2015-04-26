@@ -2,11 +2,13 @@ package hkust.cse.calendar.apptstorage;//
 
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
+import hkust.cse.calendar.unit.Request;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
 import java.util.UUID;
 
 
@@ -14,6 +16,8 @@ public abstract class ApptStorage {
 
 	public HashMap<Integer, Appt> mAppts;		//a hashmap to save every thing to it, write to memory by the memory based storage implementation	
 	public int mAssignedApptID;	//a global appointment ID for each appointment record
+	public ArrayList<ArrayList<Request>> mRq2DList; // a 2D array of request
+	
 	public ApptStorage() {	//default constructor
 	}
 
@@ -48,6 +52,10 @@ public abstract class ApptStorage {
 	public abstract void SaveUserToXml();       //abstract method to save userList to xml
 	
 	public abstract void LoadUserFromXml();     //abstract method to load userList from xml
+	
+	public abstract void SaveRequestsToXml(); 
+	
+	public abstract void LoadRequestsFromXml();    
 	/*
 	 * Add other methods if necessary
 	 */
@@ -60,9 +68,13 @@ public abstract class ApptStorage {
 
 	public abstract int LengthInMemory();
 	
+	public abstract void removeLocation(Location location);
+	
 	public abstract ArrayList<User> getUserList();
 	
 	public abstract void addUser(User user);
+	
+	public abstract void addRequest(Request rq);
 	
 	public abstract void updateUser(User user);
 	

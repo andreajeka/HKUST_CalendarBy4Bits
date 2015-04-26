@@ -1,10 +1,15 @@
 package hkust.cse.calendar.apptstorage;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Queue;
 import java.util.UUID;
 
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
+import hkust.cse.calendar.unit.Request;
+import hkust.cse.calendar.unit.Request.type;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
@@ -153,6 +158,88 @@ public class ApptStorageControllerImpl {
 	
 	public void removeUser(UUID userId){
 		mApptStorage.removeUser(userId);
+	}
+	
+	// location
+	public void removeLocation(Location location)
+	{
+		// TODO
+	}
+	
+	// Request
+	public ArrayList<ArrayList<Request>> getRequestList()
+	{
+		return mApptStorage.mRq2DList;
+	}
+	
+	public void setRequestList(ArrayList<ArrayList<Request>> list)
+	{
+		mApptStorage.mRq2DList = list;
+	}
+	
+	public void addRequest(Request rq)
+	{
+		mApptStorage.addRequest(rq);
+	}
+	
+	public void distributeRequest()
+	{
+		ArrayList<ArrayList<Request>> rq2DList = mApptStorage.mRq2DList;
+		if(!rq2DList.isEmpty())
+		{
+			for (ArrayList<Request> rqList : rq2DList)
+			{
+				Request rq = rqList.get(0);
+				if(rq._receiver == null)
+				{
+					boolean bParticipated = false;
+					for(Appt appt : RetrieveAllAppts())
+					{
+						if(appt.getAttendList().contains(rq._obj)) // TODO: attend or all list
+						{
+							rqList.add(new Request(mApptStorage.getCurrentUser(), appt.getInitiator(), rq.TYPE, rq._obj));
+							if (!bParticipated) bParticipated = true;
+						}
+					}
+					if (bParticipated) rqList.remove(rq);
+					else rq._receiver = (User) rq._obj;
+				}
+			}
+			mApptStorage.mRq2DList = rq2DList;
+		}
+	}
+	
+	public void sortRequest()
+	{
+		ArrayList<ArrayList<Request>> rq2DList = mApptStorage.mRq2DList;
+		Collections.sort
+		(
+			rq2DList, 
+			new Comparator<ArrayList<Request>>() 
+			{
+				@Override
+				public int compare(ArrayList<Request> rqList1, ArrayList<Request> rqList2) 
+				{
+					Request rq1 = rqList1.get(0);
+					Request rq2 = rqList2.get(0);
+					if (rq1.TYPE._value < rq2.TYPE._value)
+						return -1;
+					else if (rq1.TYPE._value > rq2.TYPE._value)
+						return 1;
+					else
+						return 0;
+				}
+			}
+		);
+		mApptStorage.mRq2DList = rq2DList;
+	}
+	
+	public void LoadRequestFromXml(){
+		mApptStorage.LoadRequestsFromXml();
+	}
+	
+	public void SaveRequestToXml(){
+		mApptStorage.SaveRequestsToXml();
 	}
 
 }

@@ -2,6 +2,7 @@ package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.apptstorage.ApptStorageNullImpl;
+import hkust.cse.calendar.unit.RequestChecker;
 import hkust.cse.calendar.users.User;
 
 import java.awt.Container;
@@ -77,6 +78,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		controller = new ApptStorageControllerImpl(new ApptStorageNullImpl());
 		//load userList from xml
 		controller.LoadUserFromXml();
+		controller.LoadRequestFromXml();
 		if(controller.searchUser("user") == null){
 			User user = new User("user", "user");
 			user.setAdmin(true);
@@ -150,16 +152,12 @@ public class LoginDialog extends JFrame implements ActionListener
 				User user = controller.searchUser(username);
 				if (user.getPassword().equals(pw)) {
 					controller.setCurrentUser(user);
-					// TODO Check if user is to be removed. 
-					String currUsername = user.getUsername();
-					if (user.isTobeRemoved()) {
-						JOptionPane.showMessageDialog(this, "You have been removed", "User Removed", JOptionPane.INFORMATION_MESSAGE);
-						controller.removeUser(currUsername);
-						return;
-					}	
-
-					CalGrid grid = new CalGrid(controller);
-					setVisible(false);
+					// Check if user is to be removed. 
+					if (RequestChecker.getInstance().Check(controller, user))
+					{
+						CalGrid grid = new CalGrid(controller);
+						setVisible(false);
+					}
 
 				} else {
 					JOptionPane.showMessageDialog(this, "Invalid Password", "Input Error", JOptionPane.ERROR_MESSAGE);

@@ -29,6 +29,8 @@ public class PersonalSettingDialog extends JFrame {
 	private JLabel lastnameL =  new JLabel("Last name: ");
 	private JTextField firstnameTF = new JTextField(10);
 	private JLabel firstnameL =  new JLabel("First name: ");
+	private JTextField emailTF = new JTextField(10);
+	private JLabel emailL =  new JLabel("Email: ");
 	private JPanel infoPanel = new JPanel();
 	
 	private JButton saveBut = new JButton("Save");
@@ -59,6 +61,8 @@ public class PersonalSettingDialog extends JFrame {
 		infoPanel.add(lastnameTF);
 		infoPanel.add(firstnameL);
 		infoPanel.add(firstnameTF);
+		infoPanel.add(emailL);
+		infoPanel.add(emailTF);
 		this.add(infoPanel, BorderLayout.PAGE_START);
 		buttonPanel.add(saveBut, BorderLayout.CENTER);
 		buttonPanel.add(cancelBut, BorderLayout.EAST);
@@ -95,6 +99,8 @@ public class PersonalSettingDialog extends JFrame {
 						return;
 					}
 						
+					_user.setEmail(emailTF.getText());
+					_controller.updateUser(_user);
 					
 					// Close
 					setVisible(false);

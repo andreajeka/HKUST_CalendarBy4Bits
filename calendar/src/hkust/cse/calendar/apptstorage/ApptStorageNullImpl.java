@@ -3,6 +3,7 @@ package hkust.cse.calendar.apptstorage;
 import hkust.cse.calendar.gui.Utility;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
+import hkust.cse.calendar.unit.Request;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
@@ -46,7 +47,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		mAppts = new HashMap<Integer, Appt>();
 		xstream = new XStream();
 		userList = new ArrayList<User>();
-		
+		mRq2DList = new ArrayList<ArrayList<Request>>();
 	}
 
 
@@ -170,7 +171,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public Appt RetrieveAppts(int joinApptID) {
 		// RetrieveAppts with joinApptID
-		return null;
+		return mAppts.get(joinApptID);
 	}
 
 	@Override
@@ -366,6 +367,45 @@ public class ApptStorageNullImpl extends ApptStorage {
 					break;
 				}
 			}
+		}
+	}
+	
+	// Locations
+	@Override
+	public void removeLocation(Location location)
+	{
+		// TODO
+	}
+	
+	// Request
+	@Override
+	public void addRequest(Request rq)
+	{
+		ArrayList<Request> rqList = new ArrayList<Request>();
+		rqList.add(rq);
+		mRq2DList.add(rqList);
+	}
+	
+	@Override
+	public void SaveRequestsToXml()
+	{
+		try {
+			xstream.toXML(mRq2DList, new FileWriter("Request.xml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void LoadRequestsFromXml()
+	{
+		try{
+			xmlFile = new File("Request.xml");
+			if(xmlFile.exists() && xmlFile.isFile()){
+				mRq2DList = (ArrayList<ArrayList<Request>>)xstream.fromXML(xmlFile);
+			}
+		}catch(Exception e){
+			System.out.println("loadRequestFailed");
 		}
 	}
 	

@@ -1,7 +1,10 @@
 package hkust.cse.calendar.unit;
 
 
+import hkust.cse.calendar.users.User;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.UUID;
 
@@ -41,6 +44,8 @@ public class Appt implements Serializable {
 	private long remindBefore;				    // Store how long should the reminder be activated before start time
 	
 	private boolean isPublic;					// Public flag. True if the creator of this event make this public
+
+	private User initiator;
 	
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
@@ -244,5 +249,9 @@ public class Appt implements Serializable {
 		this.remindBefore = remindBefore;
 	}
 	
-
+	// Initiator related methods
+	public User getInitiator()
+	{
+		return initiator;
+	}
 }

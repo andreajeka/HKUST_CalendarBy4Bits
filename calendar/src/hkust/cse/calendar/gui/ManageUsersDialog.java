@@ -2,6 +2,7 @@ package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.unit.Location;
+import hkust.cse.calendar.unit.Request;
 import hkust.cse.calendar.users.User;
 
 import java.awt.BorderLayout;
@@ -201,6 +202,7 @@ public class ManageUsersDialog extends JFrame {
 					
 					if (user != null) { // Not necessary to check, but safety comes first
 						user.setTobeRemoved(true);
+						controller.addRequest(new Request(currentUser, null, Request.type.DELETE_USER, user));// Testing
 					}
 					loadUserList();
 				}
