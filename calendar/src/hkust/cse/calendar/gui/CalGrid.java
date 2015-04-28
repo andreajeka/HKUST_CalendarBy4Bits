@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -73,9 +74,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	
 	private final Object[][] data = new Object[6][7];
 	//private final Vector[][] apptMarker = new Vector[6][7];
-	private final String[] names = { "Sunday", "Monday", "Tuesday",
+	public static final String[] names = { "Sunday", "Monday", "Tuesday",
 			"Wednesday", "Thursday", "Friday", "Saturday" };
-	private final String[] months = { "January", "February", "March", "April",
+	public static final String[] months = { "January", "February", "March", "April",
 			"May", "June", "July", "August", "September", "October",
 			"November", "December" };
 	private JTable tableView;
@@ -405,11 +406,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					pubEvents.setLocationRelativeTo(null);
 					pubEvents.show();
 				} 
-				else if (e.getActionCommand().equals("Automatic")) {
+				else if (e.getActionCommand().equals("Automatic Group Event Scheduling")) {
+					//TODO Do automatic event scheduling
 					
-				}
-				else if (e.getActionCommand().equals("Manual")) {
-					CreateGroupEvent createGroupE = new CreateGroupEvent(CalGrid.this);
 				}
 			}
 		};
@@ -500,17 +499,10 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				"Appointment Management");
 		
 		// Add group event scheduling
-		JMenu menu = new JMenu("Group Event Scheduling");
-		Appmenu.add(menu);
-		
-		// Add submenu to group event
-		JMenuItem submi = new JMenuItem("Automatic");
-		submi.addActionListener(listener);
-		menu.add(submi);
-		submi = new JMenuItem("Manual");
-		submi.addActionListener(listener);
-		menu.add(submi);
-		
+		mi = new JMenuItem("Automatic Group Event Scheduling");
+		mi.addActionListener(listener);
+		Appmenu.add(mi);
+	
 		// Add manual scheduling to Appmenu
 		mi = new JMenuItem("Manual Scheduling");
 		mi.addActionListener(listener);

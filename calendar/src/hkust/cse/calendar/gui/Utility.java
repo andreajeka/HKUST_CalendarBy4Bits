@@ -5,6 +5,7 @@ import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -61,7 +62,6 @@ public class Utility {
 		newAppt.setTimeSpan(new TimeSpan(start, end));
 		User[] temp = new User[1];
 		temp[0] = me;
-		// newAppt.setParticipants(temp);
 
 		newAppt.setTitle("Untitled");
 		newAppt.setInfo("Input description of this appointment");
@@ -168,5 +168,37 @@ public class Utility {
 				}
 			}
 		}
+	}
+	
+	public final static ArrayList<TimeSpan> createTimeSlotsForADay(TimeSpan period) {
+		ArrayList<TimeSpan> timeSlots = new ArrayList<TimeSpan>();
+		int hour = 8;
+		int minute = 0;
+		
+		for(int i = 0; i < 40; i++ ) {
+			Timestamp start = new Timestamp(0);
+			start.setYear(period.StartTime().getYear());
+			start.setMonth(period.StartTime().getMonth());
+			start.setDate(period.StartTime().getDate());
+			start.setHours(hour);
+			start.setMinutes(minute);
+			
+			minute += 15;
+			if (minute == 60) {
+				hour++;
+				minute = 0;
+			}
+			
+			Timestamp end = new Timestamp(0);
+			end.setYear(period.StartTime().getYear());
+			end.setMonth(period.StartTime().getMonth());
+			end.setDate(period.StartTime().getDate());
+			end.setHours(hour);
+			end.setMinutes(minute);
+			
+			timeSlots.add(new TimeSpan(start,end));
+		}
+		
+		return timeSlots;
 	}
 }

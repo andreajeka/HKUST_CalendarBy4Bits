@@ -10,6 +10,7 @@ import hkust.cse.calendar.users.User;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			// Retrieve all the attendants (by its id) of the appointment
 			ArrayList<UUID> attendantList = new ArrayList<UUID>(apptList[i].getAttendList());
 			// If the list of attendant contains current user, add that appointment to userApptList
-			if (attendantList.contains(currentUser.getUserId()))
+			if (attendantList.contains(entity.getUserId()))
 				userApptList.add(apptList[i]);
 		}
 		
@@ -174,6 +175,64 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return mAppts.get(joinApptID);
 	}
 
+	@Override
+	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(ArrayList<User>  entities, TimeSpan period) {
+		ArrayList<TimeSpan> timeSlots = Utility.createTimeSlotsForADay(period);
+		for (int i = 0; i < entities.size(); i++) {
+
+			Appt[] temp = RetrieveAppts(entities.get(i), period);
+		
+			if (temp == null) continue;
+			
+			for(int j = 0; j < temp.length; j++) {
+				int startTH = temp[j].TimeSpan().StartTime().getHours();
+				int startTM = temp[j].TimeSpan().StartTime().getMinutes();
+				int endTH = temp[j].TimeSpan().EndTime().getHours();
+				int endTM = temp[j].TimeSpan().EndTime().getMinutes();
+				int minutesDiff =  (endTH * 60 + endTM) - (startTH * 60 + startTM);
+				
+				int numSlots = minutesDiff / 15;
+
+					for(int k = 0; k < numSlots; k++) {
+						Timestamp start = new Timestamp(0);
+						start.setYear(period.StartTime().getYear());
+						start.setMonth(period.StartTime().getMonth());
+						start.setDate(period.StartTime().getDate());
+						start.setHours(startTH);
+						start.setMinutes(startTM);
+						
+						startTM += 15;
+						if (startTM == 60) {
+							startTH++;
+							startTM = 0;
+						}
+						
+						Timestamp end = new Timestamp(0);
+						start.setYear(period.EndTime().getYear());
+						start.setMonth(period.EndTime().getMonth());
+						start.setDate(period.EndTime().getDate());
+						end.setHours(startTH);
+						end.setMinutes(startTM);
+						
+						TimeSpan aSlot = new TimeSpan(start,end);
+						for (TimeSpan ts : timeSlots) {
+
+							if ((ts.StartTime().getHours() == aSlot.StartTime().getHours()) && 
+									(ts.StartTime().getMinutes() == aSlot.StartTime().getMinutes())) {
+								if ((ts.EndTime().getHours() == aSlot.EndTime().getHours()) && 
+										(ts.EndTime().getMinutes() == aSlot.EndTime().getMinutes())) {
+									timeSlots.remove(ts);
+									break;
+								}
+							}
+						}
+					}
+			}
+		}
+		if (timeSlots.isEmpty()) return null;
+		else return timeSlots;
+	}
+	
 	@Override
 	public void UpdateAppt(Appt appt) {
 		int apptID = appt.getID();

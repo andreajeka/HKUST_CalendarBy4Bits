@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -71,7 +72,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	private JButton saveBut;
 	private JButton CancelBut;
-	private JButton inviteBut;
+	private JButton groupEventBut;
 	private JButton rejectBut;
 	
 	private Appt NewAppt;
@@ -112,9 +113,18 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private boolean isReminderToggled = false;
 	
 
+	private ArrayList<String> usernameChosenList;
+	private ArrayList<TimeSpan> dateChosenList;
+	private ArrayList<TimeSpan> timeChosenList;
+	
+	
 	@SuppressWarnings("deprecation")
 	private void commonConstructor(String title, CalGrid cal) {
 		parent = cal;
+		usernameChosenList = new  ArrayList<String>();
+		dateChosenList = new ArrayList<TimeSpan>();
+		timeChosenList = new ArrayList<TimeSpan>();
+		
 		this.setAlwaysOnTop(true);
 		setTitle(title);
 		setModal(false);
@@ -340,9 +350,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-		inviteBut = new JButton("Invite");
-		inviteBut.addActionListener(this);
-		panel2.add(inviteBut);
+		groupEventBut = new JButton("Group Event");
+		groupEventBut.addActionListener(this);
+		panel2.add(groupEventBut);
 		
 		saveBut = new JButton("Save");
 		saveBut.addActionListener(this);
@@ -366,7 +376,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			saveBut.setText("Accept");
 		}
 		if (this.getTitle().equals("Someone has responded to your Joint Appointment invitation") ){
-			inviteBut.show(false);
+			groupEventBut.show(false);
 			rejectBut.show(false);
 			CancelBut.show(false);
 			saveBut.setText("confirmed");
@@ -397,6 +407,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 			saveButtonResponse();
 
 		} else if (e.getSource() == rejectBut){
+			/*System.out.println(usernameChosenList);
+			System.out.println(dateChosenList);
+			System.out.println(timeChosenList);*/
 			if (JOptionPane.showConfirmDialog(this, "Reject this joint appointment?", "Confirmation", JOptionPane.YES_NO_OPTION) == 0){
 				NewAppt.addReject(getCurrentUserUUID());
 				NewAppt.getAttendList().remove(getCurrentUserUUID());
@@ -404,8 +417,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 				this.setVisible(false);
 				dispose();
 			}
-		} else if (e.getSource() == inviteBut) {
-			/*CreateGroupEvent inviteUserD = new CreateGroupEvent(parent);*/
+		} else if (e.getSource() == groupEventBut) {
+			CreateGroupEvent inviteUserD = new CreateGroupEvent(parent, usernameChosenList, dateChosenList, timeChosenList);
+			inviteUserD.setAlwaysOnTop(true);
+			inviteUserD.setLocationRelativeTo(this);
 			
 		}
 		
@@ -506,11 +521,12 @@ public class AppScheduler extends JDialog implements ActionListener,
 		int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
 		int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
 		
-		if (remindHF.getText().isEmpty() || remindMF.getText().isEmpty() || remindSF.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Don't leave the fields in Reminder empty", "Warning",  JOptionPane.WARNING_MESSAGE);
-			return;
+		if (reminderToggle.isSelected()) {
+			if (remindHF.getText().isEmpty() || remindMF.getText().isEmpty() || remindSF.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Don't leave the fields in Reminder empty", "Warning",  JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 		}
-		
 		freqAmount = FreqAmountField.getSelectedIndex() + 1;
 		
 		// Check if there is no appointment selected in the appointment list (via Manual Scheduling)

@@ -74,4 +74,14 @@ public class TimeSpan implements Serializable {
 	public void EndTime(Timestamp e) {
 		mEndTime = e;
 	}
+	
+/*	public boolean equals(TimeSpan ts) {
+		if (this == ts) return true;
+		if (ts == null) return false;
+		if ((mStartTime.getHours() == ts.mStartTime.getHours()) && (mStartTime.getMinutes() == ts.mStartTime.getMinutes()) 
+			&& (mEndTime.getHours() == ts.mEndTime.getHours()) && (mEndTime.getMinutes() == ts.mEndTime.getMinutes()))
+				return true;
+		return false;
+	}
+	*/
 }

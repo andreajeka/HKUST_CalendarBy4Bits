@@ -8,7 +8,7 @@ import hkust.cse.calendar.users.User;
 // Using controller.addRequest.(new Request(..))
 // Delete a user: Request(curr user, null, Request.type.DELETE_USER, user)
 // Delete a location: Request(curr user, null, Request.type.DELETE_LOCATION, location)
-// Invite a user: Request(initiator, user, INVITE, appt)
+// Invite a user: Request(initiator, user, Request.type.INVITE, appt)
 
 public class Request {
 	User _sender;
