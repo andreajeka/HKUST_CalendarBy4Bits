@@ -81,11 +81,11 @@ public class CreateGroupEvent extends JFrame{
 	
 	/* Attributes needed to store the selections from the panes */
 	private ArrayList<String> usernameChosenList;
+	private ArrayList<User> userChosenList;
 	private ArrayList<TimeSpan> dateInTheList;
 	private ArrayList<TimeSpan> dateChosenList;
 	private ArrayList<TimeSpan> timeInTheList;
 	private ArrayList<TimeSpan> timeChosenList;
-	
 	
 	/* Attributes needed for the navigation buttons in navpane*/
 	private JButton next1Btn;
@@ -94,13 +94,15 @@ public class CreateGroupEvent extends JFrame{
 	private JButton back2Btn;
 	private JButton confirmBtn;
 	
-	public CreateGroupEvent(CalGrid cal, ArrayList<String> usernameChosenList, 
-			ArrayList<TimeSpan> dateChosenList, ArrayList<TimeSpan> timeChosenList) {
+	public CreateGroupEvent(CalGrid cal, ArrayList<User> userChosenList, 
+			ArrayList<TimeSpan> timeChosenList) {
 		parent = cal;
-		this.usernameChosenList = usernameChosenList;
-		this.dateChosenList = dateChosenList;
+		this.userChosenList = userChosenList;
 		this.timeChosenList = timeChosenList;
+		
+		usernameChosenList = new ArrayList<String>();
 		dateInTheList = new ArrayList<TimeSpan>();
+		dateChosenList = new ArrayList<TimeSpan>();
 		timeInTheList = new ArrayList<TimeSpan>();
 		setSize(new Dimension(500,500));
 		pane = this.getContentPane();
@@ -244,6 +246,7 @@ public class CreateGroupEvent extends JFrame{
 				}
 				
 				usernameChosenList.clear();
+				
 				for(int i = 0; i < rightListModel.getSize(); i++) 
 					usernameChosenList.add((String) rightListModel.getElementAt(i));
 				
@@ -461,15 +464,21 @@ public class CreateGroupEvent extends JFrame{
 		next2Btn.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {		
+			public void actionPerformed(ActionEvent e) {	
+				// Collect the selected indices
 				int[] selectedIndices = dateList.getSelectedIndices();
+				
+				// Warn user if at least one index is not selected
 				if (selectedIndices.length == 0) {
 					JOptionPane.showMessageDialog(CreateGroupEvent.this, "Please select at least one from the date list",
 							"Input Error", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				
+				// Clear the dateChosenList
 				dateChosenList.clear();
+				
+				// Add the newest selection
 				for (int i = 0; i < selectedIndices.length; i++) {
 					dateChosenList.add(dateInTheList.get(selectedIndices[i]));
 				}
@@ -571,21 +580,34 @@ public class CreateGroupEvent extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				// Collect the selected indices
 				int[] selectedIndices = timeList.getSelectedIndices();
+				
+				// Warn user if there is no index selected
 				if (selectedIndices.length == 0) {
 					JOptionPane.showMessageDialog(CreateGroupEvent.this, "Please select at least one from the time list",
 							"Input Error", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				
+				// Yes No Confirmation upon successful creation
 				int result = JOptionPane.showConfirmDialog(CreateGroupEvent.this, "Confirm the following event?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION){
-					//TODO: DO STH
+					// If answer is yes, we loop through the selected indices, 
+					// use timeInTheList array to get the timespan element and add it to timeChosenList
+					// (Map user selection to our array)
 					for (int i = 0; i < selectedIndices.length; i++) {
 						timeChosenList.add(timeInTheList.get(selectedIndices[i]));
 					}
+					
+					for (int i = 0; i < usernameChosenList.size(); i++) {
+						userChosenList.add(parent.controller.searchUser(usernameChosenList.get(i)));
+					}
+					
+					// Close window when we are done
 					closeWindow();
+
 				} else {
 					return;
 				}
@@ -600,7 +622,9 @@ public class CreateGroupEvent extends JFrame{
 		
 	}
 
+	// Method to load the user list into the combobox leftList
 	private void loadUserList() {
+		// If user list is not empty
 		if (!parent.controller.getUserList().isEmpty()) {
 			ArrayList<User> userList = parent.controller.getUserList();
 			leftListModel.removeAllElements();
@@ -619,16 +643,20 @@ public class CreateGroupEvent extends JFrame{
 		}
 	}
 	
+	// Method to load the timeslots into the combobox timeList
 	private void loadTimeSlots() {
-		ArrayList<User> userChosenList  = new ArrayList<User>();
+
+		// Map the chosen user names into its corresponding user instance in apptstorage
+		ArrayList<User> userAndCurrChosenList  = new ArrayList<User>();
 		for (String name : usernameChosenList) {
-			userChosenList.add(parent.controller.searchUser(name));
+			userAndCurrChosenList.add(parent.controller.searchUser(name));
 		}
 		
 		// Add the current user as well because we also need to get available timeslots based on the current user
-		userChosenList.add(parent.controller.getCurrentUser());
+		userAndCurrChosenList.add(parent.controller.getCurrentUser());
 		for (int i = 0; i < dateChosenList.size(); i++) {
-			ArrayList<TimeSpan> timeSlots = parent.controller.RetrieveAvailTimeSpans(userChosenList, dateChosenList.get(i));
+			// Retrieve the available time slots
+			ArrayList<TimeSpan> timeSlots = parent.controller.RetrieveAvailTimeSpans(userAndCurrChosenList, dateChosenList.get(i));
 			if (!timeSlots.isEmpty()) {
 				for (int j = 0; j < timeSlots.size(); j++) {
 					// Display date
@@ -644,17 +672,21 @@ public class CreateGroupEvent extends JFrame{
 					if (Eminutes < 10) 
 						Emins = "0" + Eminutes;
 					
+					// Add the information of each timeslot to the timeList combo box
 					timeListModel.addElement( date + " " + CalGrid.months[dateChosenList.get(i).StartTime().getMonth()] + " " + year  
 							+ "  " +
 							// Display time
 							timeSlots.get(j).StartTime().getHours() + ":" + Smins + " to " + 
 							timeSlots.get(j).EndTime().getHours() + ":" +  Emins);
+		
+					// Also add the corresponding TimeSpan element to the timeInTheList array to ease mapping to the timeChosenList
 					timeInTheList.add(timeSlots.get(j));
 			}
 		}
 		}
 	}
 	
+	// Close this window
 	private void closeWindow() {
 		setVisible(false);
 		dispose();

@@ -3,8 +3,8 @@
     <int>1</int>
     <hkust.cse.calendar.unit.Appt>
       <mTimeSpan>
-        <mStartTime>2015-04-28 00:00:00.0</mStartTime>
-        <mEndTime>2015-04-28 00:30:00.0</mEndTime>
+        <mStartTime>2015-04-30 00:00:00.0</mStartTime>
+        <mEndTime>2015-04-30 01:00:00.0</mEndTime>
       </mTimeSpan>
       <mTitle>Untitled</mTitle>
       <mInfo>Input description of this appointment</mInfo>
@@ -27,8 +27,8 @@
     <int>2</int>
     <hkust.cse.calendar.unit.Appt>
       <mTimeSpan>
-        <mStartTime>2015-04-28 00:30:00.0</mStartTime>
-        <mEndTime>2015-04-28 01:45:00.0</mEndTime>
+        <mStartTime>2015-04-30 05:00:00.0</mStartTime>
+        <mEndTime>2015-04-30 06:00:00.0</mEndTime>
       </mTimeSpan>
       <mTitle>Untitled</mTitle>
       <mInfo>Input description of this appointment</mInfo>
@@ -51,8 +51,8 @@
     <int>3</int>
     <hkust.cse.calendar.unit.Appt>
       <mTimeSpan>
-        <mStartTime>2015-04-28 00:45:00.0</mStartTime>
-        <mEndTime>2015-04-28 01:00:00.0</mEndTime>
+        <mStartTime>2015-04-30 07:00:00.0</mStartTime>
+        <mEndTime>2015-04-30 08:00:00.0</mEndTime>
       </mTimeSpan>
       <mTitle>Untitled</mTitle>
       <mInfo>Input description of this appointment</mInfo>

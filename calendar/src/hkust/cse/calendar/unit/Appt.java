@@ -250,6 +250,12 @@ public class Appt implements Serializable {
 	}
 	
 	// Initiator related methods
+	public void setInitiator(User initiator)
+	{
+		this.initiator = initiator;
+	}
+	
+	// Initiator related methods
 	public User getInitiator()
 	{
 		return initiator;

@@ -54,6 +54,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void SaveAppt(Appt appt) {
+		
+		if (appt.isJoint()) {
+			int key = LengthInMemory() + 1;
+			appt.setJoinID(key);
+			mAppts.put(key, appt);
+		} else {
+		
 		Appt[] userApptList = RetrieveAppts(currentUser);
 		ArrayList<Appt> apptList = new ArrayList<Appt>(Arrays.asList(userApptList));
 		String digitHour="";
@@ -86,6 +93,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			appt.setID(key);
 			mAppts.put(key, appt);
 			appt.addAttendant(currentUser.getUserId());
+		}
 		}
 	}
 
