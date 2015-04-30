@@ -337,14 +337,19 @@ public class AppList extends JPanel implements ActionListener {
 		Color color;
 		currColor = new Color(0,240-(appt.TimeSpan().StartTime().getHours()-8)*25,255-(appt.TimeSpan().StartTime().getMinutes()*3));
 		currColorForJoint = new Color(255-(appt.TimeSpan().StartTime().getHours()-8)*25,0,190-(appt.TimeSpan().StartTime().getMinutes()*3));
-		if(!appt.isJoint())
-			color = currColor;
-		else
-			color = currColorForJoint;
 		
-		if (appt == null)
-			return;
+		if (appt == null) return;
 
+		if (appt.getWaitingList().isEmpty()) {
+		
+			if(!appt.isJoint())
+				color = currColor;
+			else
+				color = currColorForJoint;
+		} else {
+			color = Color.yellow;
+		}
+		
 		Timestamp temp;
 
 		temp = appt.TimeSpan().StartTime();
@@ -355,12 +360,25 @@ public class AppList extends JPanel implements ActionListener {
 		int endMin = temp.getHours() * 60 + temp.getMinutes();
 		endMin = endMin - OFFSET * 60;
 
+		// Set value(text) to the cells in applist
 		int[] pos = new int[2];
 		for (int i = startMin; i < endMin; i = i + SMALLEST_DURATION) {
 			pos = calRowColNum(i);
 			if (i == startMin) {
+				// appt automatically returns title from the toString() method
 				tableView.getModel().setValueAt(appt, pos[0], pos[1]);
-
+				
+				// Set the status box in the appt list
+				if (!appt.getWaitingList().isEmpty()) {
+					if (pos[1] == 1)
+						tableView.getModel().setValueAt("Pending Group Event", pos[0], 2);
+					else tableView.getModel().setValueAt("Pending Group Event", pos[0], 5); 
+				} else if (appt.isJoint() && appt.getWaitingList().isEmpty()) {
+					if (pos[1] == 1)
+						tableView.getModel().setValueAt("Confirmed Group Event", pos[0], 2);
+					else tableView.getModel().setValueAt("Confirmed Group Event", pos[0], 5);
+				}
+				
 				if (pos[1] == 1) {
 					cellCMD[pos[0]][0] = COLORED_TITLE;
 					cellColor[pos[0]][0] = color;
@@ -370,7 +388,17 @@ public class AppList extends JPanel implements ActionListener {
 				}
 			} else {
 				tableView.getModel().setValueAt(appt, pos[0], pos[1]);
-
+				
+				if (!appt.getWaitingList().isEmpty()) {
+					if (pos[1] == 1)
+						tableView.getModel().setValueAt("Pending Group Event", pos[0], 2);
+					else tableView.getModel().setValueAt("Pending Group Event", pos[0], 5); 
+				} else if (appt.isJoint() && appt.getWaitingList().isEmpty()) {
+					if (pos[1] == 1)
+						tableView.getModel().setValueAt("Confirmed Group Event", pos[0], 2);
+					else tableView.getModel().setValueAt("Confirmed Group Event", pos[0], 5);
+				}
+				
 				if (pos[1] == 1) {
 					cellCMD[pos[0]][0] = COLORED;
 					cellColor[pos[0]][0] = color;

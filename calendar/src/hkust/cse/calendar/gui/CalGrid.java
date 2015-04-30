@@ -730,7 +730,6 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
-		// TODO WAITING APPT
 	}
 	
 	public AppList getAppList() {
