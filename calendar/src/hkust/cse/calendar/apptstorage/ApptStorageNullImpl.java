@@ -24,23 +24,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	private XStream xstream;
 	private User currentUser;
-	private Location[] _locations;
 	private File xmlFile;
 	private File locFile;
 	private File userFile;
 	private String overlapMessage="";
 	private boolean isOverlap = false;
-
+	private ArrayList<Location> _locations;
 	private ArrayList<User> userList;
-
-	/************* MY TASKS ************/
-	// public getUserList
-	// public addUser (check the userList(authenticate) before adding a new user)
-	// public update(change the info of user, eg. username, password etc)
-	/************* MY TASKS ************/
-
-	// private(should be public) (boolean) authenticate
-	// public boolean/User getUser(User user);
 
 
 	public ApptStorageNullImpl()
@@ -299,7 +289,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		try{
 			locFile = new File("locations.xml");
 			if(locFile.exists() && locFile.isFile()){
-				_locations = (Location[])xstream.fromXML(locFile);
+				_locations = (ArrayList<Location>)xstream.fromXML(locFile);
 				//System.out.println("enter loadLocFromXml" + _locations.length);
 			} 
 		}catch (Exception e){
@@ -337,18 +327,18 @@ public class ApptStorageNullImpl extends ApptStorage {
 	}
 
 	@Override
-	public Location[] getLocationList(){
+	public ArrayList<Location> getLocationList(){
 		return _locations;
 	}
 
 	@Override
-	public void setLocationList(Location[] locations){
+	public void setLocationList(ArrayList<Location> locations){
 		this._locations = locations;
 	}
 
 	@Override
 	public int getLocationCapacity(){
-		return this._locations.length;
+		return this._locations.size();
 	}
 
 	@Override

@@ -118,12 +118,12 @@ public class ApptStorageControllerImpl {
 		mApptStorage.LoadUserFromXml();
 	}
 	/* get the locationList of mApptStorage */
-	public Location[] getLocationList(){
+	public ArrayList<Location> getLocationList(){
 		return mApptStorage.getLocationList();
 	}
 	
 	/* set the locationList of mApptStorage */
-	public void setLocationList(Location[] locations){
+	public void setLocationList(ArrayList<Location> locations){
 		mApptStorage.setLocationList(locations);
 	}
 	

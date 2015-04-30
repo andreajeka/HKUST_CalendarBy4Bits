@@ -10,7 +10,7 @@ import java.util.UUID;
 
 
 public class Appt implements Serializable {
-	
+
 	// Static variables for frequencies
 	public static final int MODE_ONCE = 0;
 	public static final int MODE_DAILY = 1;
@@ -37,16 +37,19 @@ public class Appt implements Serializable {
 
 	private String location;					// The location
 
+
+	private int capacity;						// The capacity of location
+
 	private int frequencyAmount;				// The amount of frequency
 
 	private boolean reminder;					// Reminder flag. True if it is turned on
-	
+
 	private long remindBefore;				    // Store how long should the reminder be activated before start time
-	
+
 	private boolean isPublic;					// Public flag. True if the creator of this event make this public
 
 	private User initiator;
-	
+
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
 		mTimeSpan = null;
@@ -58,6 +61,7 @@ public class Appt implements Serializable {
 		waiting = new LinkedList<UUID>();
 		joinApptID = -1;
 		location = "";
+		capacity = -1;
 		reminder = false;
 	}
 
@@ -85,7 +89,12 @@ public class Appt implements Serializable {
 	public String getLocation() {
 		return location;
 	}
-	
+
+	// Getter of the capacity
+	public int getCapacity(){
+		return capacity;
+	}
+
 	public int getFrequencyAmount() {
 		return frequencyAmount;
 	}
@@ -210,6 +219,11 @@ public class Appt implements Serializable {
 		this.location= location;
 	}
 
+	//Setter of the capacity of location
+	public void setCapacity(int capacity){
+		this.capacity = capacity;
+	}
+
 	// Setter of frequency amount
 	public void setFrequencyAmount(int frequencyAmount) {
 		this.frequencyAmount = frequencyAmount;
@@ -228,7 +242,7 @@ public class Appt implements Serializable {
 	public boolean reminder() {
 		return reminder;
 	}
-	
+
 	public void reminderOn(boolean logic) {
 		reminder = logic;
 	}
@@ -248,13 +262,13 @@ public class Appt implements Serializable {
 	public void setRemindBefore(long remindBefore) {
 		this.remindBefore = remindBefore;
 	}
-	
+
 	// Initiator related methods
 	public void setInitiator(User initiator)
 	{
 		this.initiator = initiator;
 	}
-	
+
 	// Initiator related methods
 	public User getInitiator()
 	{

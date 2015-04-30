@@ -1,6 +1,12 @@
-<hkust.cse.calendar.unit.Location-array>
+<list>
   <hkust.cse.calendar.unit.Location>
-    <location>hk</location>
+    <location>lab 3</location>
     <bRemoval>false</bRemoval>
+    <capacity>33</capacity>
   </hkust.cse.calendar.unit.Location>
-</hkust.cse.calendar.unit.Location-array>
+  <hkust.cse.calendar.unit.Location>
+    <location>rm 3111</location>
+    <bRemoval>false</bRemoval>
+    <capacity>0</capacity>
+  </hkust.cse.calendar.unit.Location>
+</list>

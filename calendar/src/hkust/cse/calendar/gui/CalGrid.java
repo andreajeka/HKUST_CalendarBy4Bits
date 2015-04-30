@@ -364,7 +364,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equals("Manual Scheduling")) {
-					if (controller.getLocationList().length != 0) {
+					if (controller.getLocationList().size() != 0) {
 						AppScheduler a = new AppScheduler("New", CalGrid.this);
 						a.updateSetApp(hkust.cse.calendar.gui.Utility
 								.createDefaultAppt(currentY, currentM, currentD,
@@ -410,14 +410,8 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					//TODO Do automatic event scheduling
 					
 				}
-			}
-		};
-		
-		// Action Listeners
-		ActionListener listener2 = new ActionListener(){
-			@SuppressWarnings("deprecation")
-			public void actionPerformed(ActionEvent e){
-				if(e.getActionCommand().equals("Manage Locations")){
+			
+				else if(e.getActionCommand().equals("Manage Locations")){
 					LocationsDialog b = new LocationsDialog(controller);
 					b.show();
 					b.setLocationRelativeTo(null);
@@ -509,7 +503,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Appmenu.add(mi);
 		
         // Add location to Appmenu
-		miManageLocs.addActionListener(listener2);
+		miManageLocs.addActionListener(listener);
 		Appmenu.add(miManageLocs);
 		
 		// Add "Time Machine" to the menuBar

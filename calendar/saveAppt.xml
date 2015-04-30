@@ -16,7 +16,8 @@
       </attend>
       <reject/>
       <waiting/>
-      <location>hk</location>
+      <location>lab 3</location>
+      <capacity>33</capacity>
       <frequencyAmount>1</frequencyAmount>
       <reminder>false</reminder>
       <remindBefore>0</remindBefore>
@@ -36,11 +37,12 @@
       <joinApptID>-1</joinApptID>
       <isjoint>false</isjoint>
       <attend>
-        <uuid reference="../../../../entry/hkust.cse.calendar.unit.Appt/attend/uuid"/>
+        <uuid>70b71397-ffdc-4a37-b362-b1efbf3affee</uuid>
       </attend>
       <reject/>
       <waiting/>
       <location>hk</location>
+      <capacity>0</capacity>
       <frequencyAmount>1</frequencyAmount>
       <reminder>false</reminder>
       <remindBefore>0</remindBefore>
@@ -65,6 +67,7 @@
       <reject/>
       <waiting/>
       <location>hk</location>
+      <capacity>0</capacity>
       <frequencyAmount>1</frequencyAmount>
       <reminder>false</reminder>
       <remindBefore>0</remindBefore>
