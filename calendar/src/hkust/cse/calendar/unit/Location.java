@@ -5,10 +5,12 @@ public class Location {
 
 	private String location;
 	private boolean bRemoval;
+	private int capacity;
 	
-	public Location(String location){
+	public Location(String location, int capacity){
 		this.location = location;
 		this.bRemoval = false;
+		this.capacity = capacity;
 	}
 	
 	public String getName(){
@@ -22,5 +24,13 @@ public class Location {
 	public boolean getRemovalBool()
 	{
 		return bRemoval;
+	}
+	
+	public void setCapacity(int capacity){
+		this.capacity = capacity;
+	}
+	
+	public int getCapacity(){
+		return this.capacity;
 	}
 }
