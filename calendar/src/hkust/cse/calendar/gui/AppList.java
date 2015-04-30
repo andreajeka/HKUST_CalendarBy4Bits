@@ -389,16 +389,6 @@ public class AppList extends JPanel implements ActionListener {
 			} else {
 				tableView.getModel().setValueAt(appt, pos[0], pos[1]);
 				
-				if (!appt.getWaitingList().isEmpty()) {
-					if (pos[1] == 1)
-						tableView.getModel().setValueAt("Pending Group Event", pos[0], 2);
-					else tableView.getModel().setValueAt("Pending Group Event", pos[0], 5); 
-				} else if (appt.isJoint() && appt.getWaitingList().isEmpty()) {
-					if (pos[1] == 1)
-						tableView.getModel().setValueAt("Confirmed Group Event", pos[0], 2);
-					else tableView.getModel().setValueAt("Confirmed Group Event", pos[0], 5);
-				}
-				
 				if (pos[1] == 1) {
 					cellCMD[pos[0]][0] = COLORED;
 					cellColor[pos[0]][0] = color;

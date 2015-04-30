@@ -1,124 +1,24 @@
 <map>
   <entry>
-    <int>0</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-30 08:00:00.0</mStartTime>
-        <mEndTime>2015-04-30 08:15:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>Test2</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>0</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend>
-        <uuid>70b71397-ffdc-4a37-b362-b1efbf3affee</uuid>
-      </attend>
-      <reject/>
-      <waiting/>
-      <location>lab 3</location>
-      <capacity>33</capacity>
-      <frequencyAmount>1</frequencyAmount>
-      <reminder>false</reminder>
-      <remindBefore>0</remindBefore>
-      <isPublic>false</isPublic>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
     <int>1</int>
     <hkust.cse.calendar.unit.Appt>
       <mTimeSpan>
         <mStartTime>2015-04-30 00:00:00.0</mStartTime>
-        <mEndTime>2015-04-30 01:00:00.0</mEndTime>
+        <mEndTime>2015-04-30 00:45:00.0</mEndTime>
       </mTimeSpan>
-      <mTitle>Untitled</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>1</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend>
-        <uuid reference="../../../../entry/hkust.cse.calendar.unit.Appt/attend/uuid"/>
-      </attend>
-      <reject/>
-      <waiting/>
-      <location>lab 3</location>
-      <capacity>33</capacity>
-      <frequencyAmount>1</frequencyAmount>
-      <reminder>false</reminder>
-      <remindBefore>0</remindBefore>
-      <isPublic>false</isPublic>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>2</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-30 05:00:00.0</mStartTime>
-        <mEndTime>2015-04-30 06:00:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>Untitled</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>2</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend>
-        <uuid reference="../../../../entry/hkust.cse.calendar.unit.Appt/attend/uuid"/>
-      </attend>
-      <reject/>
-      <waiting/>
-      <location>lab 3</location>
-      <capacity>33</capacity>
-      <frequencyAmount>1</frequencyAmount>
-      <reminder>false</reminder>
-      <remindBefore>0</remindBefore>
-      <isPublic>false</isPublic>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>3</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-30 07:00:00.0</mStartTime>
-        <mEndTime>2015-04-30 08:00:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>Untitled</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>3</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend>
-        <uuid>0670a29e-05ca-4d35-bc4a-3efae0ff71d7</uuid>
-      </attend>
-      <reject/>
-      <waiting/>
-      <location>hk</location>
-      <capacity>0</capacity>
-      <frequencyAmount>1</frequencyAmount>
-      <reminder>false</reminder>
-      <remindBefore>0</remindBefore>
-      <isPublic>false</isPublic>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>4</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-30 01:00:00.0</mStartTime>
-        <mEndTime>2015-04-30 01:15:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>Untitled</mTitle>
+      <mTitle>Test1</mTitle>
       <mInfo>Input description of this appointment</mInfo>
       <mApptID>0</mApptID>
-      <joinApptID>4</joinApptID>
+      <joinApptID>1</joinApptID>
       <isjoint>true</isjoint>
       <attend/>
       <reject/>
       <waiting>
         <uuid>70b71397-ffdc-4a37-b362-b1efbf3affee</uuid>
-        <uuid>0670a29e-05ca-4d35-bc4a-3efae0ff71d7</uuid>
+        <uuid>bed4bfff-bb71-4d0a-9cb9-810a40432655</uuid>
       </waiting>
-      <location>hk</location>
-      <capacity>0</capacity>
+      <location>lab 3</location>
+      <capacity>33</capacity>
       <frequencyAmount>0</frequencyAmount>
       <reminder>false</reminder>
       <remindBefore>0</remindBefore>
@@ -130,64 +30,6 @@
         <isAdmin>true</isAdmin>
         <tobeRemoved>false</tobeRemoved>
       </initiator>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>5</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-30 08:00:00.0</mStartTime>
-        <mEndTime>2015-04-30 08:15:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>Test2</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>0</mApptID>
-      <joinApptID>5</joinApptID>
-      <isjoint>true</isjoint>
-      <attend/>
-      <reject/>
-      <waiting>
-        <uuid>70b71397-ffdc-4a37-b362-b1efbf3affee</uuid>
-        <uuid>0670a29e-05ca-4d35-bc4a-3efae0ff71d7</uuid>
-      </waiting>
-      <location>hk</location>
-      <capacity>0</capacity>
-      <frequencyAmount>0</frequencyAmount>
-      <reminder>false</reminder>
-      <remindBefore>0</remindBefore>
-      <isPublic>false</isPublic>
-      <initiator>
-        <mUsername>user</mUsername>
-        <mPassword>user</mPassword>
-        <mUserId reference="../../waiting/uuid"/>
-        <isAdmin>true</isAdmin>
-        <tobeRemoved>false</tobeRemoved>
-      </initiator>
-    </hkust.cse.calendar.unit.Appt>
-  </entry>
-  <entry>
-    <int>7</int>
-    <hkust.cse.calendar.unit.Appt>
-      <mTimeSpan>
-        <mStartTime>2015-04-30 02:00:00.0</mStartTime>
-        <mEndTime>2015-04-30 02:30:00.0</mEndTime>
-      </mTimeSpan>
-      <mTitle>Untitled</mTitle>
-      <mInfo>Input description of this appointment</mInfo>
-      <mApptID>7</mApptID>
-      <joinApptID>-1</joinApptID>
-      <isjoint>false</isjoint>
-      <attend>
-        <uuid>70b71397-ffdc-4a37-b362-b1efbf3affee</uuid>
-      </attend>
-      <reject/>
-      <waiting/>
-      <location>rm 3111</location>
-      <capacity>0</capacity>
-      <frequencyAmount>1</frequencyAmount>
-      <reminder>false</reminder>
-      <remindBefore>0</remindBefore>
-      <isPublic>false</isPublic>
     </hkust.cse.calendar.unit.Appt>
   </entry>
 </map>

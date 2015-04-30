@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -85,7 +86,10 @@ public class CreateGroupEvent extends JFrame{
 	private ArrayList<TimeSpan> dateInTheList;
 	private ArrayList<TimeSpan> dateChosenList;
 	private ArrayList<TimeSpan> timeInTheList;
-	private ArrayList<TimeSpan> timeChosenList;
+	
+	// The reason why I use array list instead of a mere TimeSpan class is because
+	// I need to get the value as pass by reference. If you have better idea, you can change it
+	private ArrayList<TimeSpan> timeSlotChosen;
 	
 	/* Attributes needed for the navigation buttons in navpane*/
 	private JButton next1Btn;
@@ -95,10 +99,10 @@ public class CreateGroupEvent extends JFrame{
 	private JButton confirmBtn;
 	
 	public CreateGroupEvent(CalGrid cal, ArrayList<User> userChosenList, 
-			ArrayList<TimeSpan> timeChosenList) {
+			ArrayList<TimeSpan> timeSlotChosen) {
 		parent = cal;
 		this.userChosenList = userChosenList;
-		this.timeChosenList = timeChosenList;
+		this.timeSlotChosen = timeSlotChosen;
 		
 		usernameChosenList = new ArrayList<String>();
 		dateInTheList = new ArrayList<TimeSpan>();
@@ -578,6 +582,7 @@ public class CreateGroupEvent extends JFrame{
 		confirmBtn = new JButton("Confirm");
 		confirmBtn.addActionListener(new ActionListener() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// Collect the selected indices
@@ -588,19 +593,65 @@ public class CreateGroupEvent extends JFrame{
 					JOptionPane.showMessageDialog(CreateGroupEvent.this, "Please select at least one from the time list",
 							"Input Error", JOptionPane.WARNING_MESSAGE);
 					return;
-				}
+				} 
 				
+				// Sort first
+				Arrays.sort(selectedIndices);
+				
+				// Because our Utility.ArrayisConsecutive does not work on element with 0 
+				if (selectedIndices[0] == 0) {
+					// Make a copy from our original indices array
+					int[] selectedIndicesIncr = new int[selectedIndices.length];
+					// Increment every element by one
+					for(int i = 0; i < selectedIndices.length; i++) {
+						selectedIndicesIncr[i] = selectedIndices[i] + 1;
+					}
+					
+					if (!Utility.ArrayIsConsecutive(selectedIndicesIncr, selectedIndicesIncr.length)) {
+						JOptionPane.showMessageDialog(CreateGroupEvent.this, "You cannot select inconsecutive slots",
+								"Input Error", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+					
+				} else {
+				
+					if (!Utility.ArrayIsConsecutive(selectedIndices, selectedIndices.length)) {
+						JOptionPane.showMessageDialog(CreateGroupEvent.this, "You cannot select inconsecutive slots",
+								"Input Error", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
 				// Yes No Confirmation upon successful creation
 				int result = JOptionPane.showConfirmDialog(CreateGroupEvent.this, "Confirm the following event?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
-				if (result == JOptionPane.YES_OPTION){
+				if (result == JOptionPane.YES_OPTION) {
 					// If answer is yes, we loop through the selected indices, 
 					// use timeInTheList array to get the timespan element and add it to timeChosenList
 					// (Map user selection to our array)
-					for (int i = 0; i < selectedIndices.length; i++) {
-						timeChosenList.add(timeInTheList.get(selectedIndices[i]));
-					}
-					
+					if (selectedIndices.length == 1) {
+						timeSlotChosen.add(timeInTheList.get(selectedIndices[0]));
+					} else {
+						TimeSpan first = timeInTheList.get(0);
+						TimeSpan last = timeInTheList.get(selectedIndices.length - 1);
+							
+						Timestamp start = new Timestamp(0);
+						start.setYear(first.StartTime().getYear());
+						start.setMonth(first.StartTime().getMonth());
+						start.setDate(first.StartTime().getDate());
+						start.setHours(first.StartTime().getHours());
+						start.setMinutes(first.StartTime().getMinutes());
+			
+						Timestamp end = new Timestamp(0);
+						end.setYear(last.EndTime().getYear());
+						end.setMonth(last.EndTime().getMonth());
+						end.setDate(last.EndTime().getDate());
+						end.setHours(last.EndTime().getHours());
+						end.setMinutes(last.EndTime().getMinutes());
+							
+						TimeSpan merged = new TimeSpan(start, end);
+						timeSlotChosen.add(merged);
+					} 
+						
 					for (int i = 0; i < usernameChosenList.size(); i++) {
 						userChosenList.add(parent.controller.searchUser(usernameChosenList.get(i)));
 					}

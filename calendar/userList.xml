@@ -9,8 +9,8 @@
   <hkust.cse.calendar.users.User>
     <mUsername>user2</mUsername>
     <mPassword>user2</mPassword>
-    <mUserId>0670a29e-05ca-4d35-bc4a-3efae0ff71d7</mUserId>
+    <mUserId>bed4bfff-bb71-4d0a-9cb9-810a40432655</mUserId>
     <isAdmin>false</isAdmin>
-    <tobeRemoved>true</tobeRemoved>
+    <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
 </list>

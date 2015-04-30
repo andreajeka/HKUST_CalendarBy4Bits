@@ -201,4 +201,56 @@ public class Utility {
 		
 		return timeSlots;
 	}
+	
+	private final static int getMinFromArray(int[] array, int n) {
+		int min = array[0];
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] < min)
+				min  = array[i];
+		}
+		return min;
+	}
+	
+	private final static int getMaxFromArray(int[] array, int n) {
+		int max = array[0];
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] > max)
+				max  = array[i];
+		}
+		return max;
+	}
+	
+	public final static boolean ArrayIsConsecutive(int[] array, int n) {
+		if (n < 1) return false;
+		
+		int min = getMinFromArray(array, n);
+		int max = getMaxFromArray(array, n);
+		
+		// max - min + 1 == n checks whether the whole elements
+		// has the potential of being consecutive
+		// Example array -> 1. [30, 32, 31, 29, 33] ====> 33 - 29 + 1 = 5  | true
+		//  				2. [79, 30, 31, 33, 29] ====> 79 - 29 + 1 = 51 | false
+		if ((max - min + 1) == n) {
+			
+			// After passing the condition, we have to check for repetitions by marking
+			for (int i = 0; i < n; i++) {
+				int j;
+				if (array[i] < 0)
+					j = -array[i] - min;
+				else 
+					j = array[i] - min;
+				
+				if (array[j] > 0)
+					array[j]  = -array[j];
+				else
+					return false;
+			}
+			
+			// No negative value means all elements are distinct
+			return true;
+		}
+		
+		// Because max-min+1 != n
+		return false;
+	}
 }

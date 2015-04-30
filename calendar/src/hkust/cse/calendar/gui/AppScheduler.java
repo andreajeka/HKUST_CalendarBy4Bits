@@ -119,14 +119,14 @@ ComponentListener {
 
 
 	private ArrayList<User> userChosenList;
-	private ArrayList<TimeSpan> timeChosenList;
+	private ArrayList<TimeSpan> timeSlotChosen;
 
 
 	@SuppressWarnings("deprecation")
 	private void commonConstructor(String title, CalGrid cal) {
 		parent = cal;
 		userChosenList = new  ArrayList<User>();
-		timeChosenList = new ArrayList<TimeSpan>();
+		timeSlotChosen = new ArrayList<TimeSpan>();
 
 		this.setAlwaysOnTop(true);
 		setTitle(title);
@@ -434,7 +434,7 @@ ComponentListener {
 			eTimeM.setEditable(false);
 
 			CreateGroupEvent inviteUserD = new CreateGroupEvent(parent, 
-					userChosenList, timeChosenList);
+					userChosenList, timeSlotChosen);
 			inviteUserD.setAlwaysOnTop(true);
 			inviteUserD.setLocationRelativeTo(this);
 			inviteUserD.addWindowListener(new WindowListener() {
@@ -604,7 +604,7 @@ ComponentListener {
 
 private void saveButtonResponse() {
 		
-		if (!timeChosenList.isEmpty()) 
+		if (!timeSlotChosen.isEmpty()) 
 			groupCreationSuccessful = true;
 		
 		
@@ -615,28 +615,27 @@ private void saveButtonResponse() {
 			locField.setSelectedIndex(capaLocField.getSelectedIndex());
 			String location = (String) locField.getSelectedItem();
 			
-			for (int i = 0; i < timeChosenList.size(); i++) {
-				NewAppt.setTitle(title);
-				NewAppt.setInfo(desc);
-				NewAppt.setJoint(true);
-				NewAppt.setTimeSpan(timeChosenList.get(i));
-				NewAppt.setLocation(location);
-				NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
-				NewAppt.setPublic(publicCheckBox.isSelected());
+			NewAppt.setTitle(title);
+			NewAppt.setInfo(desc);
+			NewAppt.setJoint(true);
+			NewAppt.setTimeSpan(timeSlotChosen.get(0));
+			NewAppt.setLocation(location);
+			NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
+			NewAppt.setPublic(publicCheckBox.isSelected());
 				
-				// Put current user to waiting too?
-				NewAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
+			// Put current user to waiting too?
+			NewAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
 				
-				for (User user : userChosenList) {
-					NewAppt.addWaiting(user.getUserId());
-				}
-
-			    // TODO how about reminder
-			    // TODO how about frequency
-			    
-				NewAppt.setInitiator(parent.controller.getCurrentUser());
-			    parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+			for (User user : userChosenList) {
+				NewAppt.addWaiting(user.getUserId());
 			}
+			
+		    // TODO how about reminder
+		    // TODO how about frequency
+			    
+			NewAppt.setInitiator(parent.controller.getCurrentUser());
+			parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+			
 		} else {
 			// Save the appointment to the hard disk
 			/* Assign information to the newly created appointment. */
