@@ -131,9 +131,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override		 	
 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {	
 		
-		// TODO Get attendance list. Right now we use attendant list only 
-		// because we have not implemented group event yet.
-		
 		// Retrieve all appointments according to the specified timespan
 		Appt[] apptList = RetrieveAppts(time);
 		if (apptList == null) return null;
@@ -143,9 +140,9 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// Iterate through the list of retrieved appointments
 		for (int i = 0; i < apptList.length; i++) {
 			// Retrieve all the attendants (by its id) of the appointment
-			ArrayList<UUID> attendantList = new ArrayList<UUID>(apptList[i].getAttendList());
+			ArrayList<UUID> allPeople = new ArrayList<UUID>(apptList[i].getAllPeople());
 			// If the list of attendant contains current user, add that appointment to userApptList
-			if (attendantList.contains(entity.getUserId()))
+			if (allPeople.contains(entity.getUserId()))
 				userApptList.add(apptList[i]);
 		}
 		

@@ -123,6 +123,8 @@ public class DetailsDialog extends JFrame implements ActionListener {
 			{
 				// Map user id to username
 				area.append("  " + appList.parent.controller.searchUser(attendList.get(i)).getUsername());
+				if (i == attendList.size() - 1) continue;
+				area.append(",");
 			}
 		}
 		area.append("\n\n  Reject:");
@@ -140,7 +142,9 @@ public class DetailsDialog extends JFrame implements ActionListener {
 		{
 			for(int i = 0; i < waitingList.size(); i++)
 			{
-				area.append("  " + waitingList.get(i));
+				area.append("  " + appList.parent.controller.searchUser(waitingList.get(i)).getUsername());
+				if (i == waitingList.size() - 1) continue;	
+				area.append(",");
 			}
 		}
 

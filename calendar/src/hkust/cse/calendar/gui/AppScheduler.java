@@ -372,7 +372,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		NewAppt = new Appt();
 
 		if (this.getTitle().equals("Join Appointment Content Change") || this.getTitle().equals("Join Appointment Invitation")){
-			//inviteBut.show(false);
+			inviteBut.show(false);
 			rejectBut.show(true);
 			CancelBut.setText("Consider Later");
 			saveBut.setText("Accept");
@@ -600,18 +600,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 		if (!timeChosenList.isEmpty()) 
 			groupCreationSuccessful = true;
 		
-			
-			
-	/*	} else {
-			yearF.setEditable(true);
-			monthF.setEditable(true);
-			dayF.setEditable(true);
-			sTimeH.setEditable(true);
-			sTimeM.setEditable(true);
-			eTimeH.setEditable(true);
-			eTimeM.setEditable(true);
-		}*/
-		
 		
 		if (groupCreationSuccessful) {
 			System.out.println("Group creation succesful");
@@ -626,12 +614,14 @@ public class AppScheduler extends JDialog implements ActionListener,
 				NewAppt.setTimeSpan(timeChosenList.get(i));
 				NewAppt.setLocation(location);
 				NewAppt.setPublic(publicCheckBox.isSelected());
-				for (User user : userChosenList) {
-					NewAppt.addWaiting(user.getUserId());
-				}
+				
 				// Put current user to waiting too?
 				NewAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
 				
+				for (User user : userChosenList) {
+					NewAppt.addWaiting(user.getUserId());
+				}
+
 			    // TODO how about reminder
 			    // TODO how about frequency
 			    
