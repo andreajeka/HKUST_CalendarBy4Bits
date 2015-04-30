@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -81,15 +82,15 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private boolean isJoint = false;
 
 	private JTextArea detailArea;
-	private Vector<String> items;
+	private Vector<String> items, itemsPlusCapa;
 	private String[] FreqStrings;
 	
 	private JSplitPane pDes;
 	private JPanel detailPanel;
-	private DefaultComboBoxModel<String> listModelString;
+	private DefaultComboBoxModel<String> listModelString, capaListModelString;
 	private DefaultComboBoxModel<Integer> listModelInt;
 	private JLabel titleLoc;
-	private JComboBox<String> locField;
+	private JComboBox<String> locField, capaLocField;
 	private JCheckBox publicCheckBox;
 	private JLabel titleFreq;
 	private JComboBox<String> FreqField;
@@ -110,6 +111,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private int selectedApptId = -1;
 	private int freqAmount = 0;
 	private boolean isReminderToggled = false;
+	private ArrayList<Location> locations;
 	
 
 	@SuppressWarnings("deprecation")
@@ -299,20 +301,27 @@ public class AppScheduler extends JDialog implements ActionListener,
 		titleLoc = new JLabel("LOCATION");
 		titleAndTextPanel.add(titleLoc);
 		items = new Vector<String>();
-		Location[] locations = cal.controller.getLocationList();
+		itemsPlusCapa = new Vector<String>();
+		locations = cal.controller.getLocationList();
 		if(locations == null){
-			locations = new Location[0];
+			locations = new ArrayList<Location>();
 			items.addElement("--EMPTY--");
+			itemsPlusCapa.addElement("--EMPTY--");
 		}
 		else if(locations != null){
 			items.clear();
-			for(int i=0; i<locations.length; i++){
-				items.addElement(locations[i].getName().toString());
+			itemsPlusCapa.clear();
+			for(int i=0; i<locations.size(); i++){
+				items.addElement(locations.get(i).getName().toString());
+				itemsPlusCapa.addElement(locations.get(i).getName().toString() + " (" + Integer.toString(locations.get(i).getCapacity()) + " )");
 			}
 		}
 		listModelString = new DefaultComboBoxModel<String>(items);
+		capaListModelString = new DefaultComboBoxModel<String>(itemsPlusCapa);
 		locField = new JComboBox<String>(listModelString);
-		titleAndTextPanel.add(locField);
+		capaLocField = new JComboBox<String>(capaListModelString);
+		locField.setSelectedIndex(capaLocField.getSelectedIndex());
+		titleAndTextPanel.add(capaLocField);
 		
 		publicCheckBox = new JCheckBox("PUBLIC");
 		titleAndTextPanel.add(publicCheckBox);
@@ -572,6 +581,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private void addAppt(int[] date, int[] time, int mode, int action) {
 		String title = titleField.getText();
 		String info = detailArea.getText();
+		locField.setSelectedIndex(capaLocField.getSelectedIndex());
 		String location = (String) locField.getSelectedItem();
 		long RemindH = Long.parseLong(remindHF.getText());
 		long RemindM = Long.parseLong(remindMF.getText());
@@ -589,6 +599,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			NewAppt.setTitle(title);
 			NewAppt.setInfo(info);
 			NewAppt.setLocation(location);
+			NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
 			NewAppt.setPublic(publicCheckBox.isSelected());

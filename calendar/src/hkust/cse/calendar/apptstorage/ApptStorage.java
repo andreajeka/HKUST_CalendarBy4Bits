@@ -60,9 +60,9 @@ public abstract class ApptStorage {
 	 * Add other methods if necessary
 	 */
 	
-	public abstract Location[] getLocationList();
+	public abstract ArrayList<Location> getLocationList();
 	
-	public abstract void setLocationList(Location[] locations);
+	public abstract void setLocationList(ArrayList<Location> locations);
 	
 	public abstract int getLocationCapacity();
 

@@ -12,7 +12,7 @@ public class Location {
 		this.bRemoval = false;
 		this.capacity = capacity;
 	}
-	 
+	
 	public String getName(){
 		return location;
 	}

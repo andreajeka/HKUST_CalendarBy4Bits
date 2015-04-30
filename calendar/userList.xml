@@ -20,4 +20,11 @@
     <isAdmin>false</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
+  <hkust.cse.calendar.users.User>
+    <mUsername>abc</mUsername>
+    <mPassword>abc</mPassword>
+    <mUserId>e305e3b4-d68a-40ab-ac4a-bd2f80612782</mUserId>
+    <isAdmin>false</isAdmin>
+    <tobeRemoved>false</tobeRemoved>
+  </hkust.cse.calendar.users.User>
 </list>

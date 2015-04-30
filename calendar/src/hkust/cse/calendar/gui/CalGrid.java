@@ -70,7 +70,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	private JLabel year;
 	private JComboBox<String> month;
 	public CalendarClock CalClock;
-	
+
 	private final Object[][] data = new Object[6][7];
 	//private final Vector[][] apptMarker = new Vector[6][7];
 	private final String[] names = { "Sunday", "Monday", "Tuesday",
@@ -81,7 +81,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	private JTable tableView;
 	private AppList applist;
 	public static final int[] monthDays = { 31, 28, 31, 30, 31, 30, 31, 31, 30,
-			31, 30, 31 };
+		31, 30, 31 };
 	private JTextPane note;
 
 	private JSplitPane upper;
@@ -138,8 +138,8 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 		applist = new AppList();
 		applist.setParent(this);
-		
-		
+
+
 		setJMenuBar(createMenuBar());
 
 		today = new GregorianCalendar();
@@ -198,7 +198,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		leftP.add(yearGroup, BorderLayout.NORTH);
 
 		TableModel dataModel = prepareTableModel();
-		
+
 		tableView = new JTable(dataModel) {
 			@SuppressWarnings("deprecation")
 			public TableCellRenderer getCellRenderer(int row, int col) {
@@ -210,7 +210,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 						if (today.get(Calendar.YEAR) == currentY
 								&& today.get(Calendar.MONTH) + 1 == currentM
 								&& today.get(Calendar.DAY_OF_MONTH) == Integer
-										.parseInt(tem)) {
+								.parseInt(tem)) {
 							return new CalCellRenderer(dayInfo.Today);
 						}
 						// Change days with event to green
@@ -229,7 +229,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 							end.setDate(Integer.parseInt(tem) + 1);
 							end.setHours(0);
 							end.setMinutes(0);
-							
+
 							Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
 							if (appData != null)
 								return new CalCellRenderer(dayInfo.HasEvent);
@@ -270,7 +270,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		whole = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upper, applist);
 		getContentPane().add(whole);
 
-		
+
 		initializeSystem(); // for you to add.
 		//mCurrUser = getCurrUser(); // totally meaningless code
 		Settings.setEnabled(true);
@@ -280,7 +280,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		UpdateCal();
 		pack();				// sized the window to a preferred size
 		setVisible(true);	//set the window to be visible
-		
+
 		// Increment time normally
 		//Timer timer = new Timer();
 		//timer.schedule(new incrementTimeTask(), 6000);
@@ -363,7 +363,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equals("Manual Scheduling")) {
-					if (controller.getLocationList().length != 0) {
+					if (controller.getLocationList().size() != 0) {
 						AppScheduler a = new AppScheduler("New", CalGrid.this);
 						a.updateSetApp(hkust.cse.calendar.gui.Utility
 								.createDefaultAppt(currentY, currentM, currentD,
@@ -406,19 +406,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					pubEvents.show();
 				} 
 				else if (e.getActionCommand().equals("Automatic")) {
-					
+
 				}
 				else if (e.getActionCommand().equals("Manual")) {
 					CreateGroupEvent createGroupE = new CreateGroupEvent(CalGrid.this);
 				}
-			}
-		};
-		
-		// Action Listeners
-		ActionListener listener2 = new ActionListener(){
-			@SuppressWarnings("deprecation")
-			public void actionPerformed(ActionEvent e){
-				if(e.getActionCommand().equals("Manage Locations")){
+				else if(e.getActionCommand().equals("Manage Locations")){
 					LocationsDialog b = new LocationsDialog(controller);
 					b.show();
 					b.setLocationRelativeTo(null);
@@ -428,7 +421,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				}
 			}
 		};
-		
+
+
+
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.getAccessibleContext().setAccessibleName("Calendar Choices");
 		JMenuItem mi;
@@ -443,12 +438,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.setMnemonic('P');
 		mi.getAccessibleContext().setAccessibleDescription("To change your infomation");
 		mi.addActionListener(listener);
-		
+
 		Settings.add(miManageUsers);
 		miManageUsers.setMnemonic('M');
 		miManageUsers.getAccessibleContext().setAccessibleDescription("For managing other users");
 		miManageUsers.addActionListener(listener);
-		
+
 		mi = (JMenuItem) Settings.add(new JMenuItem("Logout"));	//adding a Logout menu button for user to logout
 		mi.setMnemonic('L');
 		mi.getAccessibleContext().setAccessibleDescription("For user logout");
@@ -471,7 +466,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				}
 			}
 		});
-		
+
 		mi = (JMenuItem) Settings.add(new JMenuItem("Exit"));
 		mi.setMnemonic('E');
 		mi.getAccessibleContext().setAccessibleDescription("Exit Program");
@@ -498,11 +493,11 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		Appmenu.setMnemonic('p');
 		Appmenu.getAccessibleContext().setAccessibleDescription(
 				"Appointment Management");
-		
+
 		// Add group event scheduling
 		JMenu menu = new JMenu("Group Event Scheduling");
 		Appmenu.add(menu);
-		
+
 		// Add submenu to group event
 		JMenuItem submi = new JMenuItem("Automatic");
 		submi.addActionListener(listener);
@@ -510,16 +505,16 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		submi = new JMenuItem("Manual");
 		submi.addActionListener(listener);
 		menu.add(submi);
-		
+
 		// Add manual scheduling to Appmenu
 		mi = new JMenuItem("Manual Scheduling");
 		mi.addActionListener(listener);
 		Appmenu.add(mi);
-		
-        // Add location to Appmenu
-		miManageLocs.addActionListener(listener2);
+
+		// Add location to Appmenu
+		miManageLocs.addActionListener(listener);
 		Appmenu.add(miManageLocs);
-		
+
 		// Add "Time Machine" to the menuBar
 		menuBar.add(timeMenu);
 		timeMenu.setEnabled(false);
@@ -528,21 +523,21 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				"Time Machine");
 		mi = new JMenuItem("Open");
 		mi.addActionListener(listener);
-		
+
 		timeMenu.add(mi);
-		
+
 		// Put items after the following line to align them to the right of menu bar
-	    menuBar.add(Box.createHorizontalGlue());
+		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(publicEvents);
 		publicEvents.addActionListener(listener);
-	
-		
+
+
 		return menuBar;
 	}
 
 	private void initializeSystem() {
 		mCurrUser = controller.getCurrentUser();	//get User from controller
-		
+
 		if (!mCurrUser.isAdmin()) {
 			miManageUsers.setEnabled(false);
 			miManageLocs.setEnabled(false);
@@ -550,7 +545,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			miManageUsers.setEnabled(true);
 			miManageLocs.setEnabled(true);
 		}
-		
+
 		controller.LoadApptFromXml();
 		controller.LoadLocFromXml();	
 		checkUpdateJoinAppt();
@@ -571,7 +566,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				tableView.repaint();
 			}
 			UpdateCal();
-			
+
 		} else if (e.getSource() == wButton) {
 			if (year == null)
 				return;
@@ -586,7 +581,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				tableView.repaint();
 			}
 			UpdateCal();
-			
+
 		} else if (e.getSource() == month) {
 			if (month.getSelectedItem() != null) {
 				currentM = month.getSelectedIndex() + 1;
@@ -622,7 +617,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	public enum dayInfo{
 		Today, HasEvent, Empty
 	}
-	
+
 	public void UpdateCal() {
 		if (mCurrUser != null) {
 			mCurrTitle = "Desktop Calendar - " + mCurrUser.getUsername() + " - ";
@@ -631,11 +626,11 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			Appt[] monthAppts = null;
 			GetMonthAppts();
 
-//			for (int i = 0; i < 6; i++)
-//				for (int j = 0; j < 7; j++)
-//					apptMarker[i][j] = new Vector(10, 1);
-			
-			
+			//			for (int i = 0; i < 6; i++)
+			//				for (int j = 0; j < 7; j++)
+			//					apptMarker[i][j] = new Vector(10, 1);
+
+
 			TableModel t = prepareTableModel();
 			this.tableView.setModel(t);
 			this.tableView.repaint();
@@ -643,27 +638,27 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		}
 	}
 
-//	public void clear() {
-//		for (int i = 0; i < 6; i++)
-//			for (int j = 0; j < 7; j++)
-//				apptMarker[i][j] = new Vector(10, 1);
-//		TableModel t = prepareTableModel();
-//		tableView.setModel(t);
-//		tableView.repaint();
-//		applist.clear();
-//	}
+	//	public void clear() {
+	//		for (int i = 0; i < 6; i++)
+	//			for (int j = 0; j < 7; j++)
+	//				apptMarker[i][j] = new Vector(10, 1);
+	//		TableModel t = prepareTableModel();
+	//		tableView.setModel(t);
+	//		tableView.repaint();
+	//		applist.clear();
+	//	}
 
 
 	private Appt[] GetMonthAppts() {
 		// This will fix issue with year
 		String curYear = Integer.toString(currentY);
-	    int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
-	    String curMonth = Integer.toString(month);
-	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+"1 00:00:00");
+		int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
+		String curMonth = Integer.toString(month);
+		Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+"1 00:00:00");
 
-	    GregorianCalendar g = new GregorianCalendar(currentY, month, 1);
-	    int dateIntMax = g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-	    String dateMax = Integer.toString(dateIntMax);
+		GregorianCalendar g = new GregorianCalendar(currentY, month, 1);
+		int dateIntMax = g.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+		String dateMax = Integer.toString(dateIntMax);
 		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+dateMax+" 23:59:59");
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
@@ -673,7 +668,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		previousRow = tableView.getSelectedRow();
 		previousCol = tableView.getSelectedColumn();
 	}
-	
+
 	private void mouseResponse() {
 		int[] selectedRows = tableView.getSelectedRows();
 		int[] selectedCols = tableView.getSelectedColumns();
@@ -693,7 +688,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			currentRow = tableView.getSelectedRow();
 			currentCol = tableView.getSelectedColumn();
 		}
-		
+
 		if (currentRow > 5 || currentRow < 0 || currentCol < 0
 				|| currentCol > 6)
 			return;
@@ -734,19 +729,19 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 	public Appt[] GetTodayAppt() {
 		String curYear = Integer.toString(currentY);
-	    int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
-	    String curMonth = Integer.toString(month);
-	    Integer date = new Integer(currentD);
-	    String curDate= Integer.toString(date);
+		int month = currentM; //no need to minus 1 because Timestamp.valueOf automatically -1 inside it. WOW RIGHT!
+		String curMonth = Integer.toString(month);
+		Integer date = new Integer(currentD);
+		String curDate= Integer.toString(date);
 
-	    Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 00:00:00");
-	    Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 23:59:59");
+		Timestamp start = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 00:00:00");
+		Timestamp end = Timestamp.valueOf(curYear+"-"+curMonth+"-"+curDate+" 23:59:59");
 
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
-		
+
 	}
-	
+
 	public AppList getAppList() {
 		return applist;
 	}
@@ -754,12 +749,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	public User getCurrUser() {
 		return mCurrUser;
 	}
-	
+
 	// check for any invite or update from join appointment
 	public void checkUpdateJoinAppt(){
 		// Fix Me!
 	}
-	
+
 	// Change today to a custom date and time, to be called from time machine widget
 	public void setToday(GregorianCalendar gc){
 		// Set application time
@@ -777,7 +772,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		tableView.repaint();
 		UpdateCal();
 	}
-	
+
 	public GregorianCalendar getToday(){
 		return today;
 	}
@@ -786,11 +781,11 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void timeIsElapsing(CalendarClock emitter) {
-		
+
 		String message = "";
 		String digitHour = "";
 		Timestamp now = emitter.getCurrentTime();
-		
+
 		Timestamp start = new Timestamp(0);
 		start.setYear(now.getYear());
 		start.setMonth(now.getMonth());
@@ -798,7 +793,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		start.setHours(0);
 		start.setMinutes(0);
 		start.setSeconds(0);
-		
+
 		Timestamp end = new Timestamp(0);
 		end.setYear(now.getYear());
 		end.setMonth(now.getMonth());
@@ -806,7 +801,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		end.setHours(23);
 		end.setMinutes(59);
 		end.setSeconds(59);
-		
+
 		Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
 
 		// nextElapsedTime = time of clock + delay
@@ -816,21 +811,21 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		if (appData != null) {
 			for (int i = 0; i < appData.length; i++) {
 				timeForReminder.setTime(appData[i].TimeSpan().StartTime().getTime() - appData[i].getRemindBefore());
-				
+
 				/*System.out.println("Now " + now + "equal to time for reminder " + (Utility.AfterBeforeEqual(now, timeForReminder) == 0) );
 				System.out.println("Now " + now + "less than time for reminder " + (Utility.AfterBeforeEqual(now, timeForReminder) == -1) );
 				System.out.println("Next elapsed " + nextElapsedTime + "greater than time for reminder " + (Utility.AfterBeforeEqual(nextElapsedTime, timeForReminder) == 1) );*/
-				
+
 				if ((Utility.AfterBeforeEqual(now, timeForReminder) == 0) || 
 						((Utility.AfterBeforeEqual(now, timeForReminder) == -1) && (Utility.AfterBeforeEqual(nextElapsedTime, timeForReminder) == 1 ))) {
 					if (appData[i].reminder()) {
 						if (appData[i].TimeSpan().StartTime().getMinutes() < 10 )
 							digitHour = "0";
 						else digitHour = "";
-						
+
 						message = "You have an appointment [" + appData[i].getTitle() + 
-							"] at " + appData[i].TimeSpan().StartTime().getHours() + ":" + 
-							  digitHour + appData[i].TimeSpan().StartTime().getMinutes();
+								"] at " + appData[i].TimeSpan().StartTime().getHours() + ":" + 
+								digitHour + appData[i].TimeSpan().StartTime().getMinutes();
 						// Pop up a notification window 
 						JOptionPane.showMessageDialog(null, message, "Reminder",  JOptionPane.INFORMATION_MESSAGE);
 					}

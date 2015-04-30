@@ -112,7 +112,7 @@ public class DetailsDialog extends JFrame implements ActionListener {
 		area.append("Title: " + appt.getTitle() + "\n");
 		area.append("Time: " + time + "\n");
 		area.append("Location: " + appt.getLocation() + "\n"); 
-//		area.append("Reminder: " + appt.getFrequency() + "\n");
+		area.append("Capacity: " + appt.getCapacity() + "\n");
 		area.append("\nParticipants:\n");
 		area.append("  Attend:");
 		LinkedList<UUID> attendList = appt.getAttendList();

@@ -1,6 +1,67 @@
-<hkust.cse.calendar.unit.Location-array>
+<list>
   <hkust.cse.calendar.unit.Location>
-    <location>hk</location>
+    <location>lab 2</location>
     <bRemoval>false</bRemoval>
+    <capacity>44</capacity>
   </hkust.cse.calendar.unit.Location>
-</hkust.cse.calendar.unit.Location-array>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 1</location>
+    <bRemoval>false</bRemoval>
+    <capacity>120</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 3</location>
+    <bRemoval>false</bRemoval>
+    <capacity>33</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 11</location>
+    <bRemoval>false</bRemoval>
+    <capacity>11</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 22</location>
+    <bRemoval>false</bRemoval>
+    <capacity>1</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 13</location>
+    <bRemoval>false</bRemoval>
+    <capacity>11</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 23</location>
+    <bRemoval>false</bRemoval>
+    <capacity>3</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 8</location>
+    <bRemoval>false</bRemoval>
+    <capacity>21</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>rm 2001</location>
+    <bRemoval>false</bRemoval>
+    <capacity>33</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>G009</location>
+    <bRemoval>false</bRemoval>
+    <capacity>120</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>rm 3111</location>
+    <bRemoval>false</bRemoval>
+    <capacity>60</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>Jack&apos;s home</location>
+    <bRemoval>false</bRemoval>
+    <capacity>0</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 33</location>
+    <bRemoval>false</bRemoval>
+    <capacity>22</capacity>
+  </hkust.cse.calendar.unit.Location>
+</list>

@@ -36,6 +36,8 @@ public class Appt implements Serializable {
 	private LinkedList<UUID> waiting;			// The waiting list
 
 	private String location;					// The location
+	
+	private int capacity;						// The capacity of location
 
 	private int frequencyAmount;				// The amount of frequency
 
@@ -58,6 +60,7 @@ public class Appt implements Serializable {
 		waiting = new LinkedList<UUID>();
 		joinApptID = -1;
 		location = "";
+		capacity = -1;
 		reminder = false;
 	}
 
@@ -84,6 +87,11 @@ public class Appt implements Serializable {
 	// Getter of the location
 	public String getLocation() {
 		return location;
+	}
+	
+	// Getter of the capacity
+	public int getCapacity(){
+		return capacity;
 	}
 	
 	public int getFrequencyAmount() {
@@ -208,6 +216,11 @@ public class Appt implements Serializable {
 	// Setter of the location
 	public void setLocation(String location) {
 		this.location= location;
+	}
+	
+	//Setter of the capacity of location
+	public void setCapacity(int capacity){
+		this.capacity = capacity;
 	}
 
 	// Setter of frequency amount
