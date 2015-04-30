@@ -612,6 +612,7 @@ private void saveButtonResponse() {
 			System.out.println("Group creation succesful");
 			String title = titleField.getText();
 			String desc = detailArea.getText();
+			locField.setSelectedIndex(capaLocField.getSelectedIndex());
 			String location = (String) locField.getSelectedItem();
 			
 			for (int i = 0; i < timeChosenList.size(); i++) {
@@ -620,6 +621,7 @@ private void saveButtonResponse() {
 				NewAppt.setJoint(true);
 				NewAppt.setTimeSpan(timeChosenList.get(i));
 				NewAppt.setLocation(location);
+				NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
 				NewAppt.setPublic(publicCheckBox.isSelected());
 				
 				// Put current user to waiting too?

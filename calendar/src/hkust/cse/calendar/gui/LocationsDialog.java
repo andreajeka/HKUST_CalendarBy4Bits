@@ -245,7 +245,7 @@ public class LocationsDialog extends JFrame {
 				}
 				groupList = new JList<String>(groupListModel);
 				groupLocationPane = new JPanel();
-				
+				groupRemoveBt = new JButton("remove");
 				groupScroll = new JScrollPane(groupList);
 				groupScroll.setPreferredSize(new Dimension(470,225));
 				groupLocationPane.add(groupScroll, BorderLayout.PAGE_START);
@@ -255,7 +255,7 @@ public class LocationsDialog extends JFrame {
 				groupFrame.setSize(480, 300);	
 				groupFrame.add(groupLocationPane, BorderLayout.PAGE_START);
 				groupButtonPane = new JPanel();
-				groupButtonPane.add(removeBt);
+				groupButtonPane.add(groupRemoveBt);
 				groupFrame.add(groupButtonPane, BorderLayout.PAGE_END);
 				groupFrame.setVisible(true);
 				

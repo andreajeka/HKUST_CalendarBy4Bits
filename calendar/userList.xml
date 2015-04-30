@@ -11,6 +11,6 @@
     <mPassword>user2</mPassword>
     <mUserId>0670a29e-05ca-4d35-bc4a-3efae0ff71d7</mUserId>
     <isAdmin>false</isAdmin>
-    <tobeRemoved>false</tobeRemoved>
+    <tobeRemoved>true</tobeRemoved>
   </hkust.cse.calendar.users.User>
 </list>
