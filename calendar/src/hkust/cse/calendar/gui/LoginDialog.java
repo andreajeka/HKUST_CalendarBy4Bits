@@ -9,6 +9,8 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -32,7 +34,7 @@ public class LoginDialog extends JFrame implements ActionListener
 {
 	private JTextField userName;
 	private JPasswordField password;
-	private JButton button;
+	private JButton loginButton;
 	private JButton closeButton;
 	private JButton signupButton;
 
@@ -68,6 +70,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		
 
 		setTitle("Log in");
+		
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -129,10 +132,58 @@ public class LoginDialog extends JFrame implements ActionListener
 		JPanel butPanel = new JPanel();
 		butPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-		button = new JButton("Log in");
-		button.addActionListener(this);
-		butPanel.add(button);
+		loginButton = new JButton("Log in");
+		loginButton.addActionListener(this);
+		loginButton.addKeyListener(new KeyListener() {
 
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode()==KeyEvent.VK_ENTER){
+					// Trim to remove whitespaces
+					String username = userName.getText().trim();
+					String pw = new String(password.getPassword()).trim();
+
+					areFieldsEmpty(username, pw);
+					if (textFieldEmpty) {
+						JOptionPane.showMessageDialog(LoginDialog.this, "Empty Username and/or Password", "Input Error", JOptionPane.WARNING_MESSAGE);
+					} else if (controller.searchUser(username) != null) {
+						User user = controller.searchUser(username);
+						if (user.getPassword().equals(pw)) {
+							controller.setCurrentUser(user);
+							// Check if user is to be removed. 
+							if (RequestChecker.getInstance().Check(controller, user))
+							{
+								CalGrid grid = new CalGrid(controller);
+								setVisible(false);
+							}
+
+						} else {
+							JOptionPane.showMessageDialog(LoginDialog.this, "Invalid Password", "Input Error", JOptionPane.ERROR_MESSAGE);
+						}
+					} else {
+						JOptionPane.showMessageDialog(LoginDialog.this, "Invalid Username", "Input Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		butPanel.add(loginButton);
+
+		this.getRootPane().setDefaultButton(loginButton);
+		
 		closeButton = new JButton("Close program");
 		closeButton.addActionListener(this);
 		butPanel.add(closeButton);
@@ -147,7 +198,7 @@ public class LoginDialog extends JFrame implements ActionListener
 
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == button)
+		if(e.getSource() == loginButton)
 		{
 			// Trim to remove whitespaces
 			String username = userName.getText().trim();
@@ -201,9 +252,6 @@ public class LoginDialog extends JFrame implements ActionListener
 				JOptionPane.showMessageDialog(this, "Sign up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
 			}
 			
-			
-			
-			
 		}
 		else if(e.getSource() == closeButton)
 		{
@@ -216,7 +264,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		}
 	
 	}
-
+	
 	// This method checks whether a string is a valid user name or password, as they can contains only letters and numbers
 	public static boolean ValidString(String s)
 	{
