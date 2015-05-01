@@ -18,6 +18,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,7 +53,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 public class CalGrid extends JFrame implements ActionListener, ClockListeners {
-
+	
 	// private User mNewUser;
 	private static final long serialVersionUID = 1L;
 	public ApptStorageControllerImpl controller;
@@ -71,7 +72,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	private JLabel year;
 	private JComboBox<String> month;
 	public CalendarClock CalClock;
-	
+
 	private final Object[][] data = new Object[6][7];
 	//private final Vector[][] apptMarker = new Vector[6][7];
 	public static final String[] names = { "Sunday", "Monday", "Tuesday",
@@ -103,7 +104,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			"President's Day (US)\n",
 			"",
 			"Ching Ming Festival\nGood Friday\nThe day following Good Friday\nEaster Monday\n",
-			"Labour Day\nThe Buddha��s Birthday\nTuen Ng Festival\n",
+			"Labour Day\nThe Buddha's Birthday\nTuen Ng Festival\n",
 			"",
 			"Hong Kong Special Administrative Region Establishment Day\n",
 			"Civic Holiday(CAN)\n",
@@ -407,8 +408,20 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 					pubEvents.show();
 				} 
 				else if (e.getActionCommand().equals("Automatic Group Event Scheduling")) {
-					//TODO Do automatic event scheduling
 					
+					if (controller.getLocationList().size() != 0) {
+						AppScheduler a = new AppScheduler("Automatic Group Event", CalGrid.this, true);
+						a.updateSetApp(hkust.cse.calendar.gui.Utility
+								.createDefaultAppt(currentY, currentM, currentD,
+										mCurrUser));
+						a.setLocationRelativeTo(null);
+						a.show();
+						TableModel t = prepareTableModel();
+						tableView.setModel(t);
+						tableView.repaint();
+					} else {
+						JOptionPane.showMessageDialog(null, "Input at least one location in 'Manage Locations'", "NO LOCATION!", JOptionPane.ERROR_MESSAGE);
+					}					
 				}
 			
 				else if(e.getActionCommand().equals("Manage Locations")){

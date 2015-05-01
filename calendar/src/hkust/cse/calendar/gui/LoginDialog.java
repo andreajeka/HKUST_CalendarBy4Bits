@@ -138,7 +138,6 @@ public class LoginDialog extends JFrame implements ActionListener
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
 				if (e.getKeyCode()==KeyEvent.VK_ENTER){
 					// Trim to remove whitespaces
 					String username = userName.getText().trim();
@@ -169,13 +168,11 @@ public class LoginDialog extends JFrame implements ActionListener
 
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
 				
 			}
 			

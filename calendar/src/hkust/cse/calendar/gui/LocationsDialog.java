@@ -88,25 +88,21 @@ public class LocationsDialog extends JFrame {
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -118,10 +114,10 @@ public class LocationsDialog extends JFrame {
 
 		TitledBorder title = new TitledBorder(BorderFactory
 				.createEtchedBorder(Color.white, new Color(200, 200, 200)),
-				" Location:                Capacity:  ");
+				"       Location:                          Capacity:  ");
 
 		scroll = new JScrollPane(list);
-		scroll.setPreferredSize(new Dimension(470,225));
+		scroll.setPreferredSize(new Dimension(455,195));
 
 		left.add(scroll, BorderLayout.WEST);
 

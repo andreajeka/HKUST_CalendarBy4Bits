@@ -55,6 +55,10 @@ public class ApptStorageControllerImpl {
 		return mApptStorage.RetrieveAppts(joinApptID);
 	}
 	
+	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(User entity, TimeSpan period) {
+		return mApptStorage.RetrieveAvailTimeSpans(entity, period);
+	}
+	
 	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(ArrayList<User> entities, TimeSpan period) {
 		return mApptStorage.RetrieveAvailTimeSpans(entities, period);
 	}

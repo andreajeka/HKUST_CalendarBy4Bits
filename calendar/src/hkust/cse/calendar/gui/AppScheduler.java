@@ -26,17 +26,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Timer;
 import java.util.UUID;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -47,7 +44,6 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 
@@ -80,10 +76,10 @@ ComponentListener {
 
 	private Appt NewAppt;
 	private CalGrid parent;
-	private boolean isNew = true;
+/*	private boolean isNew = true;
 	private boolean isChanged = true;
-	private boolean isJoint = false;
-	private boolean groupCreationSuccessful = false;
+	private boolean isJoint = false;*/
+
 
 	private JTextArea detailArea;
 	private Vector<String> items, itemsPlusCapa;
@@ -115,19 +111,28 @@ ComponentListener {
 	private int selectedApptId = -1;
 	private int freqAmount = 0;
 	private boolean isReminderToggled = false;
+	private boolean automatic;
+	private Timestamp duration;
+	
+	// Group event ready means that a manual group event scheduling has been 
+	// created if it is true
+	private boolean groupEventReady = false;
 	private ArrayList<Location> locations;
 
 
 	private ArrayList<User> userChosenList;
 	private ArrayList<TimeSpan> timeSlotChosen;
+	private ArrayList<TimeSpan> dateChosenList;
 
 
 	@SuppressWarnings("deprecation")
 	private void commonConstructor(String title, CalGrid cal) {
 		parent = cal;
 		userChosenList = new  ArrayList<User>();
+		dateChosenList = new ArrayList<TimeSpan>();
 		timeSlotChosen = new ArrayList<TimeSpan>();
-
+		automatic = false;
+		duration = new Timestamp(0);
 		this.setAlwaysOnTop(true);
 		setTitle(title);
 		setModal(false);
@@ -377,7 +382,7 @@ ComponentListener {
 
 		contentPane.add("South", panel2);
 		NewAppt = new Appt();
-
+		// TODO : MODIFY!!!
 		if (this.getTitle().equals("Join Appointment Content Change") || this.getTitle().equals("Join Appointment Invitation")){
 			inviteBut.show(false);
 			rejectBut.show(true);
@@ -404,6 +409,21 @@ ComponentListener {
 
 	AppScheduler(String title, CalGrid cal) {
 		commonConstructor(title, cal);
+		rejectBut.setEnabled(false);
+	}
+	
+	AppScheduler(String title, CalGrid cal, boolean automatic) {
+		commonConstructor(title, cal);
+		this.automatic = automatic;
+		yearF.setEditable(false);
+		monthF.setEditable(false);
+		dayF.setEditable(false);
+		sTimeH.setEditable(false);
+		sTimeM.setEditable(false);
+		eTimeH.setEditable(false);
+		eTimeM.setEditable(false);
+		rejectBut.setEnabled(false);
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -432,9 +452,18 @@ ComponentListener {
 			sTimeM.setEditable(false);
 			eTimeH.setEditable(false);
 			eTimeM.setEditable(false);
-
-			CreateGroupEvent inviteUserD = new CreateGroupEvent(parent, 
-					userChosenList, timeSlotChosen);
+			
+			CreateGroupEvent inviteUserD;
+			
+			if (automatic) {
+				inviteUserD = new CreateGroupEvent(parent, CreateGroupEvent.AUTOMATIC,
+						userChosenList, dateChosenList, timeSlotChosen, duration);
+			} else {
+				
+				inviteUserD = new CreateGroupEvent(parent, CreateGroupEvent.MANUAL,
+						userChosenList, dateChosenList, timeSlotChosen, duration);
+			}
+			
 			inviteUserD.setAlwaysOnTop(true);
 			inviteUserD.setLocationRelativeTo(this);
 			inviteUserD.addWindowListener(new WindowListener() {
@@ -469,7 +498,6 @@ ComponentListener {
 
 				@Override
 				public void windowClosing(WindowEvent e) {
-					// TODO Auto-generated method stub
 					yearF.setEditable(true);
 					monthF.setEditable(true);
 					dayF.setEditable(true);
@@ -481,19 +509,16 @@ ComponentListener {
 
 				@Override
 				public void windowDeactivated(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void windowDeiconified(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
 				@Override
 				public void windowIconified(WindowEvent e) {
-					// TODO Auto-generated method stub
 
 				}
 
@@ -604,11 +629,16 @@ ComponentListener {
 
 private void saveButtonResponse() {
 		
+		
+		// Manual Group scheduling
 		if (!timeSlotChosen.isEmpty()) 
-			groupCreationSuccessful = true;
+			groupEventReady = true;
+		else
+			// Either it is automatic group scheduling or manual private scheduling
+			groupEventReady = false;
 		
 		
-		if (groupCreationSuccessful) {
+		if (groupEventReady) {
 			System.out.println("Group creation succesful");
 			String title = titleField.getText();
 			String desc = detailArea.getText();
@@ -637,70 +667,81 @@ private void saveButtonResponse() {
 			parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
 			
 		} else {
-			// Save the appointment to the hard disk
-			/* Assign information to the newly created appointment. */
-			int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
-			int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
-		
-			if (reminderToggle.isSelected()) {
-				if (remindHF.getText().isEmpty() || remindMF.getText().isEmpty() || remindSF.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(this, "Don't leave the fields in Reminder empty", "Warning",  JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-			}
-			freqAmount = FreqAmountField.getSelectedIndex() + 1;
-		
-			// Check if there is no appointment selected in the appointment list (via Manual Scheduling)
-			if (selectedApptId == -1) {
-				/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
-				if (FreqField.getSelectedItem().equals("Once")) {
-					addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.NEW);
-				} else if (FreqField.getSelectedItem().equals("Daily")) {
-					addAppt(date, time, Appt.MODE_DAILY, ApptStorageControllerImpl.NEW);
-				} else if (FreqField.getSelectedItem().equals("Weekly")) {
-					addAppt(date, time, Appt.MODE_WEEKLY, ApptStorageControllerImpl.NEW);
-				} else if (FreqField.getSelectedItem().equals("Monthly")) {
-					addAppt(date, time, Appt.MODE_MONTHLY, ApptStorageControllerImpl.NEW);
-				}
-			} 
-		
-			// TODO FREQUENCY UPDATED, PLEASE READ THE NOTE (ESP. MICHELLE)
-			/* THIS PART IS TRICKY. WE CANNOT JUST IMPLEMENT APPTSTORAGECONTROLLER.NEW BECAUSE
-			 * IF WE DO THAT, THE VERY INITIAL APPOINTMENT THAT WE CHOOSE TO BE MODIFIED CANNOT BE MODIFIED AS WELL.
-			 * YOU CAN TRY TO COMMENT OUT THE METHOD addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY) 
-			 * FROM ONE OF THE FREQUENCY MODE BELOW AND TRY MODIFYING AN APPT BY ITS TIME AND FREQUENCY. THE RESULT WILL
-			 * SHOW THAT THE APPT WILL BE PRODUCED WITH THE APPROPRIATE FREQUENCY AND TIME BUT THE VERY FIRST APPT IS NOT MODIFIED
-			 * BY ITS TIME. HENCE WE NEED TO DO addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY) FIRST*/
-		
-			else { // if appointment tile is selected from AppList (via right click)
-				if (FreqField.getSelectedItem().equals("Once")) {
-					addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
-				
-				} else if (FreqField.getSelectedItem().equals("Daily")) {
-					// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
-					addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
-				
-					// Add the following if user's modification only include the frequency part
-					addAppt(date, time, Appt.MODE_DAILY, ApptStorageControllerImpl.NEW);
-				
-				} else if (FreqField.getSelectedItem().equals("Weekly")) {
-					// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
-					addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
-
-					// Add the following if user's modification only include the frequency part
-					addAppt(date, time, Appt.MODE_WEEKLY, ApptStorageControllerImpl.NEW);
-				
-				} else if (FreqField.getSelectedItem().equals("Monthly")) {
-					// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
-					addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
-				
-					// Add the following if user's modification only include the frequency part
-					addAppt(date, time, Appt.MODE_MONTHLY, ApptStorageControllerImpl.NEW);
-				}
 			
-				selectedApptId = -1;
-			}
+			if (!dateChosenList.isEmpty()) {
+				// TODO: Send request to users with the timeslots
+				System.out.println("Sending request and timeslots to user....");
+				// TODO: You can call the controller's function RetrieveAvailTimeSpans(User entity, TimeSpan period) for each user 
+				//       for a specified period. Use loops to go through all period. I asked the TA and he said that initiator can
+				//       specify the duration of the event, so a duration attribute is made to store initiator's request.
+				System.out.println("Duration of event is " + duration.getHours() + " hours and " + duration.getMinutes() + " minutes." );
+			
+			} else {
+				/** MANUAL INDIVIDUAL SCHEDULING **/
+				// Save the appointment to the hard disk
+				/* Assign information to the newly created appointment. */
+				int[] date = getValidDate(); // date[0] refers to year, date[1] refers to month, date[2] refers to day
+				int[] time = getValidTimeInterval(); // time[0] refers to start time, time[1] refers to end time
 		
+				if (reminderToggle.isSelected()) {
+					if (remindHF.getText().isEmpty() || remindMF.getText().isEmpty() || remindSF.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(this, "Don't leave the fields in Reminder empty", "Warning",  JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				freqAmount = FreqAmountField.getSelectedIndex() + 1;
+		
+				// Check if there is no appointment selected in the appointment list (via Manual Scheduling)
+				if (selectedApptId == -1) {
+					/* Save the appointment to the hard disk (AppStorageController to ApptStorage) */
+					if (FreqField.getSelectedItem().equals("Once")) {
+						addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.NEW);
+					} else if (FreqField.getSelectedItem().equals("Daily")) {
+						addAppt(date, time, Appt.MODE_DAILY, ApptStorageControllerImpl.NEW);
+					} else if (FreqField.getSelectedItem().equals("Weekly")) {
+						addAppt(date, time, Appt.MODE_WEEKLY, ApptStorageControllerImpl.NEW);
+					} else if (FreqField.getSelectedItem().equals("Monthly")) {
+						addAppt(date, time, Appt.MODE_MONTHLY, ApptStorageControllerImpl.NEW);
+					}
+				} 
+		
+				// TODO FREQUENCY UPDATED, PLEASE READ THE NOTE (ESP. MICHELLE)
+				/* THIS PART IS TRICKY. WE CANNOT JUST IMPLEMENT APPTSTORAGECONTROLLER.NEW BECAUSE
+				 * IF WE DO THAT, THE VERY INITIAL APPOINTMENT THAT WE CHOOSE TO BE MODIFIED CANNOT BE MODIFIED AS WELL.
+				 * YOU CAN TRY TO COMMENT OUT THE METHOD addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY) 
+				 * FROM ONE OF THE FREQUENCY MODE BELOW AND TRY MODIFYING AN APPT BY ITS TIME AND FREQUENCY. THE RESULT WILL
+				 * SHOW THAT THE APPT WILL BE PRODUCED WITH THE APPROPRIATE FREQUENCY AND TIME BUT THE VERY FIRST APPT IS NOT MODIFIED
+				 * BY ITS TIME. HENCE WE NEED TO DO addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY) FIRST*/
+		
+				else { // if appointment tile is selected from AppList (via right click)
+					if (FreqField.getSelectedItem().equals("Once")) {
+						addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+				
+					} else if (FreqField.getSelectedItem().equals("Daily")) {
+						// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
+						addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+				
+						// Add the following if user's modification only include the frequency part
+						addAppt(date, time, Appt.MODE_DAILY, ApptStorageControllerImpl.NEW);
+				
+					} else if (FreqField.getSelectedItem().equals("Weekly")) {
+						// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
+						addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+
+						// Add the following if user's modification only include the frequency part
+						addAppt(date, time, Appt.MODE_WEEKLY, ApptStorageControllerImpl.NEW);
+				
+					} else if (FreqField.getSelectedItem().equals("Monthly")) {
+						// Add the following if user's modification include either: start time, end time, location, title, desc, reminder
+						addAppt(date, time, Appt.MODE_ONCE, ApptStorageControllerImpl.MODIFY);
+				
+						// Add the following if user's modification only include the frequency part
+						addAppt(date, time, Appt.MODE_MONTHLY, ApptStorageControllerImpl.NEW);
+					}
+			
+					selectedApptId = -1;
+				}
+			}
 		}
 		
 		setVisible(false);

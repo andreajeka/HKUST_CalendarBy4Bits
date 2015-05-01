@@ -37,10 +37,15 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 
 public class CreateGroupEvent extends JFrame{
+
+	public final static int MANUAL = 1;
+
+	public final static int AUTOMATIC = 2;
 	
 	/* Basic attributes for the class */
 	private CalGrid parent;
 	Container pane;
+	private int action;
 	private JPanel createGroupPane;
 	private JPanel browsePane;
 	private JPanel navPane;
@@ -59,7 +64,7 @@ public class CreateGroupEvent extends JFrame{
 	/* Attributes needed for the second page of browsePane in the dialog*/
 	private JPanel dateOption;
 	private JPanel addBtnPanel;
-	private JPanel instructionPanel1;
+	private JPanel instructionOrDurationPanel;
 	boolean firstTimeFor2 = true;
 	
 	// Constant array for combo box month & day
@@ -77,7 +82,7 @@ public class CreateGroupEvent extends JFrame{
 	private DefaultListModel<String> timeListModel;
 	private JList<String> timeList;
 	private JScrollPane timeListPane;
-	private JPanel instructionPanel2; 
+	private JPanel instructionPanel; 
 	boolean firstTimeFor3 = true;
 	
 	/* Attributes needed to store the selections from the panes */
@@ -86,6 +91,7 @@ public class CreateGroupEvent extends JFrame{
 	private ArrayList<TimeSpan> dateInTheList;
 	private ArrayList<TimeSpan> dateChosenList;
 	private ArrayList<TimeSpan> timeInTheList;
+	private Timestamp duration;
 	
 	// The reason why I use array list instead of a mere TimeSpan class is because
 	// I need to get the value as pass by reference. If you have better idea, you can change it
@@ -98,15 +104,16 @@ public class CreateGroupEvent extends JFrame{
 	private JButton back2Btn;
 	private JButton confirmBtn;
 	
-	public CreateGroupEvent(CalGrid cal, ArrayList<User> userChosenList, 
-			ArrayList<TimeSpan> timeSlotChosen) {
+	public CreateGroupEvent(CalGrid cal,  int action, ArrayList<User> userChosenList, 
+			ArrayList<TimeSpan> dateChosenList, ArrayList<TimeSpan> timeSlotChosen, Timestamp duration) {
 		parent = cal;
 		this.userChosenList = userChosenList;
+		this.dateChosenList = dateChosenList;
 		this.timeSlotChosen = timeSlotChosen;
-		
+		this.action = action;
+		this.duration = duration;
 		usernameChosenList = new ArrayList<String>();
 		dateInTheList = new ArrayList<TimeSpan>();
-		dateChosenList = new ArrayList<TimeSpan>();
 		timeInTheList = new ArrayList<TimeSpan>();
 		setSize(new Dimension(500,500));
 		pane = this.getContentPane();
@@ -262,8 +269,11 @@ public class CreateGroupEvent extends JFrame{
 					dateOption.setVisible(true);
 					addBtnPanel.setVisible(true);
 					dateListPane.setVisible(true);
-					instructionPanel1.setVisible(true);
-					next2Btn.setVisible(true);
+					instructionOrDurationPanel.setVisible(true);
+					if (action == MANUAL)
+						next2Btn.setVisible(true);
+					else
+						confirmBtn.setVisible(true);
 					back1Btn.setVisible(true);
 				}
 			}
@@ -312,7 +322,6 @@ public class CreateGroupEvent extends JFrame{
 		JLabel monthL = new JLabel("Month: ");
 		dateOption.add(monthL);
 		JComboBox<String> monthB = new JComboBox<String>();
-		//monthB.addActionListener(this);
 		monthB.setPreferredSize(new Dimension(100, 30));
 		for (int cnt = 0; cnt < 12; cnt++)
 			monthB.addItem(months[cnt]);
@@ -322,7 +331,6 @@ public class CreateGroupEvent extends JFrame{
 		JLabel dateL = new JLabel("DATE: ");
 		dateOption.add(dateL);
 		JComboBox<Integer> dateB = new JComboBox<Integer>();
-		//dateB.addActionListener(this);
 		dateB.setPreferredSize(new Dimension(50, 30));
 		for (int cnt = 0; cnt < 31; cnt++)
 			dateB.addItem(days[cnt]);
@@ -369,7 +377,7 @@ public class CreateGroupEvent extends JFrame{
 				/*------------------------------------------------------------------------*/
 				/* Now process the selection into string and add it to the combo box GUI */
 				String month = CalGrid.months[monthIndex-1];
-				String element = month + " " + date + " " + year;
+				String element = date + " " + month + " " + year;
 				if (dateListModel.contains(element)) {
 					JOptionPane.showMessageDialog(CreateGroupEvent.this, "Duplicate date is not allowed", "Duplicate!", 
 							JOptionPane.WARNING_MESSAGE);
@@ -430,11 +438,28 @@ public class CreateGroupEvent extends JFrame{
 		
 		browsePane.add(dateListPane);
 		
+		JTextField durationHTF = new JTextField(4);
+		JTextField durationMTF = new JTextField(4);	
+		
 		/* Create a panel to store instruction on how to do multiple selection */
-		instructionPanel1 = new JPanel();
-		JLabel ctrlClickInstr = new JLabel("To allow multiple selection, hold down the Ctrl key and drag the mouse pointer");
-		instructionPanel1.add(ctrlClickInstr);
-		browsePane.add(instructionPanel1);
+		instructionOrDurationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		if (action == MANUAL) {
+			JLabel ctrlClickInstr = new JLabel("To allow multiple selection, hold down the Ctrl key and click with the mouse pointer");
+			instructionOrDurationPanel.add(ctrlClickInstr);
+		} else {
+			JLabel desiredDuration = new JLabel("Your desired duration: ");
+			JLabel durationH = new JLabel("Hour");
+			JLabel durationM = new JLabel("Minute");
+			
+			instructionOrDurationPanel.add(desiredDuration);
+			instructionOrDurationPanel.add(durationH);
+			instructionOrDurationPanel.add(durationHTF);
+			instructionOrDurationPanel.add(durationM);
+			instructionOrDurationPanel.add(durationMTF);
+		}
+
+		browsePane.add(instructionOrDurationPanel);
+		
 		
 		/* Create a back button. '<' indicates its the first back button */
 		back1Btn = new JButton("< Back");
@@ -445,9 +470,12 @@ public class CreateGroupEvent extends JFrame{
 				dateOption.setVisible(false);
 				addBtnPanel.setVisible(false);
 				dateListPane.setVisible(false);
-				instructionPanel1.setVisible(false);
+				instructionOrDurationPanel.setVisible(false);
 				back1Btn.setVisible(false);
-				next2Btn.setVisible(false);
+				if (action == MANUAL)
+					next2Btn.setVisible(false);
+				else 
+					confirmBtn.setVisible(false);
 				
 				browsePane.setLayout(new FlowLayout(FlowLayout.CENTER));
 				TitledBorder titledBorder1 = new TitledBorder(BorderFactory
@@ -463,49 +491,88 @@ public class CreateGroupEvent extends JFrame{
 			
 		});
 		
-		/* Create the second next button */
-		next2Btn = new JButton("Next >>");
-		next2Btn.addActionListener(new ActionListener() {
+		if (action == MANUAL) {
+			/* Create the second next button */
+			next2Btn = new JButton("Next >>");
+			next2Btn.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {	
-				// Collect the selected indices
-				int[] selectedIndices = dateList.getSelectedIndices();
+				@Override
+				public void actionPerformed(ActionEvent e) {	
+					// Collect the selected indices
+					int[] selectedIndices = dateList.getSelectedIndices();
 				
-				// Warn user if at least one index is not selected
-				if (selectedIndices.length == 0) {
-					JOptionPane.showMessageDialog(CreateGroupEvent.this, "Please select at least one from the date list",
+					// Warn user if at least one index is not selected
+					if (selectedIndices.length == 0) {
+						JOptionPane.showMessageDialog(CreateGroupEvent.this, "Please select at least one from the date list",
 							"Input Error", JOptionPane.WARNING_MESSAGE);
-					return;
-				}
+						return;
+					}
 				
-				// Clear the dateChosenList
-				dateChosenList.clear();
+					// Clear the dateChosenList
+					dateChosenList.clear();
 				
-				// Add the newest selection
-				for (int i = 0; i < selectedIndices.length; i++) {
-					dateChosenList.add(dateInTheList.get(selectedIndices[i]));
-				}
-				//System.out.println("Clicking next >> ...." + dateChosenList);
+					// Add the newest selection
+					for (int i = 0; i < selectedIndices.length; i++) {
+						dateChosenList.add(dateInTheList.get(selectedIndices[i]));
+					}
+					//System.out.println("Clicking next >> ...." + dateChosenList);
 				
-				prepareForPageThree();
-				if (firstTimeFor3) {
-					loadTimeSlotPage();
-					firstTimeFor3 = false;
-				} else {
-					instructionPanel2.setVisible(true);
-					timeListPane.setVisible(true);
-					back2Btn.setVisible(true);
-					confirmBtn.setVisible(true);
-					loadTimeSlots();
+					prepareForPageThree();
+					if (firstTimeFor3) {
+						loadTimeSlotPage();
+						firstTimeFor3 = false;
+					} else {
+						instructionPanel.setVisible(true);
+						timeListPane.setVisible(true);
+						back2Btn.setVisible(true);
+						confirmBtn.setVisible(true);
+						loadTimeSlots();
+					}
 				}
-			}
 			
-		});
-		
-		/* Add all buttons into the navigation pane */
-		navPane.add(back1Btn);
-		navPane.add(next2Btn);
+			});
+			navPane.add(back1Btn);
+			navPane.add(next2Btn);
+		} else {
+			confirmBtn = new JButton("Confirm");
+			navPane.add(back1Btn);
+			navPane.add(confirmBtn);
+			confirmBtn.addActionListener(new ActionListener() {
+
+				@SuppressWarnings("deprecation")
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					int[] selectedIndices = dateList.getSelectedIndices();
+					
+					// Warn user if at least one index is not selected
+					if (selectedIndices.length == 0) {
+						JOptionPane.showMessageDialog(CreateGroupEvent.this, "Please select at least one from the date list",
+							"Input Error", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+					
+					// Yes No Confirmation upon successful creation
+					int result = JOptionPane.showConfirmDialog(CreateGroupEvent.this, "Confirm the following selection?",
+							"Confirm", JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						// Add the newest selection
+						for (int i = 0; i < selectedIndices.length; i++) {
+							dateChosenList.add(dateInTheList.get(selectedIndices[i]));
+						}
+						
+						duration.setHours(Integer.parseInt(durationHTF.getText()));
+						duration.setMinutes(Integer.parseInt(durationMTF.getText()));
+						
+						closeWindow();
+					} else {
+						return;
+					}
+				}
+				
+			});
+			
+		}
 	}
 	
 	/* All steps needed to display page three */
@@ -513,7 +580,7 @@ public class CreateGroupEvent extends JFrame{
 		dateOption.setVisible(false);
 		addBtnPanel.setVisible(false);
 		dateListPane.setVisible(false);
-		instructionPanel1.setVisible(false);
+		instructionOrDurationPanel.setVisible(false);
 		next2Btn.setVisible(false);
 		back1Btn.setVisible(false);
 		
@@ -531,10 +598,10 @@ public class CreateGroupEvent extends JFrame{
 		/*----------------------*/
 		
 		/* Create a panel to store the instruction */
-		instructionPanel2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		instructionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		JLabel rangeTime = new JLabel("Choose timeslot(s) from the available timeslots below. Can be multiple.");
-		instructionPanel2.add(rangeTime);
-		browsePane.add(instructionPanel2);
+		instructionPanel.add(rangeTime);
+		browsePane.add(instructionPanel);
 		
 		/* Create a list to store the available time slots */
 		timeListModel = new DefaultListModel<String>();
@@ -553,7 +620,7 @@ public class CreateGroupEvent extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				instructionPanel2.setVisible(false);
+				instructionPanel.setVisible(false);
 				timeListPane.setVisible(false);
 				back2Btn.setVisible(false);
 				confirmBtn.setVisible(false);
@@ -564,7 +631,7 @@ public class CreateGroupEvent extends JFrame{
 				dateOption.setVisible(true);
 				addBtnPanel.setVisible(true);
 				dateListPane.setVisible(true);
-				instructionPanel1.setVisible(true);
+				instructionOrDurationPanel.setVisible(true);
 				next2Btn.setVisible(true);
 				back1Btn.setVisible(true);
 				

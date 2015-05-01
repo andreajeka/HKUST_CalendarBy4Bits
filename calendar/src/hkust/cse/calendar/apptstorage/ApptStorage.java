@@ -29,6 +29,8 @@ public abstract class ApptStorage {
 	
 	public abstract Appt RetrieveAppts(int joinApptID);					// overload method to retrieve appointment with the given joint appointment id
 
+	public abstract ArrayList<TimeSpan> RetrieveAvailTimeSpans(User entity, TimeSpan period); // overload method to retrieve available time slots for a user with a specified period
+	
 	public abstract ArrayList<TimeSpan> RetrieveAvailTimeSpans(ArrayList<User> entities, TimeSpan period); // overload method to retrieve available time slots for a group of users with a specified period of time
 	
 	public abstract void UpdateAppt(Appt appt);	//abstract method to update an appointment record

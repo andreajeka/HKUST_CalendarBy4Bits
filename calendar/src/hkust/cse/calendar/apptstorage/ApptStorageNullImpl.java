@@ -170,6 +170,62 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return mAppts.get(joinApptID);
 	}
 
+	
+	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(User entity, TimeSpan period) {
+		ArrayList<TimeSpan> timeSlots = Utility.createTimeSlotsForADay(period);
+		Appt[] temp = RetrieveAppts(entity, period);
+		
+		if (temp == null) return timeSlots;
+		
+		for(int j = 0; j < temp.length; j++) {
+			int startTH = temp[j].TimeSpan().StartTime().getHours();
+			int startTM = temp[j].TimeSpan().StartTime().getMinutes();
+			int endTH = temp[j].TimeSpan().EndTime().getHours();
+			int endTM = temp[j].TimeSpan().EndTime().getMinutes();
+			int minutesDiff =  (endTH * 60 + endTM) - (startTH * 60 + startTM);
+			
+			int numSlots = minutesDiff / 15;
+			
+			for(int k = 0; k < numSlots; k++) {
+				Timestamp start = new Timestamp(0);
+				start.setYear(period.StartTime().getYear());
+				start.setMonth(period.StartTime().getMonth());
+				start.setDate(period.StartTime().getDate());
+				start.setHours(startTH);
+				start.setMinutes(startTM);
+					
+				startTM += 15;
+				if (startTM == 60) {
+					startTH++;
+					startTM = 0;
+				}
+					
+				Timestamp end = new Timestamp(0);
+				start.setYear(period.EndTime().getYear());
+				start.setMonth(period.EndTime().getMonth());
+				start.setDate(period.EndTime().getDate());
+				end.setHours(startTH);
+				end.setMinutes(startTM);
+					
+				TimeSpan aSlot = new TimeSpan(start,end);
+				for (TimeSpan ts : timeSlots) {
+					if ((ts.StartTime().getHours() == aSlot.StartTime().getHours()) && 
+							(ts.StartTime().getMinutes() == aSlot.StartTime().getMinutes())) {
+						if ((ts.EndTime().getHours() == aSlot.EndTime().getHours()) && 
+								(ts.EndTime().getMinutes() == aSlot.EndTime().getMinutes())) {
+							timeSlots.remove(ts);
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		if (timeSlots.isEmpty()) return null;
+		else return timeSlots;
+	}
+	
+	// We cannot simply use RetrieveAvailTimeSpans for a user and add all up because there will be duplicates
 	@Override
 	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(ArrayList<User>  entities, TimeSpan period) {
 		ArrayList<TimeSpan> timeSlots = Utility.createTimeSlotsForADay(period);
@@ -188,40 +244,39 @@ public class ApptStorageNullImpl extends ApptStorage {
 				
 				int numSlots = minutesDiff / 15;
 
-					for(int k = 0; k < numSlots; k++) {
-						Timestamp start = new Timestamp(0);
-						start.setYear(period.StartTime().getYear());
-						start.setMonth(period.StartTime().getMonth());
-						start.setDate(period.StartTime().getDate());
-						start.setHours(startTH);
-						start.setMinutes(startTM);
+				for(int k = 0; k < numSlots; k++) {
+					Timestamp start = new Timestamp(0);
+					start.setYear(period.StartTime().getYear());
+					start.setMonth(period.StartTime().getMonth());
+					start.setDate(period.StartTime().getDate());
+					start.setHours(startTH);
+					start.setMinutes(startTM);
 						
-						startTM += 15;
-						if (startTM == 60) {
-							startTH++;
-							startTM = 0;
-						}
+					startTM += 15;
+					if (startTM == 60) {
+						startTH++;
+						startTM = 0;
+					}
 						
-						Timestamp end = new Timestamp(0);
-						start.setYear(period.EndTime().getYear());
-						start.setMonth(period.EndTime().getMonth());
-						start.setDate(period.EndTime().getDate());
-						end.setHours(startTH);
-						end.setMinutes(startTM);
+					Timestamp end = new Timestamp(0);
+					start.setYear(period.EndTime().getYear());
+					start.setMonth(period.EndTime().getMonth());
+					start.setDate(period.EndTime().getDate());
+					end.setHours(startTH);
+					end.setMinutes(startTM);
 						
-						TimeSpan aSlot = new TimeSpan(start,end);
-						for (TimeSpan ts : timeSlots) {
-
-							if ((ts.StartTime().getHours() == aSlot.StartTime().getHours()) && 
-									(ts.StartTime().getMinutes() == aSlot.StartTime().getMinutes())) {
-								if ((ts.EndTime().getHours() == aSlot.EndTime().getHours()) && 
-										(ts.EndTime().getMinutes() == aSlot.EndTime().getMinutes())) {
-									timeSlots.remove(ts);
-									break;
-								}
+					TimeSpan aSlot = new TimeSpan(start,end);
+					for (TimeSpan ts : timeSlots) {
+						if ((ts.StartTime().getHours() == aSlot.StartTime().getHours()) && 
+								(ts.StartTime().getMinutes() == aSlot.StartTime().getMinutes())) {
+							if ((ts.EndTime().getHours() == aSlot.EndTime().getHours()) && 
+									(ts.EndTime().getMinutes() == aSlot.EndTime().getMinutes())) {
+								timeSlots.remove(ts);
+								break;
 							}
 						}
 					}
+				}
 			}
 		}
 		if (timeSlots.isEmpty()) return null;
@@ -239,7 +294,15 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void RemoveAppt(Appt appt) {
-		mAppts.remove(appt.getID(), appt);
+		if (appt.isJoint()) {
+			if (appt.getWaitingList().isEmpty())
+				return;
+			else
+				mAppts.remove(appt.getJoinID(), appt); 
+		} else {
+			mAppts.remove(appt.getID(), appt);
+	
+		}
 	}
 
 	public void setCurrentUser(User user) {
