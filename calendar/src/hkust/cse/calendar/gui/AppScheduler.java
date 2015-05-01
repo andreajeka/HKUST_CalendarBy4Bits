@@ -476,7 +476,7 @@ ComponentListener {
 
 				@Override
 				public void windowClosed(WindowEvent e) {
-					if (!userChosenList.isEmpty()) {
+					if (!userChosenList.isEmpty() ) {
 						yearF.setEditable(false);
 						monthF.setEditable(false);
 						dayF.setEditable(false);
@@ -498,13 +498,15 @@ ComponentListener {
 
 				@Override
 				public void windowClosing(WindowEvent e) {
-					yearF.setEditable(true);
-					monthF.setEditable(true);
-					dayF.setEditable(true);
-					sTimeH.setEditable(true);
-					sTimeM.setEditable(true);
-					eTimeH.setEditable(true);
-					eTimeM.setEditable(true);
+					if (!automatic) {
+						yearF.setEditable(true);
+						monthF.setEditable(true);
+						dayF.setEditable(true);
+						sTimeH.setEditable(true);
+						sTimeM.setEditable(true);
+						eTimeH.setEditable(true);
+						eTimeM.setEditable(true);
+					}
 				}
 
 				@Override
