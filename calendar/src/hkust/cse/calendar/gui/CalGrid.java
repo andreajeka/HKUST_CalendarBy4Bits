@@ -61,8 +61,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-
 public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	
 	// private User mNewUser;
