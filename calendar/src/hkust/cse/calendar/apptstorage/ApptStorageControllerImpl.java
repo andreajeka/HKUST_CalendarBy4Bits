@@ -42,6 +42,10 @@ public class ApptStorageControllerImpl {
 		return mApptStorage.RetrieveAppts(entity, time);
 	}
 	
+	public Appt[] RetrieveAppts(User entity) {
+		return mApptStorage.RetrieveAppts(entity);
+	}
+	
 	/* retrieve all the appts */
 	public Appt[] RetrieveAllAppts(){
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mApptStorage.mAppts.values());

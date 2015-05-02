@@ -11,9 +11,13 @@ import hkust.cse.calendar.users.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -22,10 +26,14 @@ import java.awt.event.WindowListener;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -38,6 +46,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
@@ -51,6 +60,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	
@@ -98,6 +109,14 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	private JMenuItem miManageUsers = new JMenuItem("Manage Users");
 	private JMenuItem miManageLocs = new JMenuItem("Manage Locations");
 	private JButton publicEvents = new JButton("Public Events");
+	
+	// Bonus Feature Declarations and Assignments
+	private JTextField searchField = new JTextField(10);
+	private JButton searchBut = new JButton("Search");
+	private Vector<String> list = new Vector<String>();
+	private JComboBox<String> searchBox = new JComboBox<String>();
+	private boolean hide_flag = false;
+	public Appt[] apptList;
 
 	private final String[] holidays = {
 			"New Years Day\nSpring Festival\n",
@@ -113,7 +132,8 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			"Veterans Day(US)\nThanksgiving Day(US)\n", "Christmas\n" };
 
 	private AppScheduler setAppDial;
-
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public CalGrid(ApptStorageControllerImpl con) {
 		super();
 
@@ -274,18 +294,28 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 		
 		initializeSystem(); // for you to add.
-		//mCurrUser = getCurrUser(); // totally meaningless code
+
 		Settings.setEnabled(true);
 		Appmenu.setEnabled(true);
 		timeMenu.setEnabled(true);
 
+		// Loading appts to the list after initializing system.
+	    loadSearchBoxList();
+	 
+	    setModel(new DefaultComboBoxModel(list), "");
+		
+		
 		UpdateCal();
 		pack();				// sized the window to a preferred size
 		setVisible(true);	//set the window to be visible
-		
-		// Increment time normally
-		//Timer timer = new Timer();
-		//timer.schedule(new incrementTimeTask(), 6000);
+	}
+	
+	public void loadSearchBoxList() {
+		list.clear();
+		apptList = controller.RetrieveAppts(mCurrUser);
+		for (int i = 0; i < apptList.length; i++) {
+	    	list.addElement(apptList[i].getTitle());
+	    }
 	}
 
 	public TableModel prepareTableModel() {
@@ -359,8 +389,9 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	JMenuBar createMenuBar() {
-
+		
 		ActionListener listener = new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
@@ -529,9 +560,106 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.addActionListener(listener);
 		
 		timeMenu.add(mi);
+
+		 // TODO BONUS listeners
+		searchField = (JTextField) searchBox.getEditor().getEditorComponent();
+		searchBox.setEditable(true);
+		
+	   
+	    searchBut.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String input = searchField.getText();
+				if (input.isEmpty())
+					return;
+				else {
+					if (!list.contains(input))
+						JOptionPane.showMessageDialog(null, "Not Found!", "Search Result",  JOptionPane.INFORMATION_MESSAGE);
+					else {
+						int index = list.indexOf(input);
+						Appt appt = apptList[index];
+						currentY = appt.TimeSpan().StartTime().getYear() + 1900;
+						currentM = appt.TimeSpan().StartTime().getMonth() + 1;
+						currentD = appt.TimeSpan().StartTime().getDate();
+						getDateArray(data);
+						if (tableView != null) {
+							TableModel t = prepareTableModel();
+							tableView.setModel(t);
+							tableView.repaint();
+						}
+						UpdateCal();
+					}
+						
+					
+				}
+				getDateArray(data);
+				if (tableView != null) {
+					TableModel t = prepareTableModel();
+					tableView.setModel(t);
+					tableView.repaint();
+				}
+				UpdateCal();
+			}
+	    	
+	    });
+	    searchField.addKeyListener(new KeyAdapter() {
+	    	public void keyPressed(KeyEvent e) {
+	    		String input = searchField.getText();
+	    		int code = e.getKeyCode();
+	    		if (code == KeyEvent.VK_ENTER) {
+	    			if (!list.contains(input)) {
+	    				list.addElement(input);
+	    				Collections.sort(list);
+	    				setModel(getSuggestedModel(list, input), input);
+	    			}
+	    			hide_flag = true;
+	    		} else if (code == KeyEvent.VK_ESCAPE) {
+	    			hide_flag = true;
+	    		} else if (code == KeyEvent.VK_RIGHT) {
+	    			for (int i = 0; i < list.size(); i++) {
+	    				String str = list.elementAt(i);
+	    				if (str.startsWith(input)) {
+	    					searchBox.setSelectedIndex(-1);
+	    					searchField.setText(input);
+	    					return;
+	    				}
+	    			}
+	    		}
+			}
+	
+			public void keyReleased(KeyEvent e) {
+				EventQueue.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						String input = searchField.getText();
+						if (input.length() == 0) {
+							searchBox.hidePopup();
+							setModel(new DefaultComboBoxModel(list), "");
+						} else {
+							DefaultComboBoxModel cbM = getSuggestedModel(list, input);
+							if (cbM.getSize() == 0 || hide_flag) {
+								searchBox.hidePopup();
+								hide_flag = false;
+							} else {
+								setModel(cbM, input);
+								searchBox.showPopup();
+							}
+						}
+					}
+				});
+			}
+	    });
+	    
 		
 		// Put items after the following line to align them to the right of menu bar
 	    menuBar.add(Box.createHorizontalGlue());
+	    menuBar.add(searchBox);
+	    menuBar.add(searchBut);
+	    JLabel space = new JLabel("                          "
+	    		+ "   ");
+	    menuBar.add(space);
 		menuBar.add(publicEvents);
 		publicEvents.addActionListener(listener);
 	
@@ -539,6 +667,23 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		return menuBar;
 	}
 
+	@SuppressWarnings("unchecked")
+	private void setModel(@SuppressWarnings("rawtypes") DefaultComboBoxModel model, String str) {
+		searchBox.setModel(model);
+		searchBox.setSelectedIndex(-1);
+		searchField.setText(str);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static DefaultComboBoxModel getSuggestedModel(List<String> list, String text) {
+		DefaultComboBoxModel m = new DefaultComboBoxModel();
+		for (String s : list) {
+			if (s.startsWith(text)) m.addElement(s);
+		}
+		
+		return m;
+	}
+	
 	private void initializeSystem() {
 		mCurrUser = controller.getCurrentUser();	//get User from controller
 		

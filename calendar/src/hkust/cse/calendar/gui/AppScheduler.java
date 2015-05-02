@@ -745,7 +745,7 @@ private void saveButtonResponse() {
 				}
 			}
 		}
-		
+		parent.loadSearchBoxList();
 		setVisible(false);
 		dispose();
 	}
