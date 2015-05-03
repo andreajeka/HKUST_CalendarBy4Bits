@@ -185,6 +185,8 @@ public class LocationsDialog extends JFrame {
 						capacityText.setText("");
 					}
 				}
+				
+				
 			}
 		});
 
