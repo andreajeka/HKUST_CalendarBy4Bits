@@ -219,9 +219,8 @@ public class Appt implements Serializable {
 	public void setLocation(String location, int capacity) {		
 		this.location.setName(location);
 		this.location.setCapacity(capacity);
+		//System.out.println(location + ' ' + capacity);
 	}
-	
-
 
 	// Setter of frequency amount
 	public void setFrequencyAmount(int frequencyAmount) {
