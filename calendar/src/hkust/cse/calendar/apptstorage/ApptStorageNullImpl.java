@@ -491,7 +491,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public void removeLocation(Location location)
 	{
-		// TODO
+		// Remove appts related to this location
+		for(Appt appt : mAppts.values())
+		{
+			if (appt.getLocationString().equals(location))
+				mAppts.remove(appt);
+		}
+		
+		_locations.remove(location);
 	}
 	
 	// Request

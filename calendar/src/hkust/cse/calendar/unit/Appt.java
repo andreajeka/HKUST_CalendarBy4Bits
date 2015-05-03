@@ -35,7 +35,7 @@ public class Appt implements Serializable {
 
 	private LinkedList<UUID> waiting;			// The waiting list
 
-	private String location;					// The location
+	private Location location;					// The location
 
 
 	private int capacity;						// The capacity of location
@@ -60,7 +60,7 @@ public class Appt implements Serializable {
 		reject = new LinkedList<UUID>();
 		waiting = new LinkedList<UUID>();
 		joinApptID = -1;
-		location = "";
+		location = null;
 		capacity = -1;
 		reminder = false;
 	}
@@ -85,8 +85,13 @@ public class Appt implements Serializable {
 		return mApptID;
 	}
 
+	// Getter of the location string
+	public String getLocationString() {
+		return location.getName();
+	}
+	
 	// Getter of the location
-	public String getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
@@ -214,8 +219,15 @@ public class Appt implements Serializable {
 		mApptID = id;
 	}
 
+	// Setter of the location through string
+	public void setLocationThroughString(String location) {
+		// TODO
+		// Either set the location by this method
+		// or change the apps scheduler to set the location directly
+	}
+	
 	// Setter of the location
-	public void setLocation(String location) {
+	public void setLocation(Location location) {
 		this.location= location;
 	}
 

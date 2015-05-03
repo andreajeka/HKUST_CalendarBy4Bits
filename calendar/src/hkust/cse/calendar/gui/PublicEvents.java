@@ -87,7 +87,7 @@ public class PublicEvents  extends JFrame implements ActionListener{
 				eventFeed.append("Date: " + dateFormat.format(apptArray[i].TimeSpan().StartTime()) + "\n");
 				eventFeed.append("Time: " + timeFormat.format(apptArray[i].TimeSpan().StartTime()) + " to " 
 								+ timeFormat.format(apptArray[i].TimeSpan().EndTime()) + "\n");
-				eventFeed.append("Location: " + apptArray[i].getLocation()+ "\n");
+				eventFeed.append("Location: " + apptArray[i].getLocationString()+ "\n");
 				eventFeed.append("Attending: ");
 				ArrayList<UUID> attendantList = new ArrayList<UUID>(apptArray[i].getAttendList());
 				for (int j = 0; j < attendantList.size(); j++) {

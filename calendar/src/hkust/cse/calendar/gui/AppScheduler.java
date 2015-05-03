@@ -651,7 +651,7 @@ private void saveButtonResponse() {
 			NewAppt.setInfo(desc);
 			NewAppt.setJoint(true);
 			NewAppt.setTimeSpan(timeSlotChosen.get(0));
-			NewAppt.setLocation(location);
+			NewAppt.setLocationThroughString(location);
 			NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
 			NewAppt.setPublic(publicCheckBox.isSelected());
 				
@@ -771,7 +771,7 @@ private void saveButtonResponse() {
 			NewAppt.setTimeSpan(timeSpan);
 			NewAppt.setTitle(title);
 			NewAppt.setInfo(info);
-			NewAppt.setLocation(location);
+			NewAppt.setLocationThroughString(location);
 			NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
@@ -797,7 +797,7 @@ private void saveButtonResponse() {
 				appt.setTimeSpan(timeSpan);
 				appt.setTitle(title);
 				appt.setInfo(info);
-				appt.setLocation(location);
+				appt.setLocationThroughString(location);
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
@@ -840,7 +840,7 @@ private void saveButtonResponse() {
 				appt.setTimeSpan(timeSpan);
 				appt.setTitle(title);
 				appt.setInfo(info);
-				appt.setLocation(location);
+				appt.setLocationThroughString(location);
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
@@ -887,7 +887,7 @@ private void saveButtonResponse() {
 					appt.setTimeSpan(timeSpan);
 					appt.setTitle(title);
 					appt.setInfo(info);
-					appt.setLocation(location);
+					appt.setLocationThroughString(location);
 					appt.setFrequencyAmount(freqAmount);
 					appt.reminderOn(reminderToggle.isSelected());
 					appt.setPublic(publicCheckBox.isSelected());
@@ -959,7 +959,7 @@ private void saveButtonResponse() {
 		sTimeM.setText(timeMinS);
 		eTimeH.setText(timeHourE);
 		eTimeM.setText(timeMinE);
-		String locationText = appt.getLocation();
+		String locationText = appt.getLocationString();
 		for (int i = 0; i < parent.controller.getLocationCapacity(); i++) {
 			if (locationText.equals(locField.getItemAt(i)))
 				locField.setSelectedIndex(i);		
