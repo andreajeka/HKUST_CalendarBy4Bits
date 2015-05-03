@@ -132,7 +132,7 @@ public class LocationsDialog extends JFrame {
 		buttonPane.add(capacityText);
 		buttonPane.add(addBt);
 		buttonPane.add(removeBt);
-		
+
 
 		//groupBt = new JButton("Group");
 
@@ -186,8 +186,8 @@ public class LocationsDialog extends JFrame {
 						capacityText.setText("");
 					}
 				}
-				
-				
+
+
 			}
 		});
 
@@ -196,28 +196,31 @@ public class LocationsDialog extends JFrame {
 			public void actionPerformed(ActionEvent e){
 				selectedIndex = list.getSelectedIndex();
 				selectedIndexCapa = capacityList.getSelectedIndex();
-				if(selectedIndex != -1){
-					listModel.remove(selectedIndex);
-					capacityListModel.remove(selectedIndex);
-				}
-				else if(selectedIndex == -1) {
-					JOptionPane.showMessageDialog(null, "Please Select a Location", "REMOVE ERROR", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
+				if(_controller.checkLocation(listModel.get(selectedIndex))){
+					if(selectedIndex != -1){
+						listModel.remove(selectedIndex);
+						capacityListModel.remove(selectedIndex);
+					}
+					else if(selectedIndex == -1) {
+						JOptionPane.showMessageDialog(null, "Please Select a Location", "REMOVE ERROR", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 
 
-				if(_controller.getLocationList() != null){
-					/*
+					if(_controller.getLocationList() != null){
+						/*
 					locations = _controller.getLocationList();
 					locations.remove(selectedIndex);
 					_controller.setLocationList(locations);
-					*/
-					_controller.addRequest(new Request(_controller.getCurrentUser(), null, Request.type.DELETE_LOCATION, _controller.getLocation(selectedIndex)));
+						 */
+						_controller.addRequest(new Request(_controller.getCurrentUser(), null, Request.type.DELETE_LOCATION, _controller.getLocation(selectedIndex)));
+					}
 				}
-
+				else
+					JOptionPane.showMessageDialog(null, listModel.get(selectedIndex) + " had been chosen to be a location.", "Cannot remove location", JOptionPane.ERROR_MESSAGE);
 			}
 		});
-/*		
+		/*		
 		groupRemoveBt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				selectedIndex = groupList.getSelectedIndex();
@@ -237,7 +240,7 @@ public class LocationsDialog extends JFrame {
 				}
 			}
 		});
-		
+
 		groupBt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				groupListModel = new DefaultListModel<String>();
@@ -260,10 +263,10 @@ public class LocationsDialog extends JFrame {
 				groupButtonPane.add(groupRemoveBt);
 				groupFrame.add(groupButtonPane, BorderLayout.PAGE_END);
 				groupFrame.setVisible(true);
-				
+
 			}
 		});
-*/
+		 */
 	}
 
 	/******   loading the locations from _controller to JList   ******/

@@ -277,4 +277,8 @@ public class ApptStorageControllerImpl {
 	public boolean capaValidation(String location, int numOfUsers){
 		return mApptStorage.capaValidation(location, numOfUsers);
 	}
+	
+	public boolean checkLocation(String location){
+		return mApptStorage.checkLocation(location);
+	}
 }

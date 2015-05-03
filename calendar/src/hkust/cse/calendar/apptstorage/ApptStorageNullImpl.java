@@ -31,8 +31,8 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private boolean isOverlap = false;
 	private ArrayList<Location> _locations;
 	private ArrayList<User> userList;
-	private boolean capacityValidation = false;
-
+	private boolean capacityValidation;
+	private boolean check;
 
 	public ApptStorageNullImpl()
 	{
@@ -535,6 +535,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	}
 
 	public boolean capaValidation(String location, int numOfUsers){
+		capacityValidation = false;
 		if(numOfUsers < 0 || numOfUsers == 0){
 			JOptionPane.showMessageDialog(null, "The number of user should be a positive integer.", "INPUT ERROR", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -554,6 +555,17 @@ public class ApptStorageNullImpl extends ApptStorage {
 			capacityValidation = false;
 		return capacityValidation;
 
+	}
+	
+	public boolean checkLocation(String location){
+		check = true;
+		for(Appt i: mAppts.values()){
+			if(i.getLocationString().equals(location)){
+				check = false;
+				break;
+			}
+		}
+		return check;
 	}
 
 }
