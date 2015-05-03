@@ -60,7 +60,7 @@ public class LocationsDialog extends JFrame {
 
 		this.setLayout(new BorderLayout());
 		this.setLocationByPlatform(true);
-		this.setSize(480, 300);
+		this.setSize(400, 300);
 		left = new JPanel();
 
 		listModel = new DefaultListModel<String>();
@@ -117,7 +117,7 @@ public class LocationsDialog extends JFrame {
 				"       Location:                          Capacity:  ");
 
 		scroll = new JScrollPane(list);
-		scroll.setPreferredSize(new Dimension(455,195));
+		scroll.setPreferredSize(new Dimension(350,180));
 
 		left.add(scroll, BorderLayout.WEST);
 
@@ -133,9 +133,9 @@ public class LocationsDialog extends JFrame {
 		buttonPane.add(removeBt);
 		
 
-		groupBt = new JButton("Group");
+		//groupBt = new JButton("Group");
 
-		buttonPane.add(groupBt);
+		//buttonPane.add(groupBt);
 		this.add(buttonPane, BorderLayout.PAGE_END);
 
 		/******   loading items to JList   ******/		
@@ -231,7 +231,7 @@ public class LocationsDialog extends JFrame {
 				}
 			}
 		});
-*/		
+		
 		groupBt.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				groupListModel = new DefaultListModel<String>();
@@ -257,7 +257,7 @@ public class LocationsDialog extends JFrame {
 				
 			}
 		});
-
+*/
 	}
 
 	/******   loading the locations from _controller to JList   ******/
