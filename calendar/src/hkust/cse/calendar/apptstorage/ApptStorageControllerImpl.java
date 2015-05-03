@@ -250,4 +250,7 @@ public class ApptStorageControllerImpl {
 		mApptStorage.SaveRequestsToXml();
 	}
 
+	public boolean capaValidation(String location, int numOfUsers){
+		return mApptStorage.capaValidation(location, numOfUsers);
+	}
 }
