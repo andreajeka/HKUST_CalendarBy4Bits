@@ -651,8 +651,7 @@ private void saveButtonResponse() {
 			NewAppt.setInfo(desc);
 			NewAppt.setJoint(true);
 			NewAppt.setTimeSpan(timeSlotChosen.get(0));
-			NewAppt.setLocationThroughString(location);
-			NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
+			NewAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 			NewAppt.setPublic(publicCheckBox.isSelected());
 				
 			// Put current user to waiting too?
@@ -771,8 +770,7 @@ private void saveButtonResponse() {
 			NewAppt.setTimeSpan(timeSpan);
 			NewAppt.setTitle(title);
 			NewAppt.setInfo(info);
-			NewAppt.setLocationThroughString(location);
-			NewAppt.setCapacity(locations.get(locField.getSelectedIndex()).getCapacity());
+			NewAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
 			NewAppt.setPublic(publicCheckBox.isSelected());
@@ -797,7 +795,7 @@ private void saveButtonResponse() {
 				appt.setTimeSpan(timeSpan);
 				appt.setTitle(title);
 				appt.setInfo(info);
-				appt.setLocationThroughString(location);
+				appt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
@@ -840,7 +838,7 @@ private void saveButtonResponse() {
 				appt.setTimeSpan(timeSpan);
 				appt.setTitle(title);
 				appt.setInfo(info);
-				appt.setLocationThroughString(location);
+				appt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 				appt.setFrequencyAmount(freqAmount);
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
@@ -887,7 +885,7 @@ private void saveButtonResponse() {
 					appt.setTimeSpan(timeSpan);
 					appt.setTitle(title);
 					appt.setInfo(info);
-					appt.setLocationThroughString(location);
+					appt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 					appt.setFrequencyAmount(freqAmount);
 					appt.reminderOn(reminderToggle.isSelected());
 					appt.setPublic(publicCheckBox.isSelected());

@@ -37,9 +37,6 @@ public class Appt implements Serializable {
 
 	private Location location;					// The location
 
-
-	private int capacity;						// The capacity of location
-
 	private int frequencyAmount;				// The amount of frequency
 
 	private boolean reminder;					// Reminder flag. True if it is turned on
@@ -60,8 +57,7 @@ public class Appt implements Serializable {
 		reject = new LinkedList<UUID>();
 		waiting = new LinkedList<UUID>();
 		joinApptID = -1;
-		location = null;
-		capacity = -1;
+		location = new Location("", -1);
 		reminder = false;
 	}
 
@@ -97,7 +93,7 @@ public class Appt implements Serializable {
 
 	// Getter of the capacity
 	public int getCapacity(){
-		return capacity;
+		return location.getCapacity();
 	}
 
 	public int getFrequencyAmount() {
@@ -219,22 +215,13 @@ public class Appt implements Serializable {
 		mApptID = id;
 	}
 
-	// Setter of the location through string
-	public void setLocationThroughString(String location) {
-		// TODO
-		// Either set the location by this method
-		// or change the apps scheduler to set the location directly
+	// Setter of the location
+	public void setLocation(String location, int capacity) {		
+		this.location.setName(location);
+		this.location.setCapacity(capacity);
 	}
 	
-	// Setter of the location
-	public void setLocation(Location location) {
-		this.location= location;
-	}
 
-	//Setter of the capacity of location
-	public void setCapacity(int capacity){
-		this.capacity = capacity;
-	}
 
 	// Setter of frequency amount
 	public void setFrequencyAmount(int frequencyAmount) {

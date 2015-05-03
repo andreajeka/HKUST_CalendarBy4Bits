@@ -4,4 +4,14 @@
     <bRemoval>false</bRemoval>
     <capacity>33</capacity>
   </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 22</location>
+    <bRemoval>false</bRemoval>
+    <capacity>33</capacity>
+  </hkust.cse.calendar.unit.Location>
+  <hkust.cse.calendar.unit.Location>
+    <location>lab 222</location>
+    <bRemoval>false</bRemoval>
+    <capacity>1121</capacity>
+  </hkust.cse.calendar.unit.Location>
 </list>
