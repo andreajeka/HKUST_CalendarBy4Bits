@@ -126,6 +126,11 @@ public class ApptStorageControllerImpl {
 		return mApptStorage.getLocationList();
 	}
 	
+	// Get location through index
+	public Location getLocation(int index){
+		return mApptStorage.getLocationList().get(index);
+	}
+	
 	/* set the locationList of mApptStorage */
 	public void setLocationList(ArrayList<Location> locations){
 		mApptStorage.setLocationList(locations);
@@ -171,7 +176,7 @@ public class ApptStorageControllerImpl {
 	// location
 	public void removeLocation(Location location)
 	{
-		// TODO
+		mApptStorage.removeLocation(location);
 	}
 	
 	// Request
@@ -198,20 +203,39 @@ public class ApptStorageControllerImpl {
 			for (ArrayList<Request> rqList : rq2DList)
 			{
 				Request rq = rqList.get(0);
-				if(rq._receiver == null)
+				if(rq.TYPE ==  Request.type.DELETE_USER)
 				{
-					boolean bParticipated = false;
+					boolean deleteFlag = false;
 					for(Appt appt : RetrieveAllAppts())
 					{
-						if(appt.getAttendList().contains(rq._obj)) // TODO: attend or all list
+						if(appt.getAttendList().contains(rq._obj))
 						{
 							rqList.add(new Request(mApptStorage.getCurrentUser(), appt.getInitiator(), rq.TYPE, rq._obj));
-							if (!bParticipated) bParticipated = true;
+							if (!deleteFlag) deleteFlag = true;
 						}
 					}
-					if (bParticipated) rqList.remove(rq);
+					if (deleteFlag) rqList.remove(rq);
 					else rq._receiver = (User) rq._obj;
 				}
+				else if (rq.TYPE ==  Request.type.DELETE_LOCATION)
+				{
+					boolean deleteFlag = false;
+					for(Appt appt : RetrieveAllAppts())
+					{
+						if(appt.getLocation().equals(rq._obj))
+						{
+							rqList.add(new Request(mApptStorage.getCurrentUser(), appt.getInitiator(), rq.TYPE, rq._obj));
+							if (!deleteFlag) deleteFlag = true;
+						}
+					}
+					if (deleteFlag) rqList.remove(rq);
+					else 
+					{
+						rq2DList.remove(rqList);
+						removeLocation((Location) rq._obj);
+					}
+				}
+				if(rq2DList.isEmpty()) break;
 			}
 			mApptStorage.mRq2DList = rq2DList;
 		}

@@ -120,11 +120,11 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				controller.SaveApptToXml();
-				controller.SaveLocToXml();
 				controller.SaveUserToXml();
 				controller.distributeRequest();
 				controller.sortRequest();
 				controller.SaveRequestToXml();
+				controller.SaveLocToXml();
 				System.exit(0);
 			}
 		});
@@ -462,10 +462,10 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			public void actionPerformed(ActionEvent e) {
 				controller.SaveApptToXml();
 				controller.SaveUserToXml();
-				controller.SaveLocToXml();
 				controller.distributeRequest();
 				controller.sortRequest();
 				controller.SaveRequestToXml();
+				controller.SaveLocToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Logout?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION){
@@ -485,11 +485,11 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			public void actionPerformed(ActionEvent e) {
 				// save data from hasp map into disk
 				controller.SaveApptToXml();
-				controller.SaveLocToXml();
 				controller.SaveUserToXml();
 				controller.distributeRequest();
 				controller.sortRequest();
 				controller.SaveRequestToXml();
+				controller.SaveLocToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Exit Program ?",
 						"Comfirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION)

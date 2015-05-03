@@ -495,7 +495,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// Remove appts related to this location
 		for(Appt appt : mAppts.values())
 		{
-			if (appt.getLocationString().equals(location))
+			if (appt.getLocation().equals(location))
 				mAppts.remove(appt);
 		}
 

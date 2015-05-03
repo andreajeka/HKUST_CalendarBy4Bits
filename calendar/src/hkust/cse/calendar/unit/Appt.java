@@ -152,6 +152,12 @@ public class Appt implements Serializable {
 	public void setWaitingList(LinkedList<UUID> waitingList){
 		waiting = waitingList;
 	}
+	
+	public void moveFromWaitToAttend(UUID userID)
+	{
+		waiting.remove(userID);
+		addAttendant(userID);
+	}
 
 	public void setWaitingList(UUID[] waitingList){
 		LinkedList<UUID> tempLinkedList = new LinkedList<UUID>();

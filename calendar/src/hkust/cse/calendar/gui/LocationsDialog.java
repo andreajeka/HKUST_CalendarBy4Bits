@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.unit.Location;
+import hkust.cse.calendar.unit.Request;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -206,9 +207,12 @@ public class LocationsDialog extends JFrame {
 
 
 				if(_controller.getLocationList() != null){
+					/*
 					locations = _controller.getLocationList();
 					locations.remove(selectedIndex);
 					_controller.setLocationList(locations);
+					*/
+					_controller.addRequest(new Request(_controller.getCurrentUser(), null, Request.type.DELETE_LOCATION, _controller.getLocation(selectedIndex)));
 				}
 
 			}

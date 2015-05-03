@@ -79,7 +79,7 @@ public class RequestChecker {
 	
 	notiReturnCode apptInvitation(Request rq)
 	{
-		if(new OptionNoti("Request from initiator", "Join event?").popUp())
+		if(new OptionNoti("Request from initiator", "Join event: " + ((Appt) rq._obj).getTitle() + "?").popUp())
 		{
 			return notiReturnCode.NOTI_OK;
 		}
@@ -88,7 +88,7 @@ public class RequestChecker {
 	
 	notiReturnCode locationRemoval(Request rq)
 	{		
-		if(new OptionNoti("Request from admin", "Allow delete of location?").popUp())
+		if(new OptionNoti("Request from admin", "Allow delete of location: " + ((Location) rq._obj).getName() + "?").popUp())
 		{
 			return notiReturnCode.NOTI_OK;
 		}
@@ -100,7 +100,7 @@ public class RequestChecker {
 		// CASE 1: this user is an initiator of one of the appts the deleted user participate
 		if(!_user.equals(rq._obj))
 		{
-			if(new OptionNoti("Request from admin", "Allow delete of user?" + _user.getUsername()).popUp())
+			if(new OptionNoti("Request from admin", "Allow delete of user: " + _user.getUsername() + "?").popUp())
 			{
 				return notiReturnCode.NOTI_OK;
 			}
@@ -144,7 +144,7 @@ public class RequestChecker {
 					_controller.removeLocation((Location) rq._obj);
 					break;
 				case INVITE:
-					_controller.ManageAppt((Appt) rq._obj, ApptStorageControllerImpl.NEW);
+					((Appt) rq._obj).moveFromWaitToAttend(rq._receiver.getUserId());
 			}
 				
 		}
