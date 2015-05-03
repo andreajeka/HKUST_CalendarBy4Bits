@@ -44,46 +44,46 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void SaveAppt(Appt appt) {
-		
+
 		if (appt.isJoint()) {
 			int key = LengthInMemory() + 1;
 			appt.setJoinID(key);
 			mAppts.put(key, appt);
 		} else {
-		
-		Appt[] userApptList = RetrieveAppts(currentUser);
-		ArrayList<Appt> apptList = new ArrayList<Appt>(Arrays.asList(userApptList));
-		String digitHour="";
-		if (!apptList.isEmpty()) {
-			for (Appt anAppt : apptList) {
-				if (anAppt.TimeSpan().Overlap(appt.TimeSpan())) {
-					isOverlap = true;
 
-					if (appt.TimeSpan().StartTime().getMinutes() < 10 )
-						digitHour = "0";
-					else digitHour = "";
+			Appt[] userApptList = RetrieveAppts(currentUser);
+			ArrayList<Appt> apptList = new ArrayList<Appt>(Arrays.asList(userApptList));
+			String digitHour="";
+			if (!apptList.isEmpty()) {
+				for (Appt anAppt : apptList) {
+					if (anAppt.TimeSpan().Overlap(appt.TimeSpan())) {
+						isOverlap = true;
 
-					overlapMessage = "Your new appointment: [" + appt.getTitle() + "] at " 
-							+ appt.TimeSpan().StartTime().getHours() + ":" + 
-							digitHour + appt.TimeSpan().StartTime().getMinutes() + 
-							" clashes with the following appointment: [" +
-							anAppt.getTitle() + "] at " + anAppt.TimeSpan().StartTime().getHours() + ":" + 
-							digitHour + anAppt.TimeSpan().StartTime().getMinutes() + "\n";
+						if (appt.TimeSpan().StartTime().getMinutes() < 10 )
+							digitHour = "0";
+						else digitHour = "";
 
-					return;
+						overlapMessage = "Your new appointment: [" + appt.getTitle() + "] at " 
+								+ appt.TimeSpan().StartTime().getHours() + ":" + 
+								digitHour + appt.TimeSpan().StartTime().getMinutes() + 
+								" clashes with the following appointment: [" +
+								anAppt.getTitle() + "] at " + anAppt.TimeSpan().StartTime().getHours() + ":" + 
+								digitHour + anAppt.TimeSpan().StartTime().getMinutes() + "\n";
 
-				} else 
-					isOverlap = false;
+						return;
+
+					} else 
+						isOverlap = false;
+				}
 			}
-		}
 
-		if (isOverlap == false) {
-			// We put the pair appointment and its id into the HashMap
-			int key = LengthInMemory() + 1;
-			appt.setID(key);
-			mAppts.put(key, appt);
-			appt.addAttendant(currentUser.getUserId());
-		}
+			if (isOverlap == false) {
+				// We put the pair appointment and its id into the HashMap
+				int key = LengthInMemory() + 1;
+				appt.setID(key);
+				mAppts.put(key, appt);
+				appt.addAttendant(currentUser.getUserId());
+			}
 		}
 	}
 
@@ -96,7 +96,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
 		// Create a container ArrayList to contain the appointments which fall inside the requirement
 		ArrayList<Appt> apptsByTime = new ArrayList<Appt>();
-		
+
 		for (Appt anAppt: apptList) {
 			// Check which appointments is inside TimeSpan d
 			if (Utility.AfterBeforeEqual(anAppt.TimeSpan().StartTime(), d.StartTime()) == 1  | 
@@ -120,13 +120,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override		 	
 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {	
-		
+
 		// Retrieve all appointments according to the specified timespan
 		Appt[] apptList = RetrieveAppts(time);
 		if (apptList == null) return null;
 		// Create a new array list to contain list of appointments that involves currentUser
 		ArrayList<Appt> userApptList = new ArrayList<Appt>();
-		
+
 		// Iterate through the list of retrieved appointments
 		for (int i = 0; i < apptList.length; i++) {
 			// Retrieve all the attendants (by its id) of the appointment
@@ -135,21 +135,21 @@ public class ApptStorageNullImpl extends ApptStorage {
 			if (allPeople.contains(entity.getUserId()))
 				userApptList.add(apptList[i]);
 		}
-		
-		
+
+
 		Appt[] userApptArray = new Appt[userApptList.size()];
 		userApptArray = userApptList.toArray(userApptArray);
 		return userApptArray;		
 	}	
-	
+
 	public Appt[] RetrieveAppts(User entity) {
-		
+
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
 		if (apptList == null) return null;
-		
+
 		// Create a new array list to contain list of appointments that involves currentUser
 		ArrayList<Appt> userApptList = new ArrayList<Appt>();
-		
+
 		// Iterate through the list of retrieved appointments
 		for (Appt appt : apptList) {
 			// Retrieve all the attendants (by its id) of the appointment
@@ -158,7 +158,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			if (attendantList.contains(currentUser.getUserId()))
 				userApptList.add(appt);
 		}
-		
+
 		Appt[] userApptArray = new Appt[userApptList.size()];
 		userApptArray = userApptList.toArray(userApptArray);
 		return userApptArray;
@@ -170,22 +170,22 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return mAppts.get(joinApptID);
 	}
 
-	
+
 	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(User entity, TimeSpan period) {
 		ArrayList<TimeSpan> timeSlots = Utility.createTimeSlotsForADay(period);
 		Appt[] temp = RetrieveAppts(entity, period);
-		
+
 		if (temp == null) return timeSlots;
-		
+
 		for(int j = 0; j < temp.length; j++) {
 			int startTH = temp[j].TimeSpan().StartTime().getHours();
 			int startTM = temp[j].TimeSpan().StartTime().getMinutes();
 			int endTH = temp[j].TimeSpan().EndTime().getHours();
 			int endTM = temp[j].TimeSpan().EndTime().getMinutes();
 			int minutesDiff =  (endTH * 60 + endTM) - (startTH * 60 + startTM);
-			
+
 			int numSlots = minutesDiff / 15;
-			
+
 			for(int k = 0; k < numSlots; k++) {
 				Timestamp start = new Timestamp(0);
 				start.setYear(period.StartTime().getYear());
@@ -193,20 +193,20 @@ public class ApptStorageNullImpl extends ApptStorage {
 				start.setDate(period.StartTime().getDate());
 				start.setHours(startTH);
 				start.setMinutes(startTM);
-					
+
 				startTM += 15;
 				if (startTM == 60) {
 					startTH++;
 					startTM = 0;
 				}
-					
+
 				Timestamp end = new Timestamp(0);
 				start.setYear(period.EndTime().getYear());
 				start.setMonth(period.EndTime().getMonth());
 				start.setDate(period.EndTime().getDate());
 				end.setHours(startTH);
 				end.setMinutes(startTM);
-					
+
 				TimeSpan aSlot = new TimeSpan(start,end);
 				for (TimeSpan ts : timeSlots) {
 					if ((ts.StartTime().getHours() == aSlot.StartTime().getHours()) && 
@@ -220,11 +220,11 @@ public class ApptStorageNullImpl extends ApptStorage {
 				}
 			}
 		}
-		
+
 		if (timeSlots.isEmpty()) return null;
 		else return timeSlots;
 	}
-	
+
 	// We cannot simply use RetrieveAvailTimeSpans for a user and add all up because there will be duplicates
 	@Override
 	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(ArrayList<User>  entities, TimeSpan period) {
@@ -232,16 +232,16 @@ public class ApptStorageNullImpl extends ApptStorage {
 		for (int i = 0; i < entities.size(); i++) {
 
 			Appt[] temp = RetrieveAppts(entities.get(i), period);
-		
+
 			if (temp == null) continue;
-			
+
 			for(int j = 0; j < temp.length; j++) {
 				int startTH = temp[j].TimeSpan().StartTime().getHours();
 				int startTM = temp[j].TimeSpan().StartTime().getMinutes();
 				int endTH = temp[j].TimeSpan().EndTime().getHours();
 				int endTM = temp[j].TimeSpan().EndTime().getMinutes();
 				int minutesDiff =  (endTH * 60 + endTM) - (startTH * 60 + startTM);
-				
+
 				int numSlots = minutesDiff / 15;
 
 				for(int k = 0; k < numSlots; k++) {
@@ -251,20 +251,20 @@ public class ApptStorageNullImpl extends ApptStorage {
 					start.setDate(period.StartTime().getDate());
 					start.setHours(startTH);
 					start.setMinutes(startTM);
-						
+
 					startTM += 15;
 					if (startTM == 60) {
 						startTH++;
 						startTM = 0;
 					}
-						
+
 					Timestamp end = new Timestamp(0);
 					start.setYear(period.EndTime().getYear());
 					start.setMonth(period.EndTime().getMonth());
 					start.setDate(period.EndTime().getDate());
 					end.setHours(startTH);
 					end.setMinutes(startTM);
-						
+
 					TimeSpan aSlot = new TimeSpan(start,end);
 					for (TimeSpan ts : timeSlots) {
 						if ((ts.StartTime().getHours() == aSlot.StartTime().getHours()) && 
@@ -282,7 +282,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		if (timeSlots.isEmpty()) return null;
 		else return timeSlots;
 	}
-	
+
 	@Override
 	public void UpdateAppt(Appt appt) {
 		int apptID = appt.getID();
@@ -301,7 +301,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 				mAppts.remove(appt.getJoinID(), appt); 
 		} else {
 			mAppts.remove(appt.getID(), appt);
-	
+
 		}
 	}
 
@@ -448,7 +448,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		}
 		return target;
 	}
-	
+
 	// Search and return an instance of User class based on the userid
 	public User searchUser(UUID userID) {
 		User target = null;
@@ -462,7 +462,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		}
 		return target;
 	}
-	
+
 	@Override
 	public void removeUser(String username){
 		if(!userList.isEmpty()){
@@ -474,7 +474,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			}
 		}
 	}
-	
+
 	@Override
 	public void removeUser(UUID userId){
 		if(!userList.isEmpty()){
@@ -486,14 +486,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 			}
 		}
 	}
-	
+
 	// Locations
 	@Override
 	public void removeLocation(Location location)
 	{
 		// TODO
 	}
-	
+
 	// Request
 	@Override
 	public void addRequest(Request rq)
@@ -502,7 +502,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		rqList.add(rq);
 		mRq2DList.add(rqList);
 	}
-	
+
 	@Override
 	public void SaveRequestsToXml()
 	{
@@ -512,7 +512,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void LoadRequestsFromXml()
 	{
@@ -525,5 +525,17 @@ public class ApptStorageNullImpl extends ApptStorage {
 			System.out.println("loadRequestFailed");
 		}
 	}
-	
+
+	public boolean capaValidation(String location, int numOfUsers){
+		if(numOfUsers > 0){
+			for(int i=0; i<_locations.size(); i++){
+				if(location == _locations.get(i).getName()){
+					if(numOfUsers == _locations.get(i).getCapacity() || numOfUsers <= _locations.get(i).getCapacity())
+						return true;
+				}
+			}
+		}
+		return true;
+	}
+
 }
