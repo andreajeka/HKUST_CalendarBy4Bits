@@ -93,4 +93,6 @@ public abstract ArrayList<Location> getLocationList();
 	public abstract boolean capaValidation(String location, int numOfUsers);
 	
 	public abstract boolean checkLocation(String location);
+	
+	public abstract void removeUserAppts(UUID userId);
 }

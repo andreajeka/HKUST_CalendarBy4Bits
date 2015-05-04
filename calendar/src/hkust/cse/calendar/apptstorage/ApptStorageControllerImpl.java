@@ -281,4 +281,8 @@ public class ApptStorageControllerImpl {
 	public boolean checkLocation(String location){
 		return mApptStorage.checkLocation(location);
 	}
+	
+	public void removeUserAppts(UUID userId){
+		mApptStorage.removeUserAppts(userId);
+	}
 }

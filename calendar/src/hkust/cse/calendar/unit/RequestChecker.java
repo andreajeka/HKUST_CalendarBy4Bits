@@ -111,6 +111,7 @@ public class RequestChecker {
 		else
 		{
 			_controller.removeUser(_user.getUserId());
+			_controller.removeUserAppts(_user.getUserId());
 			// TODO: use noti service to notice
 			new MessageNoti("Request from admin", "You are removed.").popUp();
 			return notiReturnCode.NOTI_LOGIN_FAIL;
