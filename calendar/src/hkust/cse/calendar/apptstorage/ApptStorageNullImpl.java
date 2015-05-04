@@ -33,6 +33,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private ArrayList<User> userList;
 	private boolean capacityValidation;
 	private boolean check;
+	private ArrayList<Appt> removeApptList;
 
 	public ApptStorageNullImpl()
 	{
@@ -40,6 +41,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		xstream = new XStream();
 		userList = new ArrayList<User>();
 		mRq2DList = new ArrayList<ArrayList<Request>>();
+		_locations = new ArrayList<Location>();
 	}
 
 
@@ -495,8 +497,12 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// Remove appts related to this location
 		for(Appt appt : mAppts.values())
 		{
-			if (appt.getLocation().equals(location))
-				mAppts.remove(appt);
+			if (appt.getLocationString().equals(location.getName())){
+				System.out.println("insideinside");
+				RemoveAppt(appt);
+			}
+			System.out.println("inside");
+				//mAppts.remove(appt);
 		}
 
 		_locations.remove(location);
@@ -566,6 +572,26 @@ public class ApptStorageNullImpl extends ApptStorage {
 			}
 		}
 		return check;
+	}
+	
+	public void removeUserAppts(UUID userId){
+		removeApptList = new ArrayList<Appt>();
+		LoadApptFromXml();
+		//System.out.println(userId);
+		for(Appt a: mAppts.values()){
+			//System.out.println(a.getAllPeople().size() + " outside");
+			for(UUID id: a.getAllPeople()){
+				if(id.equals(userId) && a.getAllPeople().size() == 1){
+					//System.out.println(a.getAllPeople().size());
+					removeApptList.add(a);
+					//System.out.println(a.hashCode() + " inside the for loop");
+				}
+			}
+		}
+		for(Appt i: removeApptList){
+			RemoveAppt(i);
+		}
+		SaveApptToXml();
 	}
 
 }

@@ -119,12 +119,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				controller.SaveApptToXml();
-				controller.SaveUserToXml();
 				controller.distributeRequest();
 				controller.sortRequest();
 				controller.SaveRequestToXml();
 				controller.SaveLocToXml();
+				controller.SaveApptToXml();
+				controller.SaveUserToXml();
 				System.exit(0);
 			}
 		});
@@ -460,12 +460,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.getAccessibleContext().setAccessibleDescription("For user logout");
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.SaveApptToXml();
-				controller.SaveUserToXml();
 				controller.distributeRequest();
 				controller.sortRequest();
 				controller.SaveRequestToXml();
 				controller.SaveLocToXml();
+				controller.SaveApptToXml();
+				controller.SaveUserToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Logout?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION){
@@ -484,12 +484,12 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 		mi.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// save data from hasp map into disk
-				controller.SaveApptToXml();
-				controller.SaveUserToXml();
 				controller.distributeRequest();
 				controller.sortRequest();
 				controller.SaveRequestToXml();
 				controller.SaveLocToXml();
+				controller.SaveApptToXml();
+				controller.SaveUserToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Exit Program ?",
 						"Comfirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION)
@@ -550,8 +550,8 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			miManageLocs.setEnabled(true);
 		}
 		
-		controller.LoadApptFromXml();
-		controller.LoadLocFromXml();	
+		//controller.LoadApptFromXml();
+		//controller.LoadLocFromXml();	
 		checkUpdateJoinAppt();
 	}
 

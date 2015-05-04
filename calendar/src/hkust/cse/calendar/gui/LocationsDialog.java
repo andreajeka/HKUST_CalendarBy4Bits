@@ -196,7 +196,7 @@ public class LocationsDialog extends JFrame {
 			public void actionPerformed(ActionEvent e){
 				selectedIndex = list.getSelectedIndex();
 				selectedIndexCapa = capacityList.getSelectedIndex();
-				if(_controller.checkLocation(listModel.get(selectedIndex))){
+			//	if(_controller.checkLocation(listModel.get(selectedIndex))){
 					if(selectedIndex != -1){
 						listModel.remove(selectedIndex);
 						capacityListModel.remove(selectedIndex);
@@ -215,9 +215,9 @@ public class LocationsDialog extends JFrame {
 						 */
 						_controller.addRequest(new Request(_controller.getCurrentUser(), null, Request.type.DELETE_LOCATION, _controller.getLocation(selectedIndex)));
 					}
-				}
-				else
-					JOptionPane.showMessageDialog(null, listModel.get(selectedIndex) + " had been chosen to be a location.", "Cannot remove location", JOptionPane.ERROR_MESSAGE);
+				//}
+				//else
+					//JOptionPane.showMessageDialog(null, listModel.get(selectedIndex) + " had been chosen to be a location.", "Cannot remove location", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		/*		
