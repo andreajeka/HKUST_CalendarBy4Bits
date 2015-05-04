@@ -296,9 +296,9 @@ public class AppList extends JPanel implements ActionListener {
 	public void clear() {
 		for (int i = 0; i < 20; i++) {
 			setTextAt(" ", i, 1);
-
+			setTextAt(" ", i, 2);
 			setTextAt(" ", i, 4);
-
+			setTextAt(" ", i, 5);
 			cellCMD[i][0] = NOT_COLORED;
 			cellCMD[i][1] = NOT_COLORED;
 			cellColor[i][0] = Color.white;
