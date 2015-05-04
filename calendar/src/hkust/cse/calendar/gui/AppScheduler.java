@@ -3,6 +3,7 @@ package hkust.cse.calendar.gui;
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
+import hkust.cse.calendar.unit.Request;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
@@ -659,6 +660,7 @@ private void saveButtonResponse() {
 				
 			for (User user : userChosenList) {
 				NewAppt.addWaiting(user.getUserId());
+				parent.controller.addRequest(new Request(parent.controller.getCurrentUser(), user, Request.type.INVITE, NewAppt));
 			}
 			
 		    // TODO how about reminder
