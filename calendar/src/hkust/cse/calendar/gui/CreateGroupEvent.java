@@ -654,7 +654,6 @@ public class CreateGroupEvent extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// Collect the selected indices
 				int[] selectedIndices = timeList.getSelectedIndices();
-				
 				// Warn user if there is no index selected
 				if (selectedIndices.length == 0) {
 					JOptionPane.showMessageDialog(CreateGroupEvent.this, "Please select at least one from the time list",
@@ -665,10 +664,11 @@ public class CreateGroupEvent extends JFrame{
 				// Sort first
 				Arrays.sort(selectedIndices);
 				
+				// Make a copy from our original indices array
+				int[] selectedIndicesIncr = new int[selectedIndices.length];
 				// Because our Utility.ArrayisConsecutive does not work on element with 0 
 				if (selectedIndices[0] == 0) {
-					// Make a copy from our original indices array
-					int[] selectedIndicesIncr = new int[selectedIndices.length];
+					
 					// Increment every element by one
 					for(int i = 0; i < selectedIndices.length; i++) {
 						selectedIndicesIncr[i] = selectedIndices[i] + 1;
@@ -681,11 +681,12 @@ public class CreateGroupEvent extends JFrame{
 					}
 					
 				} else {
-				
-					if (!Utility.ArrayIsConsecutive(selectedIndices, selectedIndices.length)) {
-						JOptionPane.showMessageDialog(CreateGroupEvent.this, "You cannot select inconsecutive slots",
-								"Input Error", JOptionPane.WARNING_MESSAGE);
-						return;
+					if (selectedIndices.length > 1) {
+						if (!Utility.ArrayIsConsecutive(selectedIndicesIncr, selectedIndicesIncr.length)) {
+							JOptionPane.showMessageDialog(CreateGroupEvent.this, "You cannot select inconsecutive slots",
+									"Input Error", JOptionPane.WARNING_MESSAGE);
+							return;
+						}
 					}
 				}
 				// Yes No Confirmation upon successful creation
@@ -695,6 +696,7 @@ public class CreateGroupEvent extends JFrame{
 					// If answer is yes, we loop through the selected indices, 
 					// use timeInTheList array to get the timespan element and add it to timeChosenList
 					// (Map user selection to our array)
+
 					if (selectedIndices.length == 1) {
 						timeSlotChosen.add(timeInTheList.get(selectedIndices[0]));
 					} else {
