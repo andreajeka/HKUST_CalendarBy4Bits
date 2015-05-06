@@ -632,7 +632,6 @@ ComponentListener {
 
 private void saveButtonResponse() {
 		
-		
 		// Manual Group scheduling
 		if (!timeSlotChosen.isEmpty()) 
 			groupEventReady = true;
@@ -678,7 +677,6 @@ private void saveButtonResponse() {
 				//       for a specified period. Use loops to go through all period. I asked the TA and he said that initiator can
 				//       specify the duration of the event, so a duration attribute is made to store initiator's request.
 				System.out.println("Duration of event is " + duration.getHours() + " hours and " + duration.getMinutes() + " minutes." );
-			
 			} else {
 				/** MANUAL INDIVIDUAL SCHEDULING **/
 				// Save the appointment to the hard disk

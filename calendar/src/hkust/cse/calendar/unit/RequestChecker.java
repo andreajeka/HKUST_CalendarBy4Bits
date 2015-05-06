@@ -8,6 +8,7 @@ import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.notification.MessageNoti;
 import hkust.cse.calendar.notification.Notification;
 import hkust.cse.calendar.notification.OptionNoti;
+import hkust.cse.calendar.notification.OptionTimeSlot;
 import hkust.cse.calendar.users.User;
 
 
@@ -79,11 +80,22 @@ public class RequestChecker {
 	
 	notiReturnCode apptInvitation(Request rq)
 	{
-		if(new OptionNoti("Request from initiator", "Join event: " + ((Appt) rq._obj).getTitle() + "?").popUp())
-		{
-			return notiReturnCode.NOTI_OK;
+		if (!rq.datesChosen.isEmpty()) {
+			OptionTimeSlot ots = new OptionTimeSlot("Request from initiator", "Please select your available timeslots with duration " 
+													+ rq.duration, _controller, _user, rq.datesChosen, rq.duration);
+			ots.popUp();
+			if (ots.isConfirm()) {
+				ArrayList<TimeSpan> userFeedback = ots.getUserFeedback();
+				return notiReturnCode.NOTI_OK;
+			}
+		} else {
+			// For timeslot invitation, if dateschosen list is not empty, we create new OptionTimeSlot
+			if(new OptionNoti("Request from initiator", "Join event: " + ((Appt) rq._obj).getTitle() + "?").popUp())
+			{
+				return notiReturnCode.NOTI_OK;
+			}
 		}
-		else return notiReturnCode.NOTI_REFUSE;
+		return notiReturnCode.NOTI_REFUSE;
 	}
 	
 	notiReturnCode locationRemoval(Request rq)
@@ -93,7 +105,7 @@ public class RequestChecker {
 			return notiReturnCode.NOTI_OK;
 		}
 		else return notiReturnCode.NOTI_REFUSE;
-	};
+	}
 	
 	notiReturnCode userRemoval(Request rq)
 	{
