@@ -205,43 +205,53 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 			@SuppressWarnings("deprecation")
 			public TableCellRenderer getCellRenderer(int row, int col) {
 				String tem = (String) data[row][col];
-
+				ArrayList<dayInfo> values = new ArrayList<dayInfo>();
 				if (tem.equals("") == false) {
+					// Retrieve from storage
+					Timestamp start = new Timestamp(0);
+					start.setYear(currentY - 1900);
+					start.setMonth(currentM - 1);
+					start.setDate(Integer.parseInt(tem));
+					start.setHours(0);
+					start.setMinutes(0);
+
+					Timestamp end = new Timestamp(0);
+					end.setYear(currentY - 1900);
+					end.setMonth(currentM - 1);
+					end.setDate(Integer.parseInt(tem) + 1);
+					end.setHours(0);
+					end.setMinutes(0);
+					
+					Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
+					
 					try {
 						// Change today to red
 						if (today.get(Calendar.YEAR) == currentY
 								&& today.get(Calendar.MONTH) + 1 == currentM
 								&& today.get(Calendar.DAY_OF_MONTH) == Integer
 										.parseInt(tem)) {
-							return new CalCellRenderer(dayInfo.Today);
+							values.add(dayInfo.Today);
+							
+							if (appData != null) {
+								values.add(dayInfo.HasEvent);
+							}
+								
 						}
 						// Change days with event to green
 						else {
-							// Retrieve from storage
-							Timestamp start = new Timestamp(0);
-							start.setYear(currentY - 1900);
-							start.setMonth(currentM - 1);
-							start.setDate(Integer.parseInt(tem));
-							start.setHours(0);
-							start.setMinutes(0);
-
-							Timestamp end = new Timestamp(0);
-							end.setYear(currentY - 1900);
-							end.setMonth(currentM - 1);
-							end.setDate(Integer.parseInt(tem) + 1);
-							end.setHours(0);
-							end.setMinutes(0);
-							
-							Appt[] appData = controller.RetrieveAppts(mCurrUser, new TimeSpan(start, end));
 							if (appData != null)
-								return new CalCellRenderer(dayInfo.HasEvent);
+								values.add(dayInfo.HasEvent);
 						}
+						
+						return new CalCellRenderer(values);
 					} catch (Throwable e) {
 						System.exit(1);
 					}
 
 				}
-				return new CalCellRenderer(dayInfo.Empty);
+				values.clear();
+				values.add(dayInfo.Empty);
+				return new CalCellRenderer(values);
 			}
 		};
 
