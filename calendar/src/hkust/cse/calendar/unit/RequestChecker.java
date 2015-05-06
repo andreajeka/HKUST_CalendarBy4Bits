@@ -64,6 +64,7 @@ public class RequestChecker {
 					switch(code)
 					{
 						case NOTI_LOGIN_FAIL:
+							cleanRequests(rqList);
 							return false;
 						case NOTI_REFUSE:
 							cleanRequests(rqList);
@@ -71,7 +72,9 @@ public class RequestChecker {
 							confirmRequests(rqList, rq);
 					}
 				}
+				if(rqList.isEmpty()) break;
 			}
+			if(_rq2DList.isEmpty()) break;
 		}
 		_controller.setRequestList(_rq2DList);
 		return true;
@@ -112,7 +115,10 @@ public class RequestChecker {
 		{
 			_controller.removeUser(_user.getUserId());
 			_controller.removeUserAppts(_user.getUserId());
-			// TODO: use noti service to notice
+			// Because returning to the login dialog
+			_controller.SaveRequestToXml();
+			_controller.SaveUserToXml();
+			// use noti service to notice
 			new MessageNoti("Request from admin", "You are removed.").popUp();
 			return notiReturnCode.NOTI_LOGIN_FAIL;
 		}
@@ -143,9 +149,11 @@ public class RequestChecker {
 					break;
 				case DELETE_LOCATION:
 					_controller.removeLocation((Location) rq._obj);
+					_rq2DList.remove(rqList);
 					break;
 				case INVITE:
 					((Appt) rq._obj).moveFromWaitToAttend(rq._receiver.getUserId());
+					_rq2DList.remove(rqList);
 			}
 				
 		}
