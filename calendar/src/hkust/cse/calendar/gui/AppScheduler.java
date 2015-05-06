@@ -665,8 +665,12 @@ ComponentListener {
 	
 	private void saveButtonResponse() {
 		
+		long RemindH = Long.parseLong(remindHF.getText());
+		long RemindM = Long.parseLong(remindMF.getText());
+		long RemindS = Long.parseLong(remindSF.getText());
+		
 		// Manual Group scheduling
-		if (!timeSlotChosen.isEmpty() || selectedApptId != -1) 
+		if (!timeSlotChosen.isEmpty() || (selectedApptId != -1 && !userChosenList.isEmpty())) 
 			groupEventReady = true;
 		else
 			// Either it is automatic group scheduling or manual private scheduling
@@ -688,15 +692,16 @@ ComponentListener {
 				NewAppt.setPublic(publicCheckBox.isSelected());
 				
 				// Put current user to waiting too?
-				NewAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
+				NewAppt.addAttendant(parent.controller.getCurrentUser().getUserId());
 				
 				for (User user : userChosenList) {
-					NewAppt.addWaiting(user.getUserId());
+					NewAppt.addAttendant(user.getUserId());
 				}
 					
 				// TODO how about reminder
 				NewAppt.reminderOn(reminderToggle.isSelected());
-			    
+				NewAppt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
+				
 				NewAppt.setInitiator(parent.controller.getCurrentUser());
 				parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
 			}
@@ -719,14 +724,15 @@ ComponentListener {
 				modifiedAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 				modifiedAppt.setPublic(publicCheckBox.isSelected());
 				// Put current user to waiting too?
-				modifiedAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
+				modifiedAppt.addAttendant(parent.controller.getCurrentUser().getUserId());
 				
 				for (User user : userChosenList) {
-					modifiedAppt.addWaiting(user.getUserId());
+					modifiedAppt.addAttendant(user.getUserId());
 				}
 					
 				// TODO how about reminder
 				modifiedAppt.reminderOn(reminderToggle.isSelected());
+				modifiedAppt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
 			    
 				modifiedAppt.setInitiator(parent.controller.getCurrentUser());
 				parent.controller.ManageAppt(modifiedAppt, ApptStorageControllerImpl.MODIFY);
@@ -838,7 +844,7 @@ ComponentListener {
 			NewAppt.setFrequencyAmount(freqAmount);
 			NewAppt.reminderOn(reminderToggle.isSelected());
 			NewAppt.setPublic(publicCheckBox.isSelected());
-			NewAppt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
+			NewAppt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000);
 
 			parent.controller.ManageAppt(NewAppt, action);
 
@@ -1034,17 +1040,33 @@ ComponentListener {
 			reminderToggle.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			reminderToggle.setForeground(Color.RED);
 			isReminderToggled = true;	
+			isReminderToggled = true;
+			remindHF.setEnabled(true);
+			remindMF.setEnabled(true);
+			remindSF.setEnabled(true);
 
 		} else {
 			reminderToggle.setText("OFF");
 			reminderToggle.setBorder(new BevelBorder(BevelBorder.RAISED));
 			reminderToggle.setForeground(Color.BLUE);
-			isReminderToggled = false;
+			isReminderToggled = false;isReminderToggled = true;
+			remindHF.setEnabled(false);
+			remindMF.setEnabled(false);
+			remindSF.setEnabled(false);
 		}
+		
+		long remindDuration = appt.getRemindBefore();
+		long hour = remindDuration / 3600000;
+		remindDuration %= 3600000;
+		
+		long minute = remindDuration / 60000;
+		remindDuration %= 60000;
+		
+		long second = remindDuration / 1000;
 
-		remindHF.setText(Long.toString(appt.getRemindBefore()/3600000));
-		remindMF.setText(Long.toString(appt.getRemindBefore()/60000));
-		remindSF.setText(Long.toString(appt.getRemindBefore()/1000));
+		remindHF.setText(Long.toString(hour));
+		remindMF.setText(Long.toString(minute));
+		remindSF.setText(Long.toString(second));
 
 		titleField.setText(appt.getTitle());
 		detailArea.setText(appt.getInfo());

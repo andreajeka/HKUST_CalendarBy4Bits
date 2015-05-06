@@ -13,9 +13,7 @@
       <isjoint>true</isjoint>
       <attend>
         <uuid>540d9763-43e6-45a4-9e7c-09acc3b69904</uuid>
-        <uuid reference="../uuid"/>
         <uuid>92eb82cd-b7eb-411e-8e15-4b0e6123f1f9</uuid>
-        <uuid reference="../uuid[3]"/>
       </attend>
       <reject/>
       <waiting/>
@@ -25,8 +23,8 @@
         <capacity>2</capacity>
       </location>
       <frequencyAmount>0</frequencyAmount>
-      <reminder>false</reminder>
-      <remindBefore>0</remindBefore>
+      <reminder>true</reminder>
+      <remindBefore>600000</remindBefore>
       <isPublic>false</isPublic>
       <initiator>
         <mUsername>user</mUsername>

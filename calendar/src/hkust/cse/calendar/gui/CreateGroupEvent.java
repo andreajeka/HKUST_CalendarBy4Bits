@@ -758,7 +758,10 @@ public class CreateGroupEvent extends JFrame{
 						TimeSpan merged = new TimeSpan(start, end);
 						timeSlotChosen.add(merged);
 					} 
-						
+					
+					if (modify)
+						userChosenList.clear();
+					
 					for (int i = 0; i < usernameChosenList.size(); i++) {
 						userChosenList.add(parent.controller.searchUser(usernameChosenList.get(i)));
 					}
@@ -789,6 +792,7 @@ public class CreateGroupEvent extends JFrame{
 			leftListModel.removeAllElements();
 			
 			if (modify) {
+				rightListModel.removeAllElements();
 				for (User user : userChosenList) {
 					if (!user.equals(parent.getCurrUser())) {
 						rightListModel.addElement(user.getUsername());
