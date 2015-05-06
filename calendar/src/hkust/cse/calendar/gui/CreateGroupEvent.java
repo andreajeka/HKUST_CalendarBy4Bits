@@ -663,7 +663,7 @@ public class CreateGroupEvent extends JFrame{
 				
 				// Sort first
 				Arrays.sort(selectedIndices);
-				
+			
 				// Make a copy from our original indices array
 				int[] selectedIndicesIncr = new int[selectedIndices.length];
 				// Because our Utility.ArrayisConsecutive does not work on element with 0 
@@ -682,7 +682,13 @@ public class CreateGroupEvent extends JFrame{
 					
 				} else {
 					if (selectedIndices.length > 1) {
-						if (!Utility.ArrayIsConsecutive(selectedIndicesIncr, selectedIndicesIncr.length)) {
+						
+						int[] selectedIndicesMod = new int[selectedIndices.length];
+						
+						for (int i = 0; i < selectedIndices.length; i++) 
+							selectedIndicesMod[i] = selectedIndices[i];
+						
+						if (!Utility.ArrayIsConsecutive(selectedIndicesMod, selectedIndicesMod.length)) {
 							JOptionPane.showMessageDialog(CreateGroupEvent.this, "You cannot select inconsecutive slots",
 									"Input Error", JOptionPane.WARNING_MESSAGE);
 							return;
@@ -700,8 +706,8 @@ public class CreateGroupEvent extends JFrame{
 					if (selectedIndices.length == 1) {
 						timeSlotChosen.add(timeInTheList.get(selectedIndices[0]));
 					} else {
-						TimeSpan first = timeInTheList.get(0);
-						TimeSpan last = timeInTheList.get(selectedIndices.length - 1);
+						TimeSpan first = timeInTheList.get(selectedIndices[0]);
+						TimeSpan last = timeInTheList.get(selectedIndices[selectedIndices.length - 1]);
 							
 						Timestamp start = new Timestamp(0);
 						start.setYear(first.StartTime().getYear());
@@ -709,14 +715,15 @@ public class CreateGroupEvent extends JFrame{
 						start.setDate(first.StartTime().getDate());
 						start.setHours(first.StartTime().getHours());
 						start.setMinutes(first.StartTime().getMinutes());
-			
+						//System.out.println(first.StartTime().getHours() + ":" + first.StartTime().getMinutes());
+						
 						Timestamp end = new Timestamp(0);
 						end.setYear(last.EndTime().getYear());
 						end.setMonth(last.EndTime().getMonth());
 						end.setDate(last.EndTime().getDate());
 						end.setHours(last.EndTime().getHours());
 						end.setMinutes(last.EndTime().getMinutes());
-							
+						//System.out.println(last.EndTime().getHours() + ":" + last.EndTime().getMinutes());
 						TimeSpan merged = new TimeSpan(start, end);
 						timeSlotChosen.add(merged);
 					} 

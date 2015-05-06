@@ -340,8 +340,8 @@ public class AppList extends JPanel implements ActionListener {
 		
 		if (appt == null) return;
 
+		// If group event is confirmed, means no more waiting list
 		if (appt.getWaitingList().isEmpty()) {
-		
 			if(!appt.isJoint())
 				color = currColor;
 			else
@@ -355,7 +355,7 @@ public class AppList extends JPanel implements ActionListener {
 		temp = appt.TimeSpan().StartTime();
 		int startMin = temp.getHours() * 60 + temp.getMinutes();
 		startMin = startMin - OFFSET * 60;
-
+		
 		temp = appt.TimeSpan().EndTime();
 		int endMin = temp.getHours() * 60 + temp.getMinutes();
 		endMin = endMin - OFFSET * 60;
@@ -370,9 +370,12 @@ public class AppList extends JPanel implements ActionListener {
 				
 				// Set the status box in the appt list
 				if (!appt.getWaitingList().isEmpty()) {
-					if (pos[1] == 1)
+					if (pos[1] == 1) {
 						tableView.getModel().setValueAt("Pending Group Event", pos[0], 2);
-					else tableView.getModel().setValueAt("Pending Group Event", pos[0], 5); 
+					}
+					else {
+						tableView.getModel().setValueAt("Pending Group Event", pos[0], 5); 
+					}
 				} else if (appt.isJoint() && appt.getWaitingList().isEmpty()) {
 					if (pos[1] == 1)
 						tableView.getModel().setValueAt("Confirmed Group Event", pos[0], 2);
@@ -448,6 +451,13 @@ public class AppList extends JPanel implements ActionListener {
 		Appt apptTitle = getSelectedAppTitle();
 		if (apptTitle == null)
 			return;
+		
+		
+		if (apptTitle.isJoint())
+			// If still pending cannot modify
+			if (apptTitle.getAttendList().isEmpty())
+				return;
+		
 		AppScheduler setAppDial = new AppScheduler("Modify", parent, apptTitle.getID());
 
 		setAppDial.updateSetApp(apptTitle);
