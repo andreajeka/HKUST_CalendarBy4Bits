@@ -121,10 +121,10 @@ public class Appt implements Serializable {
 		waiting.remove(userID);
 	}
 	
-	// Getter of the reject LinkedList<String>
+/*	// Getter of the reject LinkedList<String>
 	public LinkedList<UUID> getRejectList(){
 		return reject;
-	}
+	}	*/
 
 	// Getter of the waiting LinkedList<String>
 	public LinkedList<UUID> getWaitingList(){
@@ -163,8 +163,13 @@ public class Appt implements Serializable {
 	
 	public void moveFromWaitToAttend(UUID userID)
 	{
-		waiting.remove(userID);
+		removeFromWaiting(userID);
 		addAttendant(userID);
+		
+		// Most likely only initiator, so just confirm right away
+		if (waiting.size() == 1) {
+			addAttendant(waiting.remove());
+		}
 	}
 
 	public void setWaitingList(UUID[] waitingList){

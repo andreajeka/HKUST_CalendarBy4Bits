@@ -2,14 +2,14 @@
   <hkust.cse.calendar.users.User>
     <mUsername>user</mUsername>
     <mPassword>user</mPassword>
-    <mUserId>d675a6ab-0bf4-4233-9075-c67c6fea5864</mUserId>
+    <mUserId>aeb96f4b-1a92-45bb-9750-11730db9eb2c</mUserId>
     <isAdmin>true</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
   <hkust.cse.calendar.users.User>
     <mUsername>user1</mUsername>
     <mPassword>user1</mPassword>
-    <mUserId>3c80e5ae-0f1c-4c13-be35-7dd26cef9922</mUserId>
+    <mUserId>ed2bcd3c-5429-43e4-ac12-d78b1073815f</mUserId>
     <isAdmin>false</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>

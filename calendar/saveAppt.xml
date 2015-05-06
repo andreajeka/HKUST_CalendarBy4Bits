@@ -6,14 +6,14 @@
         <mStartTime>2015-05-07 05:00:00.0</mStartTime>
         <mEndTime>2015-05-07 05:30:00.0</mEndTime>
       </mTimeSpan>
-      <mTitle>Architecture Document</mTitle>
+      <mTitle>Untitled</mTitle>
       <mInfo>Input description of this appointment</mInfo>
       <mApptID>1</mApptID>
       <joinApptID>0</joinApptID>
       <isjoint>true</isjoint>
       <attend>
-        <uuid>d675a6ab-0bf4-4233-9075-c67c6fea5864</uuid>
-        <uuid>3c80e5ae-0f1c-4c13-be35-7dd26cef9922</uuid>
+        <uuid>ed2bcd3c-5429-43e4-ac12-d78b1073815f</uuid>
+        <uuid>aeb96f4b-1a92-45bb-9750-11730db9eb2c</uuid>
       </attend>
       <reject/>
       <waiting/>
@@ -29,7 +29,7 @@
       <initiator>
         <mUsername>user</mUsername>
         <mPassword>user</mPassword>
-        <mUserId reference="../../attend/uuid"/>
+        <mUserId reference="../../attend/uuid[2]"/>
         <isAdmin>true</isAdmin>
         <tobeRemoved>false</tobeRemoved>
       </initiator>

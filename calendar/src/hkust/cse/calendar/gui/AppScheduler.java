@@ -696,8 +696,7 @@ ComponentListener {
 				
 				for (User user : userChosenList) {
 					NewAppt.addWaiting(user.getUserId());
-					//TODO: Add request 
-					//parent.controller.addRequest(new Request(parent.controller.getCurrentUser(), user, Request.type.INVITE, NewAppt));
+					parent.controller.addRequest(new Request(parent.controller.getCurrentUser(), user, Request.type.INVITE, NewAppt));
 				}
 					
 				// TODO how about reminder

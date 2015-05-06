@@ -166,6 +166,7 @@ public class RequestChecker {
 					break;
 				case INVITE:
 					((Appt) rq._obj).moveFromWaitToAttend(rq._receiver.getUserId());
+					_controller.ManageAppt(((Appt) rq._obj), ApptStorageControllerImpl.MODIFY);
 					_rq2DList.remove(rqList);
 			}
 				

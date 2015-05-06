@@ -442,6 +442,16 @@ public class AppList extends JPanel implements ActionListener {
 		Appt apptTitle = getSelectedAppTitle();
 		if (apptTitle == null)
 			return;
+		
+		if (apptTitle.isJoint()) {
+			// Don't allow pending request to be deleted
+			if (!apptTitle.getWaitingList().isEmpty())
+				return;
+			// Don't allow non-initiators to delete group event
+			if (!apptTitle.getInitiator().equals(parent.controller.getCurrentUser()))
+				return;
+		}
+		
 		parent.controller.ManageAppt(apptTitle, ApptStorageControllerImpl.REMOVE);
 		parent.updateAppList();
 	}
@@ -453,10 +463,14 @@ public class AppList extends JPanel implements ActionListener {
 			return;
 		
 		
-		if (apptTitle.isJoint())
+		if (apptTitle.isJoint()) {
 			// If still pending cannot modify
 			if (apptTitle.getAttendList().isEmpty())
 				return;
+			// Don't allow non-initiators to modify appt
+			if (!apptTitle.getInitiator().equals(parent.controller.getCurrentUser()))
+				return;
+		}
 		
 		AppScheduler setAppDial = new AppScheduler("Modify", parent, apptTitle.getID());
 

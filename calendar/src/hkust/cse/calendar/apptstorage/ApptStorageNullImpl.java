@@ -291,6 +291,12 @@ public class ApptStorageNullImpl extends ApptStorage {
 		int apptID = appt.getID();
 		// According to Java Doc, If the map previously contained a mapping for this key, 
 		// the old value is replaced by the specified value.
+		
+		// Don't allow non-initiators to modify appointments
+		if (appt.isJoint())
+			if (!getCurrentUser().equals(appt.getInitiator()))
+				return;
+		
 		mAppts.put(apptID, appt);
 		if (!appt.isJoint())
 			appt.addAttendant(currentUser.getUserId());
@@ -300,12 +306,16 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public void RemoveAppt(Appt appt) {
 		if (appt.isJoint()) {
 			// Cannot delete a pending request --> easier to implement
-			if (appt.getWaitingList().isEmpty()) {
+			if (!appt.getWaitingList().isEmpty()) {
 				return;
 			}
+			
+			// Don't allow other than initiator to delete it
+			if (!getCurrentUser().equals(appt.getInitiator())) 
+				return;
 		}
-			// Whether it is a private or confirmed group event,
-			// Just simply delete it.
+			// Whether it is a private or confirmed group event(only for initiator),
+			// Just simply delete it
 			mAppts.remove(appt.getID(), appt);
 
 	}
