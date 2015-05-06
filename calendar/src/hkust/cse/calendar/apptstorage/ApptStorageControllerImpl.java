@@ -208,7 +208,7 @@ public class ApptStorageControllerImpl {
 					boolean deleteFlag = false;
 					for(Appt appt : RetrieveAllAppts())
 					{
-						if(appt.getAttendList().contains(((User) rq._obj).getUserId()))
+						if(appt.getAttendList().contains(((User) rq._obj).getUserId()) || appt.getWaitingList().contains(((User) rq._obj).getUserId()))
 						{
 							rqList.add(new Request(mApptStorage.getCurrentUser(), appt.getInitiator(), rq.TYPE, rq._obj));
 							if (!deleteFlag) deleteFlag = true;
