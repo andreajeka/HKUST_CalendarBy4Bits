@@ -112,7 +112,15 @@ public class Appt implements Serializable {
 	public LinkedList<UUID> getAttendList(){
 		return attend;
 	}
-
+  
+	public void removeFromAttend(UUID userID){
+		attend.remove(userID);
+	}
+	
+	public void removeFromWaiting(UUID userID){
+		waiting.remove(userID);
+	}
+	
 	// Getter of the reject LinkedList<String>
 	public LinkedList<UUID> getRejectList(){
 		return reject;

@@ -500,11 +500,8 @@ public class ApptStorageNullImpl extends ApptStorage {
 		for(Appt appt : mAppts.values())
 		{
 			if (appt.getLocationString().equals(location.getName())){
-				System.out.println("insideinside");
 				RemoveAppt(appt);
 			}
-			System.out.println("inside");
-				//mAppts.remove(appt);
 		}
 
 		_locations.remove(location);
@@ -583,10 +580,18 @@ public class ApptStorageNullImpl extends ApptStorage {
 		for(Appt a: mAppts.values()){
 			//System.out.println(a.getAllPeople().size() + " outside");
 			for(UUID id: a.getAllPeople()){
-				if(id.equals(userId) && a.getAllPeople().size() == 1){
-					//System.out.println(a.getAllPeople().size());
-					removeApptList.add(a);
-					//System.out.println(a.hashCode() + " inside the for loop");
+				// delete event if single user created
+				if(id.equals(userId)){
+					if(a.getAllPeople().size() == 1){
+						//System.out.println(a.getAllPeople().size());
+						removeApptList.add(a);
+						//System.out.println(a.hashCode() + " inside the for loop");
+					}
+					// remove from attend or waiting list
+					else if(a.getAttendList().contains(userId))
+						a.removeFromAttend(userId);
+					else if(a.getWaitingList().contains(userId))
+						a.removeFromWaiting(userId);
 				}
 			}
 		}

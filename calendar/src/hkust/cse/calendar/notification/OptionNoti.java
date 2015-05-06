@@ -10,7 +10,7 @@ public class OptionNoti extends Notification {
 
 	@Override
 	public boolean popUp() {
-		return (JOptionPane.showConfirmDialog(_panel, _message, _title, JOptionPane.YES_NO_OPTION) == 1);
+		return (JOptionPane.showConfirmDialog(_panel, _message, _title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
 	}
 
 }
