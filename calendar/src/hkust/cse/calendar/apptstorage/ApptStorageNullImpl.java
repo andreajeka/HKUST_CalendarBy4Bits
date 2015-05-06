@@ -306,6 +306,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public void RemoveAppt(Appt appt) {
 		if (appt.isJoint()) {
 			// Cannot delete a pending request --> easier to implement
+
 			if (!appt.getWaitingList().isEmpty()) {
 				return;
 			}
@@ -313,6 +314,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			// Don't allow other than initiator to delete it
 			if (!getCurrentUser().equals(appt.getInitiator())) 
 				return;
+
 		}
 			// Whether it is a private or confirmed group event(only for initiator),
 			// Just simply delete it
