@@ -1,5 +1,7 @@
 package hkust.cse.calendar.unit;
 
+import java.util.ArrayList;
+
 import hkust.cse.calendar.users.User;
 
 // 3 types of request: invitation, delete user, delete location
@@ -24,8 +26,10 @@ public class Request {
 	};
 	public type TYPE;
 	public Object _obj; // can be appt/location/user
+	//public ArrayList<TimeSpan> datesChosen = null;
 	boolean bSeen;
 	boolean bAccepted;
+	// public int duration = 0;
 	
 	// Default constructor
 	public Request(User sender, User receiver, type type, Object obj)
@@ -40,5 +44,19 @@ public class Request {
 		_obj = obj;
 		bSeen = false;
 		bAccepted = false;
-	};
+	}
+	
+	// TODO New Constructor
+	/*public Request(User sender, User receiver, type type, ArrayList<TimeSpan> datesChosen, int duration) {
+		// Assertion
+		assert(!sender.equals(receiver));
+		
+		_sender = sender;
+		_receiver = receiver;
+		TYPE = type;
+		this.datesChosen = datesChosen;
+		bSeen = false;
+		bAccepted = false;
+		this.duration = duration;
+	}*/
 }

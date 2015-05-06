@@ -3,6 +3,7 @@ package hkust.cse.calendar.gui;
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
+import hkust.cse.calendar.unit.Request;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
@@ -691,11 +692,12 @@ ComponentListener {
 				NewAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 				NewAppt.setPublic(publicCheckBox.isSelected());
 				
-				// Put current user to waiting too?
-				NewAppt.addAttendant(parent.controller.getCurrentUser().getUserId());
+				NewAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
 				
 				for (User user : userChosenList) {
-					NewAppt.addAttendant(user.getUserId());
+					NewAppt.addWaiting(user.getUserId());
+					//TODO: Add request 
+					//parent.controller.addRequest(new Request(parent.controller.getCurrentUser(), user, Request.type.INVITE, NewAppt));
 				}
 					
 				// TODO how about reminder
@@ -724,10 +726,10 @@ ComponentListener {
 				modifiedAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
 				modifiedAppt.setPublic(publicCheckBox.isSelected());
 				// Put current user to waiting too?
-				modifiedAppt.addAttendant(parent.controller.getCurrentUser().getUserId());
+				modifiedAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
 				
 				for (User user : userChosenList) {
-					modifiedAppt.addAttendant(user.getUserId());
+					modifiedAppt.addWaiting(user.getUserId());
 				}
 					
 				// TODO how about reminder
@@ -746,7 +748,6 @@ ComponentListener {
 				//       for a specified period. Use loops to go through all period. I asked the TA and he said that initiator can
 				//       specify the duration of the event, so a duration attribute is made to store initiator's request.
 				System.out.println("Duration of event is " + duration.getHours() + " hours and " + duration.getMinutes() + " minutes." );
-			
 			} else {
 				/** MANUAL INDIVIDUAL SCHEDULING **/
 				// Save the appointment to the hard disk

@@ -1,7 +1,5 @@
-<list>
-  <hkust.cse.calendar.unit.Location>
+<list><hkust.cse.calendar.unit.Location>
     <location>hkust</location>
     <bRemoval>false</bRemoval>
     <capacity>2</capacity>
-  </hkust.cse.calendar.unit.Location>
-</list>
+  </hkust.cse.calendar.unit.Location></list>

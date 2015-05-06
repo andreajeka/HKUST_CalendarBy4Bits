@@ -6,6 +6,8 @@ import hkust.cse.calendar.users.User;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -107,7 +109,7 @@ public class Utility {
 	 * 1 when t1 > t2
 	 * -1 when t1 < t2
 	 */
-	public final static int AfterBeforeEqual(Timestamp t1, Timestamp t2) {
+	public static int AfterBeforeEqual(Timestamp t1, Timestamp t2) {
 		int t1Year = t1.getYear();
 		int t2Year = t2.getYear();
 		int t1Month = t1.getMonth();
@@ -170,7 +172,7 @@ public class Utility {
 		}
 	}
 	
-	public final static ArrayList<TimeSpan> createTimeSlotsForADay(TimeSpan period) {
+	public static ArrayList<TimeSpan> createTimeSlotsForADay(TimeSpan period) {
 		ArrayList<TimeSpan> timeSlots = new ArrayList<TimeSpan>();
 		int hour = 8;
 		int minute = 0;
@@ -202,7 +204,7 @@ public class Utility {
 		return timeSlots;
 	}
 	
-	private final static int getMinFromArray(int[] array, int n) {
+	private static int getMinFromArray(int[] array, int n) {
 		int min = array[0];
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] < min)
@@ -211,7 +213,7 @@ public class Utility {
 		return min;
 	}
 	
-	private final static int getMaxFromArray(int[] array, int n) {
+	private static int getMaxFromArray(int[] array, int n) {
 		int max = array[0];
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] > max)
@@ -220,7 +222,7 @@ public class Utility {
 		return max;
 	}
 	
-	public final static boolean ArrayIsConsecutive(int[] array, int n) {
+	public static boolean ArrayIsConsecutive(int[] array, int n) {
 		if (n < 1) return false;
 		
 		int min = getMinFromArray(array, n);
@@ -252,5 +254,40 @@ public class Utility {
 		
 		// Because max-min+1 != n
 		return false;
+	}
+	
+	public static int longestConsecutive(int[] array) {
+		if (array.length == 0) {
+			return 0;
+		}
+		
+		Set<Integer> set = new HashSet<Integer>();
+		int max = 1;
+		
+		for (int num : array) {
+			set.add(num);
+		}
+		
+		for (int num : array) {
+			int left = num - 1;
+			int right = num + 1;
+			int count = 1;
+			
+			while (set.contains(left)) {
+				count++;
+				set.remove(left);
+				left--;
+			}
+			
+			while (set.contains(right)) {
+				count++;
+				set.remove(right);
+				right++;
+			}
+			
+			max = Math.max(count, max);
+		}
+		
+		return max;
 	}
 }
