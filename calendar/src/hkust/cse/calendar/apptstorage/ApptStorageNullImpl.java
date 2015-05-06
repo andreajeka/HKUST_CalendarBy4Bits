@@ -50,10 +50,11 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 		if (appt.isJoint()) {
 			int key = LengthInMemory() + 1;
-			appt.setJoinID(key);
+			appt.setID(key);
+			int jointKey = jointApptAmount( new ArrayList<Appt>(mAppts.values()));
+			appt.setJoinID(jointKey);
 			mAppts.put(key, appt);
 		} else {
-
 			Appt[] userApptList = RetrieveAppts(currentUser);
 			ArrayList<Appt> apptList = new ArrayList<Appt>(Arrays.asList(userApptList));
 			String digitHour="";
@@ -168,9 +169,8 @@ public class ApptStorageNullImpl extends ApptStorage {
 	}
 
 	@Override
-	public Appt RetrieveAppts(int joinApptID) {
-		// RetrieveAppts with joinApptID
-		return mAppts.get(joinApptID);
+	public Appt RetrieveAppts(int apptID) {
+		return mAppts.get(apptID);
 	}
 
 
@@ -292,20 +292,22 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// According to Java Doc, If the map previously contained a mapping for this key, 
 		// the old value is replaced by the specified value.
 		mAppts.put(apptID, appt);
-		appt.addAttendant(currentUser.getUserId());
+		if (!appt.isJoint())
+			appt.addAttendant(currentUser.getUserId());
 	}
 
 	@Override
 	public void RemoveAppt(Appt appt) {
 		if (appt.isJoint()) {
-			if (appt.getWaitingList().isEmpty())
+			// Cannot delete a pending request --> easier to implement
+			if (appt.getWaitingList().isEmpty()) {
 				return;
-			else
-				mAppts.remove(appt.getJoinID(), appt); 
-		} else {
+			}
+		}
+			// Whether it is a private or confirmed group event,
+			// Just simply delete it.
 			mAppts.remove(appt.getID(), appt);
 
-		}
 	}
 
 	public void setCurrentUser(User user) {
@@ -594,4 +596,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 		SaveApptToXml();
 	}
 
+	private int jointApptAmount (ArrayList<Appt> apptList) {
+		int count = 0;
+		if (!apptList.isEmpty())
+			for (Appt appt : apptList) {
+				if (appt.isJoint())
+					count++;
+			}
+		return count;
+	}
 }

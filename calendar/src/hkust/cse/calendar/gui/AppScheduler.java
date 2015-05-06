@@ -405,6 +405,31 @@ ComponentListener {
 	AppScheduler(String title, CalGrid cal, int selectedApptId) {
 		this.selectedApptId = selectedApptId;
 		commonConstructor(title, cal);
+		Appt thisAppt = parent.controller.RetrieveAppts(selectedApptId);
+		if (thisAppt.isJoint()) {
+			titleFreq.setEnabled(false);
+			FreqField.setEnabled(false);
+			yearF.setEditable(false);
+			monthF.setEditable(false);
+			dayF.setEditable(false);
+			sTimeH.setEditable(false);
+			sTimeM.setEditable(false);
+			eTimeH.setEditable(false);
+			eTimeM.setEditable(false);
+			
+			ArrayList<UUID> allPeople = new ArrayList<UUID>(thisAppt.getAllPeople());
+			for (UUID anID : allPeople) {
+				userChosenList.add(parent.controller.searchUser(anID));
+			}
+			
+			int year = thisAppt.TimeSpan().StartTime().getYear() + 1900;
+			int month = thisAppt.TimeSpan().StartTime().getMonth() + 1;
+			int date = thisAppt.TimeSpan().StartTime().getDate();
+			Timestamp start = Timestamp.valueOf(year + "-" + month + "-" + date + " 08:00:00");
+			Timestamp end= Timestamp.valueOf(year + "-" + month + "-" + date + " 18:00:00");
+			TimeSpan ts = new TimeSpan(start, end);
+			dateChosenList.add(ts);
+		}
 	}
 
 	AppScheduler(String title, CalGrid cal) {
@@ -423,6 +448,7 @@ ComponentListener {
 		eTimeH.setEditable(false);
 		eTimeM.setEditable(false);
 		rejectBut.setEnabled(false);
+		FreqField.setEnabled(false);
 		
 	}
 
@@ -452,14 +478,17 @@ ComponentListener {
 			sTimeM.setEditable(false);
 			eTimeH.setEditable(false);
 			eTimeM.setEditable(false);
+			FreqField.setEnabled(false);
 			
 			CreateGroupEvent inviteUserD;
 			
 			if (automatic) {
 				inviteUserD = new CreateGroupEvent(parent, CreateGroupEvent.AUTOMATIC,
 						userChosenList, dateChosenList, timeSlotChosen, duration);
+			} else if (selectedApptId != -1 ) {
+				inviteUserD = new CreateGroupEvent(parent, CreateGroupEvent.MANUAL,
+						userChosenList, dateChosenList, timeSlotChosen, true);
 			} else {
-				
 				inviteUserD = new CreateGroupEvent(parent, CreateGroupEvent.MANUAL,
 						userChosenList, dateChosenList, timeSlotChosen, duration);
 			}
@@ -473,9 +502,10 @@ ComponentListener {
 
 
 				}
-
+				
 				@Override
 				public void windowClosed(WindowEvent e) {
+					// Is a group event
 					if (!userChosenList.isEmpty() ) {
 						yearF.setEditable(false);
 						monthF.setEditable(false);
@@ -484,6 +514,7 @@ ComponentListener {
 						sTimeM.setEditable(false);
 						eTimeH.setEditable(false);
 						eTimeM.setEditable(false);
+						FreqField.setEnabled(false);
 					} else {
 						yearF.setEditable(true);
 						monthF.setEditable(true);
@@ -492,6 +523,7 @@ ComponentListener {
 						sTimeM.setEditable(true);
 						eTimeH.setEditable(true);
 						eTimeM.setEditable(true);
+						FreqField.setEnabled(true);
 					}
 
 				}
@@ -506,6 +538,7 @@ ComponentListener {
 						sTimeM.setEditable(true);
 						eTimeH.setEditable(true);
 						eTimeM.setEditable(true);
+						FreqField.setEnabled(true);
 					}
 				}
 
@@ -533,6 +566,7 @@ ComponentListener {
 					sTimeM.setEditable(false);
 					eTimeH.setEditable(false);
 					eTimeM.setEditable(false);
+					FreqField.setEnabled(false);
 				}
 
 			});
@@ -628,17 +662,15 @@ ComponentListener {
 
 		return result;
 	}
-
-private void saveButtonResponse() {
-		
+	
+	private void saveButtonResponse() {
 		
 		// Manual Group scheduling
-		if (!timeSlotChosen.isEmpty()) 
+		if (!timeSlotChosen.isEmpty() || selectedApptId != -1) 
 			groupEventReady = true;
 		else
 			// Either it is automatic group scheduling or manual private scheduling
 			groupEventReady = false;
-		
 		
 		if (groupEventReady) {
 			System.out.println("Group creation succesful");
@@ -647,28 +679,60 @@ private void saveButtonResponse() {
 			locField.setSelectedIndex(capaLocField.getSelectedIndex());
 			String location = (String) locField.getSelectedItem();
 			
-			NewAppt.setTitle(title);
-			NewAppt.setInfo(desc);
-			NewAppt.setJoint(true);
-			NewAppt.setTimeSpan(timeSlotChosen.get(0));
-			NewAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
-			NewAppt.setPublic(publicCheckBox.isSelected());
+			if (selectedApptId == -1) {
+				NewAppt.setTitle(title);
+				NewAppt.setInfo(desc);
+				NewAppt.setJoint(true);
+				NewAppt.setTimeSpan(timeSlotChosen.get(0));
+				NewAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
+				NewAppt.setPublic(publicCheckBox.isSelected());
 				
-			// Put current user to waiting too?
-			NewAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
+				// Put current user to waiting too?
+				NewAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
 				
-			for (User user : userChosenList) {
-				NewAppt.addWaiting(user.getUserId());
+				for (User user : userChosenList) {
+					NewAppt.addWaiting(user.getUserId());
+				}
+					
+				// TODO how about reminder
+				NewAppt.reminderOn(reminderToggle.isSelected());
+			    
+				NewAppt.setInitiator(parent.controller.getCurrentUser());
+				parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+			}
+			else {
+				Appt modifiedAppt = new Appt();
+				modifiedAppt.setID(selectedApptId);
+				
+				Appt oldAppt = parent.controller.RetrieveAppts(selectedApptId);
+				
+				int joinID = oldAppt.getJoinID();
+				modifiedAppt.setJoinID(joinID);
+				modifiedAppt.setTitle(title);
+				modifiedAppt.setInfo(desc);
+				modifiedAppt.setJoint(true);
+				if (timeSlotChosen.isEmpty()) {
+					JOptionPane.showMessageDialog(this,"Please reselect timeslot", "Warning",  JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				modifiedAppt.setTimeSpan(timeSlotChosen.get(0));
+				modifiedAppt.setLocation(location, locations.get(locField.getSelectedIndex()).getCapacity());
+				modifiedAppt.setPublic(publicCheckBox.isSelected());
+				// Put current user to waiting too?
+				modifiedAppt.addWaiting(parent.controller.getCurrentUser().getUserId());
+				
+				for (User user : userChosenList) {
+					modifiedAppt.addWaiting(user.getUserId());
+				}
+					
+				// TODO how about reminder
+				modifiedAppt.reminderOn(reminderToggle.isSelected());
+			    
+				modifiedAppt.setInitiator(parent.controller.getCurrentUser());
+				parent.controller.ManageAppt(modifiedAppt, ApptStorageControllerImpl.MODIFY);
 			}
 			
-		    // TODO how about reminder
-		    // TODO how about frequency
-			    
-			NewAppt.setInitiator(parent.controller.getCurrentUser());
-			parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
-			
 		} else {
-			
 			if (!dateChosenList.isEmpty()) {
 				// TODO: Send request to users with the timeslots
 				System.out.println("Sending request and timeslots to user....");

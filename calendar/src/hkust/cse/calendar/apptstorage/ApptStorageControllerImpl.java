@@ -51,8 +51,8 @@ public class ApptStorageControllerImpl {
 	}
 
 	// overload method to retrieve appointment with the given joint appointment id
-	public Appt RetrieveAppts(int joinApptID) {
-		return mApptStorage.RetrieveAppts(joinApptID);
+	public Appt RetrieveAppts(int apptID) {
+		return mApptStorage.RetrieveAppts(apptID);
 	}
 	
 	public ArrayList<TimeSpan> RetrieveAvailTimeSpans(User entity, TimeSpan period) {

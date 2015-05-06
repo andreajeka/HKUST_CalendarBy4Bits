@@ -42,6 +42,8 @@ public class CreateGroupEvent extends JFrame{
 
 	public final static int AUTOMATIC = 2;
 	
+	private boolean modify;
+	
 	/* Basic attributes for the class */
 	private CalGrid parent;
 	Container pane;
@@ -118,6 +120,27 @@ public class CreateGroupEvent extends JFrame{
 		setSize(new Dimension(500,500));
 		pane = this.getContentPane();
 		setTitle("Manual Group Event Scheduling");
+		modify = false;
+		// Load the first page
+		loadUserPage();
+		
+		setVisible(true);
+	}
+	
+	public CreateGroupEvent(CalGrid cal,  int action, ArrayList<User> userChosenList, 
+			ArrayList<TimeSpan> dateChosenList, ArrayList<TimeSpan> timeSlotChosen, boolean modify) {
+		parent = cal;
+		this.userChosenList = userChosenList;
+		this.dateChosenList = dateChosenList;
+		this.timeSlotChosen = timeSlotChosen;
+		this.action = action;
+		this.modify = modify;
+		usernameChosenList = new ArrayList<String>();
+		dateInTheList = new ArrayList<TimeSpan>();
+		timeInTheList = new ArrayList<TimeSpan>();
+		setSize(new Dimension(500,500));
+		pane = this.getContentPane();
+		setTitle("Manual Group Event Scheduling");
 		
 		// Load the first page
 		loadUserPage();
@@ -186,7 +209,6 @@ public class CreateGroupEvent extends JFrame{
 		leftListPane = new JScrollPane(leftList);
 		leftListPane.setPreferredSize(new Dimension(210,380));
 		browsePane.add(leftListPane);
-		loadUserList();
 		
 		/* Create the labels for arrow (just some decoration */
 		arrows = new JPanel();
@@ -240,6 +262,7 @@ public class CreateGroupEvent extends JFrame{
 		
 		rightListPane = new JScrollPane(rightList);
 		rightListPane.setPreferredSize(new Dimension(210,380));
+		loadUserList();
 		browsePane.add(rightListPane);
 	
 		
@@ -317,7 +340,7 @@ public class CreateGroupEvent extends JFrame{
 		dateOption.add(yearL);
 		JTextField yearF = new JTextField(6);
 		dateOption.add(yearF);
-
+		
 		// Month
 		JLabel monthL = new JLabel("Month: ");
 		dateOption.add(monthL);
@@ -337,6 +360,14 @@ public class CreateGroupEvent extends JFrame{
 		dateOption.add(dateB);
 		browsePane.add(dateOption);
 		
+		if (modify) {
+			int year = dateChosenList.get(0).StartTime().getYear() + 1900;
+			yearF.setText("" + year);
+			int month = dateChosenList.get(0).StartTime().getMonth();
+			monthB.setSelectedIndex(month);
+			int date = dateChosenList.get(0).StartTime().getDate() - 1;
+			dateB.setSelectedIndex(date);
+		}
 		
 		/* Create a panel to contain the button to add the selected date */
 		addBtnPanel = new JPanel();
@@ -753,20 +784,37 @@ public class CreateGroupEvent extends JFrame{
 	private void loadUserList() {
 		// If user list is not empty
 		if (!parent.controller.getUserList().isEmpty()) {
-			ArrayList<User> userList = parent.controller.getUserList();
+			ArrayList<User> userList = new ArrayList<User>(parent.controller.getUserList());
+			
 			leftListModel.removeAllElements();
-			for (User user : userList) {
-				// Don't show yourself in the list. Just display other users
-				if (!user.equals(parent.mCurrUser)) {
-					String username = user.getUsername();
-					if (user.isTobeRemoved())
-						continue;
-					else {
-						leftListModel.addElement(username);
+			
+			if (modify) {
+				for (User user : userChosenList) {
+					if (!user.equals(parent.getCurrUser())) {
+						rightListModel.addElement(user.getUsername());
+						userList.remove(user);
+					}
+				}
+				
+				for (User userInTheList : userList) {
+					if (!userInTheList.equals(parent.getCurrUser())) {
+						leftListModel.addElement(userInTheList.getUsername());
+					}
+				}
+				
+			} else {
+				for (User user : userList) {
+					// Don't show yourself in the list. Just display other users
+					if (!user.equals(parent.getCurrUser())) {
+						String username = user.getUsername();
+						if (user.isTobeRemoved())
+							continue;
+						else {
+							leftListModel.addElement(username);
+						}
 					}
 				}
 			}
-			
 		}
 	}
 	

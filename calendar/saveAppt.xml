@@ -1,1 +1,40 @@
-<map/>
+<map>
+  <entry>
+    <int>1</int>
+    <hkust.cse.calendar.unit.Appt>
+      <mTimeSpan>
+        <mStartTime>2015-05-06 06:00:00.0</mStartTime>
+        <mEndTime>2015-05-06 06:30:00.0</mEndTime>
+      </mTimeSpan>
+      <mTitle>Architecture Document</mTitle>
+      <mInfo>Input description of this appointment</mInfo>
+      <mApptID>1</mApptID>
+      <joinApptID>0</joinApptID>
+      <isjoint>true</isjoint>
+      <attend>
+        <uuid>540d9763-43e6-45a4-9e7c-09acc3b69904</uuid>
+        <uuid reference="../uuid"/>
+        <uuid>92eb82cd-b7eb-411e-8e15-4b0e6123f1f9</uuid>
+        <uuid reference="../uuid[3]"/>
+      </attend>
+      <reject/>
+      <waiting/>
+      <location>
+        <location>hkust</location>
+        <bRemoval>false</bRemoval>
+        <capacity>2</capacity>
+      </location>
+      <frequencyAmount>0</frequencyAmount>
+      <reminder>false</reminder>
+      <remindBefore>0</remindBefore>
+      <isPublic>false</isPublic>
+      <initiator>
+        <mUsername>user</mUsername>
+        <mPassword>user</mPassword>
+        <mUserId reference="../../attend/uuid"/>
+        <isAdmin>true</isAdmin>
+        <tobeRemoved>false</tobeRemoved>
+      </initiator>
+    </hkust.cse.calendar.unit.Appt>
+  </entry>
+</map>

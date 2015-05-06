@@ -6,4 +6,11 @@
     <isAdmin>true</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
+  <hkust.cse.calendar.users.User>
+    <mUsername>user1</mUsername>
+    <mPassword>user1</mPassword>
+    <mUserId>92eb82cd-b7eb-411e-8e15-4b0e6123f1f9</mUserId>
+    <isAdmin>false</isAdmin>
+    <tobeRemoved>false</tobeRemoved>
+  </hkust.cse.calendar.users.User>
 </list>
