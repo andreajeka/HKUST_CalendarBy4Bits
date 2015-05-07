@@ -198,6 +198,7 @@ public class LocationsDialog extends JFrame {
 				selectedIndexCapa = capacityList.getSelectedIndex();
 			//	if(_controller.checkLocation(listModel.get(selectedIndex))){
 					if(selectedIndex != -1){
+						_controller.getLocation(selectedIndex).setRemovalBool(true);
 						listModel.remove(selectedIndex);
 						capacityListModel.remove(selectedIndex);
 					}
@@ -277,8 +278,11 @@ public class LocationsDialog extends JFrame {
 			if(locations.size() != 0){
 				listModel.clear();
 				for(int i=0; i<locations.size(); i++){
-					listModel.addElement(locations.get(i).getName().toString());
-					capacityListModel.addElement(Integer.toString(locations.get(i).getCapacity()));
+					if(!locations.get(i).getRemovalBool())
+					{
+						listModel.addElement(locations.get(i).getName().toString());
+						capacityListModel.addElement(Integer.toString(locations.get(i).getCapacity()));
+					}
 				}
 			}
 		}

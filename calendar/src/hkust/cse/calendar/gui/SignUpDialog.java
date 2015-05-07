@@ -253,6 +253,7 @@ public class SignUpDialog extends JDialog implements ActionListener{
 				}
 				
 				controller.addUser(user);
+				controller.SaveUserToXml();
 				JOptionPane.showMessageDialog(null, "Sign Up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
 			}
 			

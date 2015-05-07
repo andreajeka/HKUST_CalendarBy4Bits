@@ -206,17 +206,18 @@ public class ApptStorageControllerImpl {
 				Request rq = rqList.get(0);
 				if(rq.TYPE == Request.type.DELETE_USER && rq._receiver == null)
 				{
+					User user = (User) rq._obj;
 					boolean deleteFlag = false;
 					for(Appt appt : RetrieveAllAppts())
 					{
-						if(appt.getAttendList().contains(((User) rq._obj).getUserId()) || appt.getWaitingList().contains(((User) rq._obj).getUserId()))
+						if(!appt.getInitiator().equals(user) && (appt.getAttendList().contains(user.getUserId()) || appt.getWaitingList().contains(user.getUserId())))
 						{
 							rqList.add(new Request(mApptStorage.getCurrentUser(), appt.getInitiator(), rq.TYPE, rq._obj));
 							if (!deleteFlag) deleteFlag = true;
 						}
 					}
 					if (deleteFlag) rqList.remove(rq);
-					else rq._receiver = (User) rq._obj;
+					else rq._receiver = user;
 				}
 				else if (rq.TYPE ==  Request.type.DELETE_LOCATION && rq._receiver == null)
 				{

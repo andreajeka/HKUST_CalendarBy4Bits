@@ -21,6 +21,11 @@ public class Location {
 		this.location = location;
 	}
 	
+	public void setRemovalBool(boolean bool)
+	{
+		bRemoval = bool;
+	}
+	
 	public boolean getRemovalBool()
 	{
 		return bRemoval;
