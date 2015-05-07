@@ -109,9 +109,6 @@ public class SignUpDialog extends JDialog implements ActionListener{
 		adminButton.addActionListener(this);
 		userButton.addActionListener(this);
 
-
-
-		
 		controller = con;
 		
 		setTitle("Sign Up Dialog");
@@ -157,8 +154,6 @@ public class SignUpDialog extends JDialog implements ActionListener{
 		passwordPanel.add(passwordInput);
 
 		inputPanel.add(passwordPanel);
-
-		
 
 		// personal information
 		detailsPanel = new JPanel();
@@ -228,12 +223,6 @@ public class SignUpDialog extends JDialog implements ActionListener{
 						JOptionPane.ERROR_MESSAGE);
 				return; //this part ok!!!!
 			}
-			
-			//
-//			else if(!passwordInput.getText().equals(repasswordInput.getText())){
-//				JOptionPane.showMessageDialog(this, "Password inputs do not match!", "Input Error",
-//						JOptionPane.ERROR_MESSAGE);
-//			}
 
 			else if(lastNameInput.getText().isEmpty() || firstNameInput.getText().isEmpty()){
 				JOptionPane.showMessageDialog(this,	"Please input first name and last name!", "Input Error",
@@ -264,17 +253,10 @@ public class SignUpDialog extends JDialog implements ActionListener{
 				}
 				
 				controller.addUser(user);
-				
-				JOptionPane.showMessageDialog(this, "Sign Up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Sign Up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
 			}
-
-
-
-			}
-			//start from here
-			//
-		
-
+			
+		}
 		
 		if(e.getSource() == cancelButton){
 			this.setVisible(false);

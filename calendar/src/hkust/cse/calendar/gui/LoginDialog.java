@@ -48,27 +48,6 @@ public class LoginDialog extends JFrame implements ActionListener
 
 	public LoginDialog()		// Create a dialog to log in
 	{
-
-		adminButton = new JRadioButton("Admin");
-		userButton = new JRadioButton("Regular User");
-
-		userbg = new ButtonGroup();
-
-		adminButton.setActionCommand("Admin");
-		userButton.setActionCommand("Regular User");
-
-		userbg.add(adminButton);
-		userbg.add(userButton);
-
-		JPanel userTypePanel = new JPanel();
-		userTypePanel.add(new JLabel("User Type:"));
-		userTypePanel.add(adminButton);
-		userTypePanel.add(userButton);
-		userButton.setSelected(true);
-		adminButton.addActionListener(this);
-		userButton.addActionListener(this);
-		
-
 		setTitle("Log in");
 		
 
@@ -120,9 +99,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		
 		pwPanel.add(password);
 		top.add(pwPanel);
-
-		top.add(userTypePanel);
-
+		
 		JPanel signupPanel = new JPanel();
 		signupPanel.add(new JLabel("If you don't have an account, please:"));
 		signupButton = new JButton("Sign up now");
