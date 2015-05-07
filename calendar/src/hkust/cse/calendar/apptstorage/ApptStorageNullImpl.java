@@ -293,12 +293,6 @@ public class ApptStorageNullImpl extends ApptStorage {
 		int apptID = appt.getID();
 		// According to Java Doc, If the map previously contained a mapping for this key, 
 		// the old value is replaced by the specified value.
-		
-		// Don't allow non-initiators to modify appointments
-		if (appt.isJoint())
-			if (!getCurrentUser().equals(appt.getInitiator()))
-				return;
-		
 		mAppts.put(apptID, appt);
 		if (!appt.isJoint())
 			appt.addAttendant(currentUser.getUserId());
