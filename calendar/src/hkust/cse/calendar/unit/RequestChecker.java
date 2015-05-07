@@ -71,6 +71,7 @@ public class RequestChecker {
 							return false;
 						case NOTI_REFUSE:
 							cleanRequests(rqList);
+							break;
 						case NOTI_OK:
 							confirmRequests(rqList, rq);
 					}
