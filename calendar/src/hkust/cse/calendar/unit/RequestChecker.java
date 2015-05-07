@@ -4,6 +4,9 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import javafx.scene.Parent;
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.gui.Utility;
@@ -87,14 +90,18 @@ public class RequestChecker {
 	{
 		// TODO instance of Option Time Slot
 		if (rq.datesChosen != null) {
-			OptionTimeSlot ots = new OptionTimeSlot("Request from initiator", "Please select your available timeslots with duration " 
-													+ rq.duration, _controller, _user, rq.datesChosen, rq.duration);
-			if (ots.isConfirm()) {
+			OptionTimeSlot ots = new OptionTimeSlot(_controller, _user, rq.datesChosen, rq.duration);
+			
+			int result = JOptionPane.showConfirmDialog(null, ots, "Please select your available timeslots with duration ", JOptionPane.OK_CANCEL_OPTION);
+			
+			if (result == JOptionPane.OK_OPTION) {
 				TimeSlotFeedback feedback = new TimeSlotFeedback(rq._sender, rq._receiver, rq.feedbackID);
 				feedback.setlistOfTimeSlots(ots.getUserFeedback());
 				_controller.addFeedback(feedback);
+				_controller.SaveFeedbacksToXml();
 				return notiReturnCode.NOTI_OK;
 			}
+			
 		} else {
 			// For timeslot invitation, if dateschosen list is not empty, we create new OptionTimeSlot
 			if(new OptionNoti("Request from initiator", "Join event: " + ((Appt) rq._obj).getTitle() + "?").popUp())
@@ -171,7 +178,9 @@ public class RequestChecker {
 					break;
 				case INVITE:
 					if (rq.feedbackID != 0) {
+						
 						if (!stillWaitingForFB(rq.feedbackID)) {
+							System.out.println("Enter this area");
 							ArrayList<TimeSlotFeedback> feedbackList = _controller.getFeedbackList().get(rq.feedbackID - 1);
 							ArrayList<TimeSpan> timeSlotList = new ArrayList<TimeSpan>();
 							
@@ -209,7 +218,7 @@ public class RequestChecker {
 							}
 							// After condensing, find the earliest time slot from all available time with corresponding duration
 							ArrayList<TimeSpan> aTimeSpan = Utility.getEarliestTimeSlot(timeSlotList, rq.duration);
-							
+							System.out.println(aTimeSpan);
 							if (aTimeSpan != null) {
 								TimeSpan first = aTimeSpan.get(0);
 								TimeSpan last = aTimeSpan.get(aTimeSpan.size() - 1);

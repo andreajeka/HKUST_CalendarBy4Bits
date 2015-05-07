@@ -62,7 +62,8 @@ public class LoginDialog extends JFrame implements ActionListener
 		controller.LoadUserFromXml();
 		controller.LoadRequestFromXml();
 		controller.LoadApptFromXml();
-		controller.LoadLocFromXml();	
+		controller.LoadLocFromXml();
+		controller.LoadFeedbacksFromXml();
 		
 		if(controller.searchUser("user") == null){
 			User user = new User("user", "user");

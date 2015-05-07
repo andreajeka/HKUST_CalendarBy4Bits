@@ -20,8 +20,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,7 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 
-public class OptionTimeSlot extends Notification {
+public class OptionTimeSlot extends JPanel {
 	
 	private ApptStorageControllerImpl controller;
 	private ArrayList<TimeSpan> datesChosenList;
@@ -38,10 +36,10 @@ public class OptionTimeSlot extends Notification {
 	private int durationMins;
 	private User currUser;
 	private boolean confirm;
+	private JPanel _panel;
 	
-	public OptionTimeSlot(String title, String msg, ApptStorageControllerImpl controller, User entity,
+	public OptionTimeSlot(ApptStorageControllerImpl controller, User entity,
 			ArrayList<TimeSpan> datesChosenList, int durationMins) {
-		super(title, msg);
 		this.datesChosenList = datesChosenList;
 		this.controller = controller;
 		this.currUser = entity;
@@ -51,28 +49,12 @@ public class OptionTimeSlot extends Notification {
 		setWindow();
 	}
 	
-	@Override
-	public boolean popUp() {
-		return true;
-	}
-
 	public void setWindow() {
-		JFrame frame = new JFrame();
-		Container pane = frame.getContentPane();
-		frame.setTitle(_title);
-		frame.setPreferredSize(new Dimension(400, 390));
-
-		pane.add(_panel);
-		_panel.setLayout(new BoxLayout(_panel,BoxLayout.Y_AXIS));
+		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		TitledBorder titledBorder = new TitledBorder(BorderFactory
 				.createEtchedBorder(Color.white, new Color(178, 178, 178)),
 				"Choose Time Slot:");
-		_panel.setBorder(titledBorder);
-		
-		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		JLabel desc = new JLabel(_message);
-		labelPanel.add(desc);
-		_panel.add(labelPanel);
+		setBorder(titledBorder);
 		
 		DefaultListModel<String> timeListModel = new DefaultListModel<String>();
 		JList<String> timeList = new JList<String>(timeListModel);
@@ -110,11 +92,11 @@ public class OptionTimeSlot extends Notification {
 			}
 			}
 		}
-		_panel.add(timeListPane);
+		add(timeListPane);
 		
 		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		JButton confirmButton = new JButton("Confirm");
-		confirmButton.addActionListener(new ActionListener() {
+		JButton OKButton = new JButton("Confirm");
+		OKButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -122,7 +104,7 @@ public class OptionTimeSlot extends Notification {
 				int[] selectedIndices = timeList.getSelectedIndices();
 				
 				if (selectedIndices.length == 0) {
-					JOptionPane.showMessageDialog(frame, "Please select at least one from the time list",
+					JOptionPane.showMessageDialog(null, "Please select at least one from the time list",
 							"Input Error", JOptionPane.WARNING_MESSAGE);
 					return;
 				} 
@@ -133,13 +115,13 @@ public class OptionTimeSlot extends Notification {
 				// Check if the options will fulfill the required duration
 				int numOfSlots = durationMins / 15;
 				if (numOfSlots > Utility.longestConsecutive(selectedIndices)) {
-					JOptionPane.showMessageDialog(frame, "Please select time slots according to the required duration!",
+					JOptionPane.showMessageDialog(null, "Please select time slots according to the required duration!",
 							"Input Error", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				
 				// Yes No Confirmation upon successful creation
-				int result = JOptionPane.showConfirmDialog(frame, "Confirm the following time slots?",
+				int result = JOptionPane.showConfirmDialog(null, "Confirm the following time slots?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					//process selected;
@@ -153,24 +135,9 @@ public class OptionTimeSlot extends Notification {
 			}
 		});
 		
-		buttonsPanel.add(confirmButton);
+		buttonsPanel.add(OKButton);
 		
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				confirm = false;
-				frame.setVisible(false);
-				frame.dispose();
-			}	
-		});
-		
-		buttonsPanel.add(cancelButton);
-		
-		_panel.add(buttonsPanel);
-		frame.pack();
-		frame.setVisible(true);
+		add(buttonsPanel);
 	}
 	
 	public ArrayList<TimeSpan> getUserFeedback() {
@@ -180,4 +147,5 @@ public class OptionTimeSlot extends Notification {
 	public boolean isConfirm() {
 		return confirm;
 	}
+	
 }

@@ -125,6 +125,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				controller.SaveLocToXml();
 				controller.SaveApptToXml();
 				controller.SaveUserToXml();
+				controller.SaveFeedbacksToXml();
 				System.exit(0);
 			}
 		});
@@ -476,6 +477,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				controller.SaveLocToXml();
 				controller.SaveApptToXml();
 				controller.SaveUserToXml();
+				controller.SaveFeedbacksToXml();
 				int n = JOptionPane.showConfirmDialog(null, "Logout?",
 						"Confirm", JOptionPane.YES_NO_OPTION);
 				if (n == JOptionPane.YES_OPTION){
@@ -497,6 +499,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 				controller.distributeRequest();
 				controller.sortRequest();
 				controller.SaveRequestToXml();
+				controller.SaveFeedbacksToXml();
 				controller.SaveLocToXml();
 				controller.SaveApptToXml();
 				controller.SaveUserToXml();
