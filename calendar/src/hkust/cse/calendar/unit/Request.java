@@ -26,10 +26,11 @@ public class Request {
 	};
 	public type TYPE;
 	public Object _obj; // can be appt/location/user
-	//public ArrayList<TimeSpan> datesChosen = null;
+	public ArrayList<TimeSpan> datesChosen = null;
 	boolean bSeen;
 	boolean bAccepted;
-	// public int duration = 0;
+	public int duration = 0;
+	public int feedbackID = 0;
 	
 	// Default constructor
 	public Request(User sender, User receiver, type type, Object obj)
@@ -47,7 +48,7 @@ public class Request {
 	}
 	
 	// TODO New Constructor
-	/*public Request(User sender, User receiver, type type, ArrayList<TimeSpan> datesChosen, int duration) {
+	public Request(User sender, User receiver, type type, ArrayList<TimeSpan> datesChosen, int duration, int id) {
 		// Assertion
 		assert(!sender.equals(receiver));
 		
@@ -58,5 +59,6 @@ public class Request {
 		bSeen = false;
 		bAccepted = false;
 		this.duration = duration;
-	}*/
+		this.feedbackID = id;
+	}
 }

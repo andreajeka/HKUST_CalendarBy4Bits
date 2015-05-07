@@ -290,4 +290,9 @@ public class Utility {
 		
 		return max;
 	}
+	
+	// Input array is considered to be a list of indexes that satisfy everyone
+	public static ArrayList<Integer> getEarliestConsecutiveList(ArrayList<Integer> array) {
+		return null;
+	}
 }

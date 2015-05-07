@@ -50,9 +50,12 @@ public class OptionTimeSlot extends Notification {
 		userFeedbackDates = new ArrayList<TimeSpan>();
 	}
 	
-
 	@Override
 	public boolean popUp() {
+		return true;
+	}
+
+	public void setWindow() {
 		JFrame frame = new JFrame();
 		Container pane = frame.getContentPane();
 		frame.setTitle(_title);
@@ -167,8 +170,6 @@ public class OptionTimeSlot extends Notification {
 		_panel.add(buttonsPanel);
 		frame.pack();
 		frame.setVisible(true);
-		// Overriding and set always true
-		return true;
 	}
 	
 	public ArrayList<TimeSpan> getUserFeedback() {

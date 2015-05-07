@@ -1,6 +1,7 @@
 package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
+import hkust.cse.calendar.notification.OptionTimeSlot;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.Request;
@@ -113,7 +114,7 @@ ComponentListener {
 	private int freqAmount = 0;
 	private boolean isReminderToggled = false;
 	private boolean automatic;
-	private Timestamp duration;
+	private int duration;
 	
 	// Group event ready means that a manual group event scheduling has been 
 	// created if it is true
@@ -133,7 +134,7 @@ ComponentListener {
 		dateChosenList = new ArrayList<TimeSpan>();
 		timeSlotChosen = new ArrayList<TimeSpan>();
 		automatic = false;
-		duration = new Timestamp(0);
+		duration = 0;
 		this.setAlwaysOnTop(true);
 		setTitle(title);
 		setModal(false);
@@ -746,7 +747,13 @@ ComponentListener {
 				// TODO: You can call the controller's function RetrieveAvailTimeSpans(User entity, TimeSpan period) for each user 
 				//       for a specified period. Use loops to go through all period. I asked the TA and he said that initiator can
 				//       specify the duration of the event, so a duration attribute is made to store initiator's request.
-				System.out.println("Duration of event is " + duration.getHours() + " hours and " + duration.getMinutes() + " minutes." );
+				//System.out.println("Duration of event is " + duration.getHours() + " hours and " + duration.getMinutes() + " minutes." );
+				for (User user : userChosenList) {
+					// For this requests for a chunk of users, we have to have the same id to indicate to a same potential appt.
+				/*	parent.controller.addRequest(new Request(parent.controller.getCurrentUser(), user, 
+													 Request.type.INVITE, dateChosenList, duration, 
+													 parent.controller.getFeedBacksListCapacity() + 1));*/
+				}
 			} else {
 				/** MANUAL INDIVIDUAL SCHEDULING **/
 				// Save the appointment to the hard disk

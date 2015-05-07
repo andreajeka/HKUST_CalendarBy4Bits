@@ -3,6 +3,7 @@ package hkust.cse.calendar.apptstorage;//
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.Request;
+import hkust.cse.calendar.unit.TimeSlotFeedback;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
@@ -17,6 +18,7 @@ public abstract class ApptStorage {
 	public HashMap<Integer, Appt> mAppts;		//a hashmap to save every thing to it, write to memory by the memory based storage implementation	
 	public int mAssignedApptID;	//a global appointment ID for each appointment record
 	public ArrayList<ArrayList<Request>> mRq2DList; // a 2D array of request
+	public ArrayList<ArrayList<TimeSlotFeedback>> ts2DList;
 	
 	public ApptStorage() {	//default constructor
 	}
@@ -60,11 +62,14 @@ public abstract class ApptStorage {
 	public abstract void SaveRequestsToXml(); 
 	
 	public abstract void LoadRequestsFromXml();    
-	/*
-	 * Add other methods if necessary
-	 */
 	
-public abstract ArrayList<Location> getLocationList();
+	public abstract void SaveFeedbacksToXml(); 
+	
+	public abstract void LoadFeedbacksFromXml();
+	
+	
+	
+	public abstract ArrayList<Location> getLocationList();
 	
 	public abstract void setLocationList(ArrayList<Location> locations);
 	
@@ -79,6 +84,10 @@ public abstract ArrayList<Location> getLocationList();
 	public abstract void addUser(User user);
 	
 	public abstract void addRequest(Request rq);
+	
+	public abstract void addFeedback(TimeSlotFeedback feedback);
+	
+	public abstract int getFeedBacksListCapacity();
 	
 	public abstract void updateUser(User user);
 	
@@ -95,4 +104,5 @@ public abstract ArrayList<Location> getLocationList();
 	public abstract boolean checkLocation(String location);
 	
 	public abstract void removeUserAppts(UUID userId);
+
 }

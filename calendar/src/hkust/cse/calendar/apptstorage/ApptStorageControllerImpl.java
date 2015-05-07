@@ -10,6 +10,7 @@ import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.Request;
 import hkust.cse.calendar.unit.Request.type;
+import hkust.cse.calendar.unit.TimeSlotFeedback;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
@@ -285,4 +286,22 @@ public class ApptStorageControllerImpl {
 	public void removeUserAppts(UUID userId){
 		mApptStorage.removeUserAppts(userId);
 	}
+	
+	public void SaveFeedbacksToXml() {
+		mApptStorage.SaveFeedbacksToXml();
+	}
+	
+	public void LoadFeedbacksFromXml(){
+		mApptStorage.LoadFeedbacksFromXml();
+	}
+	
+	public void addFeedback(TimeSlotFeedback feedback) {
+		mApptStorage.addFeedback(feedback);
+	}
+	
+	public int getFeedBacksListCapacity() {
+		return mApptStorage.getFeedBacksListCapacity();
+	}
+
+	
 }

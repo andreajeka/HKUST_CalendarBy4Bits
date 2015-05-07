@@ -4,6 +4,7 @@ import hkust.cse.calendar.gui.Utility;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.Request;
+import hkust.cse.calendar.unit.TimeSlotFeedback;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.users.User;
 
@@ -42,6 +43,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		userList = new ArrayList<User>();
 		mRq2DList = new ArrayList<ArrayList<Request>>();
 		_locations = new ArrayList<Location>();
+		ts2DList = new ArrayList<ArrayList<TimeSlotFeedback>>();
 	}
 
 
@@ -621,5 +623,45 @@ public class ApptStorageNullImpl extends ApptStorage {
 					count++;
 			}
 		return count;
+	}
+
+
+	@Override
+	public void SaveFeedbacksToXml() {
+		try {
+			xstream.toXML(ts2DList, new FileWriter("TimeSlotFeedback.xml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@Override
+	public void LoadFeedbacksFromXml() {
+		// TODO Auto-generated method stub
+		try{
+			xmlFile = new File("TimeSlotFeedback.xml");
+			if(xmlFile.exists() && xmlFile.isFile()){
+				ts2DList = (ArrayList<ArrayList<TimeSlotFeedback>>)xstream.fromXML(xmlFile);
+			}
+		}catch(Exception e){
+			System.out.println("loadTimeSlotFeedbackFailed");
+		}
+	}
+
+
+	@Override
+	public void addFeedback(TimeSlotFeedback feedback) {
+		int index = feedback.getfeedBackID() - 1;
+		ArrayList<TimeSlotFeedback> tsFeedbackList = ts2DList.get(index);
+		if (tsFeedbackList.isEmpty()) {
+			tsFeedbackList = new ArrayList<TimeSlotFeedback>();
+		}
+		tsFeedbackList.add(feedback);
+	}
+	
+	@Override
+	public int getFeedBacksListCapacity() {
+		return ts2DList.size();
 	}
 }

@@ -83,23 +83,26 @@ public class RequestChecker {
 	notiReturnCode apptInvitation(Request rq)
 	{
 		// TODO instance of Option Time Slot
-		/*if (!rq.datesChosen.isEmpty()) {
+		if (rq.datesChosen != null) {
 			OptionTimeSlot ots = new OptionTimeSlot("Request from initiator", "Please select your available timeslots with duration " 
 													+ rq.duration, _controller, _user, rq.datesChosen, rq.duration);
-			ots.popUp();
+			ots.setWindow();
 			if (ots.isConfirm()) {
-				ArrayList<TimeSpan> userFeedback = ots.getUserFeedback();
+				TimeSlotFeedback feedback = new TimeSlotFeedback(rq._sender, rq._receiver, rq.feedbackID);
+				feedback.setListOfFeedbacks(ots.getUserFeedback());
+				_controller.addFeedback(feedback);
 				return notiReturnCode.NOTI_OK;
 			}
-		} else {*/
+		} else {
 			// For timeslot invitation, if dateschosen list is not empty, we create new OptionTimeSlot
 			if(new OptionNoti("Request from initiator", "Join event: " + ((Appt) rq._obj).getTitle() + "?").popUp())
 			{
+				System.out.println("OKAY");
 				return notiReturnCode.NOTI_OK;
 			}
-	//	}
+		}
 			// If uncomment everything above, you should comment the following else and just return notiReturnCode.NOTI_REFUSE
-			else return notiReturnCode.NOTI_REFUSE;
+			return notiReturnCode.NOTI_REFUSE;
 	}
 	
 	notiReturnCode locationRemoval(Request rq)
@@ -165,9 +168,17 @@ public class RequestChecker {
 					_rq2DList.remove(rqList);
 					break;
 				case INVITE:
-					((Appt) rq._obj).moveFromWaitToAttend(rq._receiver.getUserId());
-					_controller.ManageAppt(((Appt) rq._obj), ApptStorageControllerImpl.MODIFY);
-					_rq2DList.remove(rqList);
+					/*if (rq.feedbackID != 0) {
+						for (ArrayList<Request> rqList : _rq2DList) {
+							
+						}
+						// Condense the feedbacks for the appointment
+						// If all fulfilled, create a new appt
+					} else {*/
+						((Appt) rq._obj).moveFromWaitToAttend(rq._receiver.getUserId());
+						_controller.ManageAppt(((Appt) rq._obj), ApptStorageControllerImpl.MODIFY);
+						_rq2DList.remove(rqList);
+					//}
 			}
 				
 		}
