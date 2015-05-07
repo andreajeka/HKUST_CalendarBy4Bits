@@ -35,4 +35,32 @@
       </initiator>
     </hkust.cse.calendar.unit.Appt>
   </entry>
+  <entry>
+    <int>2</int>
+    <hkust.cse.calendar.unit.Appt>
+      <mTimeSpan>
+        <mStartTime>2014-05-10 01:00:00.0</mStartTime>
+        <mEndTime>2014-05-10 01:30:00.0</mEndTime>
+      </mTimeSpan>
+      <mTitle>Untitled</mTitle>
+      <mInfo>Input description of this appointment</mInfo>
+      <mApptID>2</mApptID>
+      <joinApptID>-1</joinApptID>
+      <isjoint>false</isjoint>
+      <attend>
+        <uuid>1d8112e2-16e8-42f5-b9e0-6ab50e1bd518</uuid>
+      </attend>
+      <reject/>
+      <waiting/>
+      <location>
+        <location>hkust</location>
+        <bRemoval>false</bRemoval>
+        <capacity>2</capacity>
+      </location>
+      <frequencyAmount>1</frequencyAmount>
+      <reminder>false</reminder>
+      <remindBefore>0</remindBefore>
+      <isPublic>false</isPublic>
+    </hkust.cse.calendar.unit.Appt>
+  </entry>
 </map>

@@ -227,30 +227,31 @@ public class LoginDialog extends JFrame implements ActionListener
 		}
 		else if(e.getSource() == signupButton)
 		{
+			new SignUpDialog(controller);
 			// Trim to remove whitespaces
-			String username = userName.getText().trim();
-			String pw = new String(password.getPassword()).trim();
-
-			areFieldsEmpty(username, pw);
-			if (textFieldEmpty) {
-				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.WARNING_MESSAGE);
-			} else if (controller.searchUser(username) != null) {
-				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.WARNING_MESSAGE);
-			} else {
-				User user = new User(username,pw);
-				
-				if(adminButton.isSelected()){
-					user.setAdmin(true);
-				}
-				else
-				{
-					user.setAdmin(false);
-				}
-				
-				controller.addUser(user);
-				
-				JOptionPane.showMessageDialog(this, "Sign up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
-			}
+//			String username = userName.getText().trim();
+//			String pw = new String(password.getPassword()).trim();
+//
+//			areFieldsEmpty(username, pw);
+//			if (textFieldEmpty) {
+//				JOptionPane.showMessageDialog(this, "Empty Username and/or Password", "Input Error", JOptionPane.WARNING_MESSAGE);
+//			} else if (controller.searchUser(username) != null) {
+//				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.WARNING_MESSAGE);
+//			} else {
+//				User user = new User(username,pw);
+//				
+//				if(adminButton.isSelected()){
+//					user.setAdmin(true);
+//				}
+//				else
+//				{
+//					user.setAdmin(false);
+//				}
+//				
+//				controller.addUser(user);
+//				
+//				JOptionPane.showMessageDialog(this, "Sign up successful", "Registered!", JOptionPane.INFORMATION_MESSAGE);
+//			}
 			
 		}
 		else if(e.getSource() == closeButton)
