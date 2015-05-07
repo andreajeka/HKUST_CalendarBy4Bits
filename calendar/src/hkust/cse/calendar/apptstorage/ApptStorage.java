@@ -29,7 +29,10 @@ public abstract class ApptStorage {
 
 	public abstract Appt[] RetrieveAppts(User entity, TimeSpan time);	//overloading abstract method to retrieve an appointment record by a given user object and timespan
 	
-	public abstract Appt RetrieveAppts(int apptID);					// overload method to retrieve appointment with the given joint appointment id
+
+	public abstract Appt RetrieveAppts(int apptID);					// overload method to retrieve appointment with the given appt appointment id
+
+	public abstract Appt[] RetrieveAppts(User entity);
 
 	public abstract ArrayList<TimeSpan> RetrieveAvailTimeSpans(User entity, TimeSpan period); // overload method to retrieve available time slots for a user with a specified period
 	

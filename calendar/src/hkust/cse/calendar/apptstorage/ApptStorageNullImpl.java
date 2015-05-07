@@ -148,9 +148,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return userApptArray;		
 	}	
 
+	
+	@Override
+
 	public Appt[] RetrieveAppts(User entity) {
 
 		ArrayList<Appt> apptList = new ArrayList<Appt>(mAppts.values());
+
 		if (apptList == null) return null;
 
 		// Create a new array list to contain list of appointments that involves currentUser
@@ -158,12 +162,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 		// Iterate through the list of retrieved appointments
 		for (Appt appt : apptList) {
-			// Retrieve all the attendants (by its id) of the appointment
-			ArrayList<UUID> attendantList = new ArrayList<UUID>(appt.getAttendList());
+			// Retrieve all the people (by its id) of the appointment
+			ArrayList<UUID> allPeople = new ArrayList<UUID>(appt.getAllPeople());
 			// If the list of attendant contains current user, add that appointment to userApptList
-			if (attendantList.contains(currentUser.getUserId()))
+			if (allPeople.contains(entity.getUserId()))
 				userApptList.add(appt);
 		}
+
 
 		Appt[] userApptArray = new Appt[userApptList.size()];
 		userApptArray = userApptList.toArray(userApptArray);

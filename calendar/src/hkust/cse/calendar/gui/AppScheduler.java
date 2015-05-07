@@ -832,7 +832,7 @@ ComponentListener {
 				}
 			}
 		}
-		
+		parent.loadSearchBoxList();
 		setVisible(false);
 		dispose();
 	}
