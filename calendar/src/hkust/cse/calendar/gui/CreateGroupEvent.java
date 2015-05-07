@@ -487,6 +487,8 @@ public class CreateGroupEvent extends JFrame{
 			instructionOrDurationPanel.add(durationHTF);
 			instructionOrDurationPanel.add(durationM);
 			instructionOrDurationPanel.add(durationMTF);
+			durationHTF.setText("0");
+			durationMTF.setText("0");
 		}
 
 		browsePane.add(instructionOrDurationPanel);
@@ -588,6 +590,15 @@ public class CreateGroupEvent extends JFrame{
 							"Confirm", JOptionPane.YES_NO_OPTION);
 					if (result == JOptionPane.YES_OPTION) {
 						// Add the newest selection
+						
+						if (durationHTF.getText().isEmpty() || durationMTF.getText().isEmpty()) 
+							JOptionPane.showMessageDialog(null, "Don't leave fields empty",
+									"Warning", JOptionPane.WARNING_MESSAGE);
+						
+						if (Integer.parseInt(durationMTF.getText()) % 15 != 0)
+							JOptionPane.showMessageDialog(null, "Please put multiply of 15 in minute field",
+									"Warning", JOptionPane.WARNING_MESSAGE);
+						
 						for (int i = 0; i < selectedIndices.length; i++) {
 							dateChosenList.add(dateInTheList.get(selectedIndices[i]));
 						}
@@ -598,6 +609,7 @@ public class CreateGroupEvent extends JFrame{
 						for (int i = 0; i < usernameChosenList.size(); i++) {
 							userChosenList.add(parent.controller.searchUser(usernameChosenList.get(i)));
 						}
+						
 						
 						closeWindow();
 					} else {

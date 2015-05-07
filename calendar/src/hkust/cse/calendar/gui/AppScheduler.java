@@ -757,6 +757,7 @@ ComponentListener {
 					Request req =  new Request(parent.controller.getCurrentUser(), user, 
 							 Request.type.INVITE, dateChosenList, duration.get(0), 
 							 parent.controller.getFeedBacksListCapacity() + 1);
+					System.out.println( parent.controller.getFeedBacksListCapacity());
 					req.setTitle(title);
 					req.setDesc(desc);
 					req.addParticipant(user.getUserId());

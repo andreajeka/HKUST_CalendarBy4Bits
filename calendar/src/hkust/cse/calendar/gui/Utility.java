@@ -298,12 +298,13 @@ public class Utility {
 		// Base case a) array empty or duration is 0
 		if (tsList.isEmpty() || duration == 0) return null;
 		
-		// Base case b) array only contain one list
-		if (tsList.size() == 1) 
-			return tsList;
-		
 		// We break down the duration(in mins) to number of slots
 		int numOfSlots = duration / 15;
+		
+		// Base case b) array only contain one list
+		if (tsList.size() == numOfSlots) 
+			return tsList;
+		
 		int countingSlot = 1;
 		int index = -1;
 		// Get the first timeslot as the basis

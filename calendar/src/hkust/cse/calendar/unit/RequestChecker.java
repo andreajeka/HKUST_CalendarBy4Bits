@@ -74,7 +74,9 @@ public class RequestChecker {
 							cleanRequests(rqList);
 							return false;
 						case NOTI_REFUSE:
-							cleanRequests(rqList);
+							if (rq.TYPE == Request.type.INVITE)
+								_rq2DList.remove(rqList);
+							else cleanRequests(rqList);
 							break;
 						case NOTI_OK:
 							confirmRequests(rqList, rq);
@@ -92,12 +94,16 @@ public class RequestChecker {
 	{
 		// TODO instance of Option Time Slot
 		if (rq.datesChosen != null) {
-			OptionTimeSlot ots = new OptionTimeSlot(_controller, _user, rq.datesChosen, rq.duration);
+			OptionTimeSlot ots = new OptionTimeSlot(_controller, _user, rq.datesChosen, rq.duration, rq._sender);
 			
-			int result = JOptionPane.showConfirmDialog(null, ots, "Please select your available timeslots with duration ", JOptionPane.OK_CANCEL_OPTION);
+			int result = JOptionPane.showConfirmDialog(null, ots, "Please select your available timeslots", JOptionPane.OK_CANCEL_OPTION);
 			
 			if (result == JOptionPane.OK_OPTION) {
 				TimeSlotFeedback feedback = new TimeSlotFeedback(rq._sender, rq._receiver, rq.feedbackID);
+				for (int i = 0; i < ots.getUserFeedback().size(); i++) {
+					System.out.println(ots.getUserFeedback().get(i).StartTime().getHours() + " " + 
+							ots.getUserFeedback().get(i).StartTime().getMinutes());
+				}
 				feedback.setlistOfTimeSlots(ots.getUserFeedback());
 				_controller.addFeedback(feedback);
 				_controller.SaveFeedbacksToXml();
@@ -216,10 +222,10 @@ public class RequestChecker {
 									timeSlotList = newAvailability;
 								}
 							}
-							
+							System.out.println(timeSlotList);
 							// After condensing, find the earliest time slot from all available time with corresponding duration
 							ArrayList<TimeSpan> aTimeSpan = Utility.getEarliestTimeSlot(timeSlotList, rq.duration);
-						
+							System.out.println(aTimeSpan);
 							if (aTimeSpan != null) {
 								TimeSpan first = aTimeSpan.get(0);
 								TimeSpan last = aTimeSpan.get(aTimeSpan.size() - 1);
@@ -240,13 +246,14 @@ public class RequestChecker {
 								end.setMinutes(last.EndTime().getMinutes());
 								//System.out.println(last.EndTime().getHours() + ":" + last.EndTime().getMinutes());
 								TimeSpan merged = new TimeSpan(start, end);
-							
+								
 								Appt NewAppt = new Appt();
 								NewAppt.setTitle(rq.getTitle());
 								NewAppt.setInfo(rq.getDesc());
 								NewAppt.setLocation(rq.getLocation().getName(), rq.getLocation().getCapacity());
 								NewAppt.setTimeSpan(merged);
 								NewAppt.setJoint(true);
+								NewAppt.setInitiator(rq._sender);
 								for (UUID id : rq.getParticipants()) {
 									NewAppt.addAttendant(id);
 								}
