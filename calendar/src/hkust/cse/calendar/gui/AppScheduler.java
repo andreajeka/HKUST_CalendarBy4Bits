@@ -114,7 +114,7 @@ ComponentListener {
 	private int freqAmount = 0;
 	private boolean isReminderToggled = false;
 	private boolean automatic;
-	private int duration;
+
 	
 	// Group event ready means that a manual group event scheduling has been 
 	// created if it is true
@@ -125,6 +125,7 @@ ComponentListener {
 	private ArrayList<User> userChosenList;
 	private ArrayList<TimeSpan> timeSlotChosen;
 	private ArrayList<TimeSpan> dateChosenList;
+	private ArrayList<Integer> duration;
 
 
 	@SuppressWarnings("deprecation")
@@ -134,7 +135,8 @@ ComponentListener {
 		dateChosenList = new ArrayList<TimeSpan>();
 		timeSlotChosen = new ArrayList<TimeSpan>();
 		automatic = false;
-		duration = 0;
+		duration = new ArrayList<Integer>();
+		duration.add(0);
 		this.setAlwaysOnTop(true);
 		setTitle(title);
 		setModal(false);
@@ -753,10 +755,11 @@ ComponentListener {
 					System.out.println("Creating a request now");
 					// For this requests for a chunk of users, we have to have the same id to indicate to a same potential appt.
 					Request req =  new Request(parent.controller.getCurrentUser(), user, 
-							 Request.type.INVITE, dateChosenList, duration, 
+							 Request.type.INVITE, dateChosenList, duration.get(0), 
 							 parent.controller.getFeedBacksListCapacity() + 1);
 					req.setTitle(title);
 					req.setDesc(desc);
+					req.addParticipant(user.getUserId());
 					Location loc = new Location(location, locations.get(locField.getSelectedIndex()).getCapacity());
 					req.setLocation(loc);
 					parent.controller.addRequest(req);

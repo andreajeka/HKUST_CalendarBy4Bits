@@ -1,6 +1,7 @@
 package hkust.cse.calendar.unit;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import hkust.cse.calendar.users.User;
 
@@ -34,7 +35,7 @@ public class Request {
 	private String title = "";
 	private String desc = "";
 	private Location location = null;
-	
+	private ArrayList<UUID> participants;
 	// Default constructor
 	public Request(User sender, User receiver, type type, Object obj)
 	{
@@ -63,6 +64,7 @@ public class Request {
 		bAccepted = false;
 		this.duration = duration;
 		this.feedbackID = id;
+		participants = new ArrayList<UUID>();
 	}
 
 	public String getTitle() {
@@ -87,5 +89,13 @@ public class Request {
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	public ArrayList<UUID> getParticipants() {
+		return participants;
+	}
+	
+	public void addParticipant(UUID id) {
+		participants.add(id);
 	}
 }

@@ -295,8 +295,12 @@ public class Utility {
 	// While duration determines the number of slot that the initiator set (duration)
 	public static ArrayList<TimeSpan> getEarliestTimeSlot(ArrayList<TimeSpan> tsList, int duration) {
 		
-		// Base case : array empty or duration is 0
+		// Base case a) array empty or duration is 0
 		if (tsList.isEmpty() || duration == 0) return null;
+		
+		// Base case b) array only contain one list
+		if (tsList.size() == 1) 
+			return tsList;
 		
 		// We break down the duration(in mins) to number of slots
 		int numOfSlots = duration / 15;

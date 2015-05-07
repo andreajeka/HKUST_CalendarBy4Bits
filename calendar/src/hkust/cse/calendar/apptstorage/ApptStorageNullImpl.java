@@ -646,13 +646,20 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	@Override
 	public void addFeedback(TimeSlotFeedback feedback) {
-		int index = feedback.getfeedBackID() - 1;			
+		LoadFeedbacksFromXml();
+		int index = feedback.getfeedBackID() - 1;	
+		System.out.println(index);
 		ArrayList<TimeSlotFeedback> tsFeedbackList;
 		if (ts2DList.size() == 0) {
 			tsFeedbackList = new ArrayList<TimeSlotFeedback>();
 			ts2DList.add(tsFeedbackList);
 		} else {
-			tsFeedbackList = ts2DList.get(index);
+			if (ts2DList.size() < index) {
+				tsFeedbackList = new ArrayList<TimeSlotFeedback>();
+				ts2DList.add(tsFeedbackList);
+			} else {
+				tsFeedbackList = ts2DList.get(index);
+			}
 		}
 			
 		tsFeedbackList.add(feedback);

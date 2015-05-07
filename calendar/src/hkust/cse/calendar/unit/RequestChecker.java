@@ -3,6 +3,7 @@ package hkust.cse.calendar.unit;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -107,7 +108,6 @@ public class RequestChecker {
 			// For timeslot invitation, if dateschosen list is not empty, we create new OptionTimeSlot
 			if(new OptionNoti("Request from initiator", "Join event: " + ((Appt) rq._obj).getTitle() + "?").popUp())
 			{
-				System.out.println("OKAY");
 				return notiReturnCode.NOTI_OK;
 			}
 		}
@@ -181,7 +181,6 @@ public class RequestChecker {
 					if (rq.feedbackID != 0) {
 						
 						if (!stillWaitingForFB(rq.feedbackID)) {
-							System.out.println("Enter this area");
 							ArrayList<TimeSlotFeedback> feedbackList = _controller.getFeedbackList().get(rq.feedbackID - 1);
 							ArrayList<TimeSpan> timeSlotList = new ArrayList<TimeSpan>();
 							
@@ -217,9 +216,10 @@ public class RequestChecker {
 									timeSlotList = newAvailability;
 								}
 							}
+							
 							// After condensing, find the earliest time slot from all available time with corresponding duration
 							ArrayList<TimeSpan> aTimeSpan = Utility.getEarliestTimeSlot(timeSlotList, rq.duration);
-							System.out.println(aTimeSpan);
+						
 							if (aTimeSpan != null) {
 								TimeSpan first = aTimeSpan.get(0);
 								TimeSpan last = aTimeSpan.get(aTimeSpan.size() - 1);
@@ -245,7 +245,14 @@ public class RequestChecker {
 								NewAppt.setTitle(rq.getTitle());
 								NewAppt.setInfo(rq.getDesc());
 								NewAppt.setLocation(rq.getLocation().getName(), rq.getLocation().getCapacity());
+								NewAppt.setTimeSpan(merged);
+								NewAppt.setJoint(true);
+								for (UUID id : rq.getParticipants()) {
+									NewAppt.addAttendant(id);
+								}
+								NewAppt.addAttendant(rq._sender.getUserId());
 								_controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+								_controller.getFeedbackList().remove(rq.feedbackID - 1);
 							}
 						}
 					} else {

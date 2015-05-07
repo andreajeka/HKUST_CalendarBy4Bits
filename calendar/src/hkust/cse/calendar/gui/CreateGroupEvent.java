@@ -93,7 +93,7 @@ public class CreateGroupEvent extends JFrame{
 	private ArrayList<TimeSpan> dateInTheList;
 	private ArrayList<TimeSpan> dateChosenList;
 	private ArrayList<TimeSpan> timeInTheList;
-	private int duration;
+	private ArrayList<Integer> duration;
 	
 	// The reason why I use array list instead of a mere TimeSpan class is because
 	// I need to get the value as pass by reference. If you have better idea, you can change it
@@ -107,7 +107,7 @@ public class CreateGroupEvent extends JFrame{
 	private JButton confirmBtn;
 	
 	public CreateGroupEvent(CalGrid cal,  int action, ArrayList<User> userChosenList, 
-			ArrayList<TimeSpan> dateChosenList, ArrayList<TimeSpan> timeSlotChosen, int duration) {
+			ArrayList<TimeSpan> dateChosenList, ArrayList<TimeSpan> timeSlotChosen, ArrayList<Integer> duration) {
 		parent = cal;
 		this.userChosenList = userChosenList;
 		this.dateChosenList = dateChosenList;
@@ -592,8 +592,9 @@ public class CreateGroupEvent extends JFrame{
 							dateChosenList.add(dateInTheList.get(selectedIndices[i]));
 						}
 						
-						duration = Integer.parseInt(durationHTF.getText()) * 60 + Integer.parseInt(durationMTF.getText());
-						
+						int aDuration = Integer.parseInt(durationHTF.getText()) * 60 + Integer.parseInt(durationMTF.getText());
+						duration.clear();
+						duration.add(aDuration);
 						for (int i = 0; i < usernameChosenList.size(); i++) {
 							userChosenList.add(parent.controller.searchUser(usernameChosenList.get(i)));
 						}
