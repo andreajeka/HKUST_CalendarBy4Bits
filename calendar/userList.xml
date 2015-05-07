@@ -2,28 +2,21 @@
   <hkust.cse.calendar.users.User>
     <mUsername>user</mUsername>
     <mPassword>user</mPassword>
-    <mUserId>aeb96f4b-1a92-45bb-9750-11730db9eb2c</mUserId>
+    <mUserId>1e75d96f-35b7-4dee-8bbc-aa8c31cc6ba3</mUserId>
     <isAdmin>true</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
   <hkust.cse.calendar.users.User>
     <mUsername>user1</mUsername>
     <mPassword>user1</mPassword>
-    <mUserId>ed2bcd3c-5429-43e4-ac12-d78b1073815f</mUserId>
+    <mUserId>4671af21-7b60-4a61-b722-b46022079312</mUserId>
     <isAdmin>false</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
   <hkust.cse.calendar.users.User>
-    <mUsername>yinyin</mUsername>
-    <mPassword>yinyin</mPassword>
-    <mUserId>1d8112e2-16e8-42f5-b9e0-6ab50e1bd518</mUserId>
-    <isAdmin>false</isAdmin>
-    <tobeRemoved>false</tobeRemoved>
-  </hkust.cse.calendar.users.User>
-  <hkust.cse.calendar.users.User>
-    <mUsername>yinyin2</mUsername>
-    <mPassword>[C@1a9c81f7</mPassword>
-    <mUserId>cd2557ac-aa83-4bcc-857e-b141694328fb</mUserId>
+    <mUsername>user2</mUsername>
+    <mPassword>user2</mPassword>
+    <mUserId>6526ea3c-d877-4a99-ab49-0bcca24ec2e3</mUserId>
     <isAdmin>false</isAdmin>
     <tobeRemoved>false</tobeRemoved>
   </hkust.cse.calendar.users.User>
