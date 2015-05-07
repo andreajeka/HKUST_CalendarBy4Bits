@@ -101,9 +101,9 @@ public class RequestChecker {
 			if (result == JOptionPane.OK_OPTION) {
 				TimeSlotFeedback feedback = new TimeSlotFeedback(rq._sender, rq._receiver, rq.feedbackID);
 				for (int i = 0; i < ots.getUserFeedback().size(); i++) {
-					System.out.println(ots.getUserFeedback().get(i).StartTime().getHours() + " " + 
+					/*System.out.println(ots.getUserFeedback().get(i).StartTime().getHours() + " " + 
 							ots.getUserFeedback().get(i).StartTime().getMinutes());
-				}
+			*/	}
 				feedback.setlistOfTimeSlots(ots.getUserFeedback());
 				_controller.addFeedback(feedback);
 				_controller.SaveFeedbacksToXml();
@@ -222,10 +222,64 @@ public class RequestChecker {
 									timeSlotList = newAvailability;
 								}
 							}
-							System.out.println(timeSlotList);
+							//System.out.println(timeSlotList);
 							// After condensing, find the earliest time slot from all available time with corresponding duration
 							ArrayList<TimeSpan> aTimeSpan = Utility.getEarliestTimeSlot(timeSlotList, rq.duration);
-							System.out.println(aTimeSpan);
+							/*
+							
+							// Base case a) array empty or duration is 0
+							if (timeSlotList.isEmpty() || rq.duration == 0) aTimeSpan = null;
+							
+							// We break down the duration(in mins) to number of slots
+							int numOfSlots = rq.duration / 15;
+							
+							// Base case b) array only contain one list
+							if (timeSlotList.size() == numOfSlots) 
+								aTimeSpan = timeSlotList;
+							
+							else if (numOfSlots == 1) {
+								ArrayList<TimeSpan> earliestTS = new ArrayList<TimeSpan>();
+								earliestTS.add(timeSlotList.get(0));
+								aTimeSpan = earliestTS;
+							} else {
+								int countingSlot = 1;
+								int index = -1;
+								// Get the first timeslot as the basis
+								TimeSpan pointerSlot = timeSlotList.get(0);
+							
+								// Loop through the list
+								for (int i = 1; i < timeSlotList.size(); i++) {
+							
+									System.out.println(Utility.AfterBeforeEqual(pointerSlot.EndTime(), timeSlotList.get(i).StartTime()));
+									if (Utility.AfterBeforeEqual(pointerSlot.EndTime(), timeSlotList.get(i).StartTime()) == 0) {
+											System.out.println("Got in");
+											countingSlot++;
+											// Satisfy slot requirement
+											if (countingSlot == numOfSlots) {
+												index = i + 1 - numOfSlots;
+												break;
+											}
+									} else countingSlot = 1;
+										// if not satisfy slot req yet, set pointerSlot to the next one
+										pointerSlot = timeSlotList.get(i);
+									
+								}
+							
+								// Not found
+								if (index == -1) aTimeSpan = null;
+								else {
+									int i = index;
+									ArrayList<TimeSpan> earliestTS = new ArrayList<TimeSpan>();
+									while (numOfSlots > 0) {
+										earliestTS.add(timeSlotList.get(i));
+										i++;
+										numOfSlots--;
+									}
+									aTimeSpan = earliestTS;
+								}
+							}*/
+							
+							//System.out.println(aTimeSpan);
 							if (aTimeSpan != null) {
 								TimeSpan first = aTimeSpan.get(0);
 								TimeSpan last = aTimeSpan.get(aTimeSpan.size() - 1);

@@ -305,6 +305,12 @@ public class Utility {
 		if (tsList.size() == numOfSlots) 
 			return tsList;
 		
+		if (numOfSlots == 1) {
+			ArrayList<TimeSpan> earliestTS = new ArrayList<TimeSpan>();
+			earliestTS.add(tsList.get(0));
+			return earliestTS;
+		}
+		
 		int countingSlot = 1;
 		int index = -1;
 		// Get the first timeslot as the basis
@@ -313,23 +319,16 @@ public class Utility {
 		// Loop through the list
 		for (int i = 1; i < tsList.size(); i++) {
 			// First case : Same day
-			if ((pointerSlot.StartTime().getYear() == tsList.get(i).StartTime().getYear()) &&
-					(pointerSlot.StartTime().getMonth() == tsList.get(i).StartTime().getMonth()) &&
-					(pointerSlot.StartTime().getDate() == tsList.get(i).StartTime().getDate())) {
-				
-				// If pass this test, check if it is consecutive (end time of first slot == start time of second slot)
-				if ((pointerSlot.EndTime().getHours() == tsList.get(i).EndTime().getHours()) &&
-					(pointerSlot.EndTime().getMinutes() == tsList.get(i).EndTime().getHours())) {
+			if (Utility.AfterBeforeEqual(pointerSlot.EndTime(), tsList.get(i).StartTime()) == 0) {
 					countingSlot++;
 					// Satisfy slot requirement
 					if (countingSlot == numOfSlots) {
 						index = i + 1 - numOfSlots;
 						break;
 					}
-				} else countingSlot = 1;
+			} else countingSlot = 1;
 				// if not satisfy slot req yet, set pointerSlot to the next one
 				pointerSlot = tsList.get(i);
-			}
 		}
 		
 		// Not found
