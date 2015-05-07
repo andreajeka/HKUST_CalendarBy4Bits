@@ -832,7 +832,7 @@ ComponentListener {
 				}
 			}
 		}
-		
+		parent.loadSearchBoxList();
 		setVisible(false);
 		dispose();
 	}
@@ -863,6 +863,7 @@ ComponentListener {
 			NewAppt.reminderOn(reminderToggle.isSelected());
 			NewAppt.setPublic(publicCheckBox.isSelected());
 			NewAppt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000);
+			NewAppt.setInitiator(parent.controller.getCurrentUser());
 
 			parent.controller.ManageAppt(NewAppt, action);
 
@@ -888,7 +889,8 @@ ComponentListener {
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
 				appt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
-
+				appt.setInitiator(parent.controller.getCurrentUser());
+				
 				parent.controller.ManageAppt(appt, action);
 
 				if (parent.controller.isOverlap()) {
@@ -931,6 +933,7 @@ ComponentListener {
 				appt.reminderOn(reminderToggle.isSelected());
 				appt.setPublic(publicCheckBox.isSelected());
 				appt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
+				appt.setInitiator(parent.controller.getCurrentUser());
 
 				parent.controller.ManageAppt(appt, action);
 
@@ -978,6 +981,7 @@ ComponentListener {
 					appt.reminderOn(reminderToggle.isSelected());
 					appt.setPublic(publicCheckBox.isSelected());
 					appt.setRemindBefore(RemindH * 3600000 + RemindM * 60000 + RemindS * 1000 );
+					appt.setInitiator(parent.controller.getCurrentUser());
 
 					parent.controller.ManageAppt(appt, action);
 

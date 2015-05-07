@@ -107,7 +107,7 @@ public class OptionTimeSlot extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// Collect the selected indices
 				int[] selectedIndices = timeList.getSelectedIndices();
-				System.out.println("Selected Indices: " + selectedIndices[0]);
+
 				if (selectedIndices.length == 0) {
 					JOptionPane.showMessageDialog(null, "Please select at least one from the time list",
 							"Input Error", JOptionPane.WARNING_MESSAGE);
