@@ -48,6 +48,7 @@ public class OptionTimeSlot extends Notification {
 		this.durationMins = durationMins;
 		timeInTheList = new ArrayList<TimeSpan>();
 		userFeedbackDates = new ArrayList<TimeSpan>();
+		setWindow();
 	}
 	
 	@Override

@@ -594,6 +594,10 @@ public class CreateGroupEvent extends JFrame{
 						
 						duration = Integer.parseInt(durationHTF.getText()) * 60 + Integer.parseInt(durationMTF.getText());
 						
+						for (int i = 0; i < usernameChosenList.size(); i++) {
+							userChosenList.add(parent.controller.searchUser(usernameChosenList.get(i)));
+						}
+						
 						closeWindow();
 					} else {
 						return;

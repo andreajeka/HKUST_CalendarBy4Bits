@@ -9,7 +9,7 @@ public class TimeSlotFeedback {
 	private User receiver;
 	private int feedBackID; 
 	// For a specific feedback id (to a get one potential appointment)
-	private ArrayList<TimeSpan> listOfFeedbacks;
+	private ArrayList<TimeSpan> listOfTimeSlots;
 	
 	public TimeSlotFeedback(User initiator, User receiver, int feedBackID) {
 		this.initiator = initiator;
@@ -25,12 +25,12 @@ public class TimeSlotFeedback {
 		return feedBackID;
 	}
 	
-	public ArrayList<TimeSpan> getListOfFeedbacks() {
-		return listOfFeedbacks;
+	public ArrayList<TimeSpan> getlistOfTimeSlots() {
+		return listOfTimeSlots;
 	}
 
-	public void setListOfFeedbacks(ArrayList<TimeSpan> listOfFeedbacks) {
-		this.listOfFeedbacks = listOfFeedbacks;
+	public void setlistOfTimeSlots(ArrayList<TimeSpan> listOfTimeSlots) {
+		this.listOfTimeSlots = listOfTimeSlots;
 	}
 
 	public User getReceiver() {

@@ -291,8 +291,53 @@ public class Utility {
 		return max;
 	}
 	
-	// Input array is considered to be a list of indexes that satisfy everyone
-	public static ArrayList<Integer> getEarliestConsecutiveList(ArrayList<Integer> array) {
-		return null;
+	// Input array is considered to be a list of slot that satisfy everyone
+	// While duration determines the number of slot that the initiator set (duration)
+	public static ArrayList<TimeSpan> getEarliestTimeSlot(ArrayList<TimeSpan> tsList, int duration) {
+		
+		// Base case : array empty or duration is 0
+		if (tsList.isEmpty() || duration == 0) return null;
+		
+		// We break down the duration(in mins) to number of slots
+		int numOfSlots = duration / 15;
+		int countingSlot = 1;
+		int index = -1;
+		// Get the first timeslot as the basis
+		TimeSpan pointerSlot = tsList.get(0);
+		
+		// Loop through the list
+		for (int i = 1; i < tsList.size(); i++) {
+			// First case : Same day
+			if ((pointerSlot.StartTime().getYear() == tsList.get(i).StartTime().getYear()) &&
+					(pointerSlot.StartTime().getMonth() == tsList.get(i).StartTime().getMonth()) &&
+					(pointerSlot.StartTime().getDate() == tsList.get(i).StartTime().getDate())) {
+				
+				// If pass this test, check if it is consecutive (end time of first slot == start time of second slot)
+				if ((pointerSlot.EndTime().getHours() == tsList.get(i).EndTime().getHours()) &&
+					(pointerSlot.EndTime().getMinutes() == tsList.get(i).EndTime().getHours())) {
+					countingSlot++;
+					// Satisfy slot requirement
+					if (countingSlot == numOfSlots) {
+						index = i + 1 - numOfSlots;
+						break;
+					}
+				} else countingSlot = 1;
+				// if not satisfy slot req yet, set pointerSlot to the next one
+				pointerSlot = tsList.get(i);
+			}
+		}
+		
+		// Not found
+		if (index == -1) return null;
+		// Else
+		int i = index;
+		ArrayList<TimeSpan> earliestTS = new ArrayList<TimeSpan>();
+		while (numOfSlots > 0) {
+			earliestTS.add(tsList.get(i));
+			i++;
+			numOfSlots--;
+		}
+		
+		return earliestTS;
 	}
 }

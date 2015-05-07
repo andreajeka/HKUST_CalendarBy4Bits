@@ -742,17 +742,24 @@ ComponentListener {
 			
 		} else {
 			if (!dateChosenList.isEmpty()) {
+				String title = titleField.getText();
+				String desc = detailArea.getText();
+				locField.setSelectedIndex(capaLocField.getSelectedIndex());
+				String location = (String) locField.getSelectedItem();
+				
 				// TODO: Send request to users with the timeslots
 				System.out.println("Sending request and timeslots to user....");
-				// TODO: You can call the controller's function RetrieveAvailTimeSpans(User entity, TimeSpan period) for each user 
-				//       for a specified period. Use loops to go through all period. I asked the TA and he said that initiator can
-				//       specify the duration of the event, so a duration attribute is made to store initiator's request.
-				//System.out.println("Duration of event is " + duration.getHours() + " hours and " + duration.getMinutes() + " minutes." );
 				for (User user : userChosenList) {
+					System.out.println("Creating a request now");
 					// For this requests for a chunk of users, we have to have the same id to indicate to a same potential appt.
-				/*	parent.controller.addRequest(new Request(parent.controller.getCurrentUser(), user, 
-													 Request.type.INVITE, dateChosenList, duration, 
-													 parent.controller.getFeedBacksListCapacity() + 1));*/
+					Request req =  new Request(parent.controller.getCurrentUser(), user, 
+							 Request.type.INVITE, dateChosenList, duration, 
+							 parent.controller.getFeedBacksListCapacity() + 1);
+					req.setTitle(title);
+					req.setDesc(desc);
+					Location loc = new Location(location, locations.get(locField.getSelectedIndex()).getCapacity());
+					req.setLocation(loc);
+					parent.controller.addRequest(req);
 				}
 			} else {
 				/** MANUAL INDIVIDUAL SCHEDULING **/

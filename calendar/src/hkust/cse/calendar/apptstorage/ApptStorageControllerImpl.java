@@ -303,5 +303,15 @@ public class ApptStorageControllerImpl {
 		return mApptStorage.getFeedBacksListCapacity();
 	}
 
+	// Request
+	public ArrayList<ArrayList<TimeSlotFeedback>> getFeedbackList()
+	{
+		return mApptStorage.ts2DList;
+	}
+	
+	public void setFeedbackList(ArrayList<ArrayList<TimeSlotFeedback>> list)
+	{
+		mApptStorage.ts2DList = list;
+	}
 	
 }

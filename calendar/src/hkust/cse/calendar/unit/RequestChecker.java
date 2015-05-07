@@ -1,9 +1,12 @@
 package hkust.cse.calendar.unit;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+import javafx.scene.Parent;
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
+import hkust.cse.calendar.gui.Utility;
 import hkust.cse.calendar.notification.MessageNoti;
 import hkust.cse.calendar.notification.Notification;
 import hkust.cse.calendar.notification.OptionNoti;
@@ -86,10 +89,9 @@ public class RequestChecker {
 		if (rq.datesChosen != null) {
 			OptionTimeSlot ots = new OptionTimeSlot("Request from initiator", "Please select your available timeslots with duration " 
 													+ rq.duration, _controller, _user, rq.datesChosen, rq.duration);
-			ots.setWindow();
 			if (ots.isConfirm()) {
 				TimeSlotFeedback feedback = new TimeSlotFeedback(rq._sender, rq._receiver, rq.feedbackID);
-				feedback.setListOfFeedbacks(ots.getUserFeedback());
+				feedback.setlistOfTimeSlots(ots.getUserFeedback());
 				_controller.addFeedback(feedback);
 				return notiReturnCode.NOTI_OK;
 			}
@@ -168,19 +170,92 @@ public class RequestChecker {
 					_rq2DList.remove(rqList);
 					break;
 				case INVITE:
-					/*if (rq.feedbackID != 0) {
-						for (ArrayList<Request> rqList : _rq2DList) {
+					if (rq.feedbackID != 0) {
+						if (!stillWaitingForFB(rq.feedbackID)) {
+							ArrayList<TimeSlotFeedback> feedbackList = _controller.getFeedbackList().get(rq.feedbackID - 1);
+							ArrayList<TimeSpan> timeSlotList = new ArrayList<TimeSpan>();
 							
+							// Condense list to get available time for all users
+							for (TimeSlotFeedback feedback : feedbackList) {
+								ArrayList<TimeSpan> oneListOfTimeSlot = feedback.getlistOfTimeSlots();
+								ArrayList<TimeSpan> newAvailability = new ArrayList<TimeSpan>();
+								// If first time adding get a list as the base list of comparison
+								if (timeSlotList.isEmpty()) {
+									timeSlotList.addAll(oneListOfTimeSlot);
+								} else {
+									for (TimeSpan ts : oneListOfTimeSlot) {
+										for (TimeSpan tsInList : timeSlotList) {
+											
+											// If all attributes are the same, continue looping
+											if ((ts.StartTime().getYear() == tsInList.StartTime().getYear()) &&
+												(ts.StartTime().getMonth() == tsInList.StartTime().getMonth()) &&
+												(ts.StartTime().getDate() == tsInList.StartTime().getDate())) {
+													if ((ts.StartTime().getHours() == tsInList.StartTime().getHours()) && 
+														(ts.StartTime().getMinutes() == tsInList.StartTime().getMinutes())) {
+															if ((ts.EndTime().getHours() == tsInList.EndTime().getHours()) && 
+																(ts.EndTime().getMinutes() == tsInList.EndTime().getMinutes())) {
+																newAvailability.add(tsInList);
+																break; // Break inner loop
+															}
+													}
+											} 
+										}
+									}
+
+									timeSlotList.clear();
+									// Reassign
+									timeSlotList = newAvailability;
+								}
+							}
+							// After condensing, find the earliest time slot from all available time with corresponding duration
+							ArrayList<TimeSpan> aTimeSpan = Utility.getEarliestTimeSlot(timeSlotList, rq.duration);
+							
+							if (aTimeSpan != null) {
+								TimeSpan first = aTimeSpan.get(0);
+								TimeSpan last = aTimeSpan.get(aTimeSpan.size() - 1);
+							
+								Timestamp start = new Timestamp(0);
+								start.setYear(first.StartTime().getYear());
+								start.setMonth(first.StartTime().getMonth());
+								start.setDate(first.StartTime().getDate());
+								start.setHours(first.StartTime().getHours());
+								start.setMinutes(first.StartTime().getMinutes());
+								//System.out.println(first.StartTime().getHours() + ":" + first.StartTime().getMinutes());
+							
+								Timestamp end = new Timestamp(0);
+								end.setYear(last.EndTime().getYear());
+								end.setMonth(last.EndTime().getMonth());
+								end.setDate(last.EndTime().getDate());
+								end.setHours(last.EndTime().getHours());
+								end.setMinutes(last.EndTime().getMinutes());
+								//System.out.println(last.EndTime().getHours() + ":" + last.EndTime().getMinutes());
+								TimeSpan merged = new TimeSpan(start, end);
+							
+								Appt NewAppt = new Appt();
+								NewAppt.setTitle(rq.getTitle());
+								NewAppt.setInfo(rq.getDesc());
+								NewAppt.setLocation(rq.getLocation().getName(), rq.getLocation().getCapacity());
+								_controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+							}
 						}
-						// Condense the feedbacks for the appointment
-						// If all fulfilled, create a new appt
-					} else {*/
+					} else {
 						((Appt) rq._obj).moveFromWaitToAttend(rq._receiver.getUserId());
 						_controller.ManageAppt(((Appt) rq._obj), ApptStorageControllerImpl.MODIFY);
-						_rq2DList.remove(rqList);
-					//}
+					}
+					_rq2DList.remove(rqList);
 			}
 				
 		}
+	}
+	
+	private boolean stillWaitingForFB(int id) {
+		for (ArrayList<Request> rqList : _rq2DList) {
+			for (Request rq : rqList) {
+				if (rq.feedbackID == id) 
+					return true;
+				continue;
+			}
+		}
+		return false;
 	}
 }

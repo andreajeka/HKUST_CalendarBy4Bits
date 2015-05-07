@@ -31,6 +31,9 @@ public class Request {
 	boolean bAccepted;
 	public int duration = 0;
 	public int feedbackID = 0;
+	private String title = "";
+	private String desc = "";
+	private Location location = null;
 	
 	// Default constructor
 	public Request(User sender, User receiver, type type, Object obj)
@@ -60,5 +63,29 @@ public class Request {
 		bAccepted = false;
 		this.duration = duration;
 		this.feedbackID = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 }
