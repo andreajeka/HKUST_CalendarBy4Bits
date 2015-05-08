@@ -87,7 +87,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		userName = new JTextField(15);
 		
 		//adding default admin userName, only for testing
-		userName.setText("user");
+		userName.setText("");
 		
 		namePanel.add(userName);
 		top.add(namePanel);
@@ -97,7 +97,7 @@ public class LoginDialog extends JFrame implements ActionListener
 		password = new JPasswordField(15);
 		
 		//adding default admin password, only for testing
-		password.setText("user");
+		password.setText("");
 		
 		pwPanel.add(password);
 		top.add(pwPanel);
