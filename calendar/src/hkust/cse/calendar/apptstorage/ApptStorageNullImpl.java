@@ -36,6 +36,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private boolean check;
 	private ArrayList<Appt> removeApptList;
 	private int countFeedbackRequest = 0;
+	private boolean isLocaOverlap;
 
 	public ApptStorageNullImpl()
 	{
@@ -149,7 +150,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return userApptArray;		
 	}	
 
-	
+
 	@Override
 
 	public Appt[] RetrieveAppts(User entity) {
@@ -312,15 +313,15 @@ public class ApptStorageNullImpl extends ApptStorage {
 			if (!appt.getWaitingList().isEmpty()) {
 				return;
 			}
-			
+
 			// Don't allow other than initiator to delete it
 			if (!getCurrentUser().equals(appt.getInitiator())) 
 				return;
 
 		}
-			// Whether it is a private or confirmed group event(only for initiator),
-			// Just simply delete it
-			mAppts.remove(appt.getID(), appt);
+		// Whether it is a private or confirmed group event(only for initiator),
+		// Just simply delete it
+		mAppts.remove(appt.getID(), appt);
 
 	}
 
@@ -575,7 +576,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		return capacityValidation;
 
 	}
-	
+
 	public boolean checkLocation(String location){
 		check = true;
 		for(Appt i: mAppts.values()){
@@ -586,7 +587,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		}
 		return check;
 	}
-	
+
 	public void removeUserAppts(UUID userId){
 		removeApptList = new ArrayList<Appt>();
 		LoadApptFromXml();
@@ -671,10 +672,10 @@ public class ApptStorageNullImpl extends ApptStorage {
 				tsFeedbackList = ts2DList.get(index);
 			}
 		}
-			
+
 		tsFeedbackList.add(feedback);
 	}
-	
+
 	@Override
 	public void SaveFeedbackCountToXml() {
 		try {
@@ -709,4 +710,25 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public void setCountFeedbackRequest(int countFeedbackRequest) {
 		this.countFeedbackRequest = countFeedbackRequest;
 	}
+
+	public boolean checkDuplicateLocation(String location, TimeSpan timeSpan){
+		isLocaOverlap = true;
+		//System.out.println("check duplicatelocation" + location + timeSpan);
+		//System.out.println(mAppts.size());
+		if(!mAppts.isEmpty()){
+			for(Appt appt: mAppts.values()){
+				//System.out.println("enter loop "+ appt.getLocationString());
+				if(appt.getLocation().getName().equals(location)){
+					if(appt.TimeSpan().Overlap(timeSpan)){
+						//System.out.println(appt.TimeSpan());
+						isLocaOverlap = false;
+						break;
+					}
+				}
+			}
+		}
+		//System.out.println("outside of loop return: " + isLocaOverlap);
+		return isLocaOverlap;
+	}
+
 }

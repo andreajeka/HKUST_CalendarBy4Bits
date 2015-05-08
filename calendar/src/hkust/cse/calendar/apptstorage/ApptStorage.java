@@ -114,4 +114,5 @@ public abstract class ApptStorage {
 	
 	public abstract void setCountFeedbackRequest(int countFeedbackRequest);
 
+	public abstract boolean checkDuplicateLocation(String location, TimeSpan timeSpan);
 }
