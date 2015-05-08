@@ -241,6 +241,11 @@ public class SignUpDialog extends JDialog implements ActionListener{
 						JOptionPane.ERROR_MESSAGE);
 					return;
 			}
+			
+			else if (controller.searchUser(nameInput.getText().trim()) != null) {
+				JOptionPane.showMessageDialog(this, "Username already exists", "Username not available", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 			 else {
 				User user = new User(nameInput.getText().trim(),passwordInput.getText().trim());
 				

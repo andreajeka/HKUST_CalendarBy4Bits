@@ -627,7 +627,7 @@ public class CalGrid extends JFrame implements ActionListener, ClockListeners {
 	    			hide_flag = true;
 	    		} else if (code == KeyEvent.VK_ESCAPE) {
 	    			hide_flag = true;
-	    		} else if (code == KeyEvent.VK_RIGHT) {
+	    		} else if (code == KeyEvent.VK_DOWN) {
 	    			for (int i = 0; i < list.size(); i++) {
 	    				String str = list.elementAt(i);
 	    				if (str.startsWith(input)) {
