@@ -319,4 +319,7 @@ public class ApptStorageControllerImpl {
 		mApptStorage.ts2DList = list;
 	}
 	
+	public boolean checkDuplicateLocation(String location, TimeSpan timeSpan){
+		return mApptStorage.checkDuplicateLocation(location, timeSpan);
+	}
 }

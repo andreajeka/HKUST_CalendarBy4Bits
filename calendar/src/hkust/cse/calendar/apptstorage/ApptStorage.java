@@ -108,4 +108,5 @@ public abstract class ApptStorage {
 	
 	public abstract void removeUserAppts(UUID userId);
 
+	public abstract boolean checkDuplicateLocation(String location, TimeSpan timeSpan);
 }
