@@ -35,6 +35,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 	private boolean capacityValidation;
 	private boolean check;
 	private ArrayList<Appt> removeApptList;
+	private int countFeedbackRequest = 0;
 
 	public ApptStorageNullImpl()
 	{
@@ -662,7 +663,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 			tsFeedbackList = new ArrayList<TimeSlotFeedback>();
 			ts2DList.add(tsFeedbackList);
 		} else {
-			if (ts2DList.size() < index) {
+			if (ts2DList.size() < feedback.getfeedBackID()) {
 				tsFeedbackList = new ArrayList<TimeSlotFeedback>();
 				ts2DList.add(tsFeedbackList);
 			} else {
@@ -674,7 +675,37 @@ public class ApptStorageNullImpl extends ApptStorage {
 	}
 	
 	@Override
-	public int getFeedBacksListCapacity() {
-		return ts2DList.size();
+	public void SaveFeedbackCountToXml() {
+		try {
+			xstream.toXML(countFeedbackRequest, new FileWriter("countFeedbackRequest.xml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void LoadFeedbackCountFromXml() {
+		// TODO Auto-generated method stub
+		try{
+			xmlFile = new File("countFeedbackRequest.xml");
+			if(xmlFile.exists() && xmlFile.isFile()){
+				countFeedbackRequest = (int) xstream.fromXML(xmlFile);
+			}
+		}catch(Exception e){
+			System.out.println("countFeedbackRequestFailed");
+		}
+	}
+
+
+
+	public int getCountFeedbackRequest() {
+		return countFeedbackRequest;
+	}
+
+
+	public void setCountFeedbackRequest(int countFeedbackRequest) {
+		this.countFeedbackRequest = countFeedbackRequest;
 	}
 }

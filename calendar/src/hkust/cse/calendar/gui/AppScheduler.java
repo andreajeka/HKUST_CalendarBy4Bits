@@ -756,8 +756,7 @@ ComponentListener {
 					// For this requests for a chunk of users, we have to have the same id to indicate to a same potential appt.
 					Request req =  new Request(parent.controller.getCurrentUser(), user, 
 							 Request.type.INVITE, dateChosenList, duration.get(0), 
-							 parent.controller.getFeedBacksListCapacity() + 1);
-					System.out.println( parent.controller.getFeedBacksListCapacity());
+							 parent.controller.getCountFeedbackRequest()+1);
 					req.setTitle(title);
 					req.setDesc(desc);
 					req.addParticipant(user.getUserId());
@@ -765,6 +764,8 @@ ComponentListener {
 					req.setLocation(loc);
 					parent.controller.addRequest(req);
 				}
+				parent.controller.setCountFeedbackRequest(parent.controller.getCountFeedbackRequest() + 1);
+				parent.controller.SaveFeedbackCountToXml();
 			} else {
 				/** MANUAL INDIVIDUAL SCHEDULING **/
 				// Save the appointment to the hard disk

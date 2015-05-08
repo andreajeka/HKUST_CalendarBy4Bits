@@ -90,8 +90,6 @@ public abstract class ApptStorage {
 	
 	public abstract void addFeedback(TimeSlotFeedback feedback);
 	
-	public abstract int getFeedBacksListCapacity();
-	
 	public abstract void updateUser(User user);
 	
 	public abstract User searchUser(String username);
@@ -107,5 +105,13 @@ public abstract class ApptStorage {
 	public abstract boolean checkLocation(String location);
 	
 	public abstract void removeUserAppts(UUID userId);
+
+	public abstract void SaveFeedbackCountToXml();
+
+	public abstract void LoadFeedbackCountFromXml();
+	
+	public abstract int getCountFeedbackRequest();
+	
+	public abstract void setCountFeedbackRequest(int countFeedbackRequest);
 
 }

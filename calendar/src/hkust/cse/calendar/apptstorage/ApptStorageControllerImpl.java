@@ -1,5 +1,6 @@
 package hkust.cse.calendar.apptstorage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -303,10 +304,6 @@ public class ApptStorageControllerImpl {
 	public void addFeedback(TimeSlotFeedback feedback) {
 		mApptStorage.addFeedback(feedback);
 	}
-	
-	public int getFeedBacksListCapacity() {
-		return mApptStorage.getFeedBacksListCapacity();
-	}
 
 	// Request
 	public ArrayList<ArrayList<TimeSlotFeedback>> getFeedbackList()
@@ -317,6 +314,24 @@ public class ApptStorageControllerImpl {
 	public void setFeedbackList(ArrayList<ArrayList<TimeSlotFeedback>> list)
 	{
 		mApptStorage.ts2DList = list;
+	}
+	
+	public void SaveFeedbackCountToXml() {
+		mApptStorage.SaveFeedbackCountToXml();
+	}
+	
+	public void LoadFeedbackCountFromXml() {
+		mApptStorage.LoadFeedbackCountFromXml();
+	}
+
+
+	public int getCountFeedbackRequest() {
+		return mApptStorage.getCountFeedbackRequest();
+	}
+
+
+	public void setCountFeedbackRequest(int countFeedbackRequest) {
+		mApptStorage.setCountFeedbackRequest(countFeedbackRequest);
 	}
 	
 }

@@ -324,6 +324,8 @@ public class RequestChecker {
 								NewAppt.addAttendant(rq._sender.getUserId());
 								_controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
 								_controller.getFeedbackList().remove(rq.feedbackID - 1);
+								_controller.setCountFeedbackRequest(_controller.getCountFeedbackRequest() - 1);
+								_controller.SaveFeedbackCountToXml();
 							}
 						}
 					} else {
