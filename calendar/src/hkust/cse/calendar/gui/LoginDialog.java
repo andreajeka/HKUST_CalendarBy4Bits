@@ -138,6 +138,7 @@ public class LoginDialog extends JFrame implements ActionListener
 								CalGrid grid = new CalGrid(controller);
 								setVisible(false);
 							}
+							else controller.SaveRequestToXml();
 
 						} else {
 							JOptionPane.showMessageDialog(LoginDialog.this, "Invalid Password", "Input Error", JOptionPane.ERROR_MESSAGE);

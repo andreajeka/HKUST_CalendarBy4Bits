@@ -51,8 +51,9 @@ public class RequestChecker {
 		for(int i = 0; i < _rq2DList.size(); i++)
 		{
 			ArrayList<Request> rqList = _rq2DList.get(i);
-			for(Request rq : rqList)
+			for(int j = 0; j < rqList.size(); j++)
 			{
+				Request rq = rqList.get(j);
 				if(rq._receiver.equals(_user))
 				{
 					switch(rq.TYPE)
@@ -78,9 +79,11 @@ public class RequestChecker {
 							if (rq.TYPE == Request.type.INVITE)
 								_rq2DList.remove(rqList);
 							else cleanRequests(rqList);
+							i--;
 							break;
 						case NOTI_OK:
 							confirmRequests(rqList, rq);
+							i--;
 					}
 				}
 				if(rqList.isEmpty()) break;
@@ -166,7 +169,10 @@ public class RequestChecker {
 	{
 		// For display purpose in management users dialog
 		if(rqList.get(0).TYPE == Request.type.DELETE_USER)
-			_controller.searchUser(((User) rqList.get(0)._obj).getUserId()).setTobeRemoved(false);
+		{
+			User user = _controller.searchUser(((User) rqList.get(0)._obj).getUserId());
+			if(user != null) user.setTobeRemoved(false);
+		}
 		// For display purpose in location dialog
 		if(rqList.get(0).TYPE == Request.type.DELETE_LOCATION)
 		{

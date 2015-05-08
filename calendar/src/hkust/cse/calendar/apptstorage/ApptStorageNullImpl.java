@@ -15,6 +15,8 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.swing.JOptionPane;
@@ -511,15 +513,24 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public void removeLocation(Location location)
 	{
-		// Remove appts related to this location
-		for(Appt appt : mAppts.values())
-		{
-			if (appt.getLocationString().equals(location.getName())){
-				RemoveAppt(appt);
-			}
-		}
-
-		_locations.remove(location);
+		// Remove appts related to this location		
+	    Iterator it = mAppts.entrySet().iterator();
+	    while (it.hasNext()) 
+	    {
+	        Map.Entry appt = (Map.Entry)it.next();
+	        if (((Appt) appt.getValue()).getLocationString().equals(location.getName()))
+	        	it.remove();
+	    }
+	    
+	    int index = 0;
+	    for (Location lt : _locations)
+	    {
+	    	if(lt.getName().equals(location.getName()))
+	    		break;
+	    	index++;
+	    }
+	
+		_locations.remove(index);
 	}
 
 	// Request
