@@ -658,14 +658,15 @@ public class ApptStorageNullImpl extends ApptStorage {
 		//System.out.println(feedback.getfeedBackID());
 		//System.out.println("Index:" + index);
 		//System.out.println(ts2DList.size());
-		ArrayList<TimeSlotFeedback> tsFeedbackList;
+		ArrayList<TimeSlotFeedback> tsFeedbackList = new ArrayList<TimeSlotFeedback>();
 		if (ts2DList.size() == 0) {
-			tsFeedbackList = new ArrayList<TimeSlotFeedback>();
 			ts2DList.add(tsFeedbackList);
 		} else {
 			if (ts2DList.size() < feedback.getfeedBackID()) {
-				tsFeedbackList = new ArrayList<TimeSlotFeedback>();
-				ts2DList.add(tsFeedbackList);
+				for (int i = ts2DList.size(); i < feedback.getfeedBackID(); i++) {
+					tsFeedbackList = new ArrayList<TimeSlotFeedback>();
+					ts2DList.add(tsFeedbackList);
+				}
 			} else {
 				tsFeedbackList = ts2DList.get(index);
 			}

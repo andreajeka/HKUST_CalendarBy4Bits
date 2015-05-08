@@ -106,9 +106,13 @@ public class RequestChecker {
 							ots.getUserFeedback().get(i).StartTime().getMinutes());
 			*/	}
 				feedback.setlistOfTimeSlots(ots.getUserFeedback());
-				_controller.addFeedback(feedback);
-				_controller.SaveFeedbacksToXml();
-				return notiReturnCode.NOTI_OK;
+				if (ots.getUserFeedback() == null)
+					return notiReturnCode.NOTI_REFUSE;
+				else {
+					_controller.addFeedback(feedback);
+					_controller.SaveFeedbacksToXml();
+					return notiReturnCode.NOTI_OK;
+				}
 			}
 			
 		} else {
